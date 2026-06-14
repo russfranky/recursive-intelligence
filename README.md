@@ -9,6 +9,8 @@ No technical background required. Install, pick a template, run one command, cop
 
 **Run in the cloud (free tier):** [Codespaces + Colab guide](docs/cloud_development.md) — use Colab for quick API experiments, Codespaces for the full CLI, runbook, and plateau workflow.
 
+**License:** [MIT](LICENSE) · **Changelog:** [CHANGELOG.md](CHANGELOG.md)
+
 ---
 
 ## Install (2 minutes)
@@ -21,7 +23,7 @@ pip install -e ".[all]"
 
 Works offline immediately — no API key needed for the built-in demo.
 
-**Standalone private repo:** see [docs/standalone_repo.md](docs/standalone_repo.md) — `./scripts/publish-private-repo.sh` on your machine.
+**Repository setup:** see [docs/standalone_repo.md](docs/standalone_repo.md) — clone, Codespaces, or `./scripts/publish-private-repo.sh` for mirrors.
 
 ---
 

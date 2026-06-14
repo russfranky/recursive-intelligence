@@ -5,7 +5,9 @@ Six production use cases demonstrating the Recursive Intelligence Engine evolvin
 ## Run the Benchmark
 
 ```bash
-ri-engine benchmark
+ri-engine demo
+# or (technical output)
+ri-engine expert benchmark
 # or
 python3 examples/run_benchmark.py
 ```

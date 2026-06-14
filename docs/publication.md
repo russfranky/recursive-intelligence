@@ -106,6 +106,78 @@ Approved prompts compile to `runbook/RUNBOOK.md` — point your next AI at that 
 | `output/evolved_prompts/evolution_summary.json` | 5 operator prompts at 95%+ composite |
 | `tests/test_api.py` | Public API contract |
 
+Generate locally (not committed — see `.gitignore`):
+
+```bash
+ri-engine demo                        # benchmark proof
+ri-engine expert improve-prompts        # operator prompt evolution
+```
+
+---
+
+## Red-team review
+
+Independent review of claims, scope, and risks before public release.
+
+### Claims audit
+
+| Claim | Verdict | Notes |
+|-------|---------|-------|
+| "F→A grade improvement" on 6 templates | **Accurate** | Scored by `prompt_rubric.py` (10-feature checklist). Reproducible via `ri-engine demo`. |
+| "+385% average quality" | **Accurate** | Aggregate of rubric scores (21% → 100%). Percent change is relative to baseline, not absolute LLM performance. |
+| "Works offline, no API key" | **Accurate** | Default `mock` provider uses deterministic `prompt_synthesizer.py`. |
+| "Production-ready prompts" | **Qualified** | Output is structurally complete per rubric. Real-world fitness still depends on your domain and LLM backend. |
+| "Every template improves" | **Accurate** | All 6 built-in scenarios reach 10/10 rubric features with mock provider. |
+
+### Limitations (disclose to users)
+
+1. **Mock vs real LLM** — Offline mode proves the VSR loop and rubric; semantic rewrites with GPT/Claude (`--provider openai`) may differ in style and require API keys.
+2. **Rubric ≠ downstream success** — Scores measure prompt *structure* (constraints, format, self-eval hooks), not live task completion rates.
+3. **Deterministic synthesis** — Mock provider applies strategy blocks from `prompt_synthesizer.py`; it is not a substitute for human prompt engineering review on sensitive domains.
+4. **Expert commands** — `ri-engine expert …` exposes internal research tooling; not covered by the public API contract in `tests/test_api.py`.
+
+### Privacy and data handling
+
+| Data | Leaves machine? |
+|------|-----------------|
+| Seed prompts, objectives, customer text | **Never** (local only) |
+| Session state (`output/improvement_session.json`) | **Never** |
+| Trait export (`--share-traits`) | **Opt-in only** — structural patterns, no raw prompts |
+| Macro trait registry (`config/macro_trait_registry.json`) | **Local only** — gitignored |
+
+### Security posture
+
+- No network calls with default mock provider.
+- API keys are read from environment variables only; never written to output files.
+- No telemetry or external analytics.
+- `output/` and `runbook/` are gitignored — users control what they commit.
+
+### Recommended public messaging
+
+- Lead with **"structured prompt improvement"**, not "autonomous AGI."
+- Show `ri-engine demo` as reproducible proof, not a one-time marketing screenshot.
+- Document that OpenAI/Anthropic providers are optional upgrades for semantic variation.
+
+---
+
+## Publication checklist
+
+Use this before tagging a release or flipping repo visibility to public.
+
+- [x] `LICENSE` (MIT) at repo root
+- [x] `README.md` — install, quick start, templates, API pointer
+- [x] `docs/getting_started.md` — non-technical onboarding
+- [x] `docs/publication.md` — this file (API + red-team + checklist)
+- [x] `docs/technical_reference.md` — architecture for developers
+- [x] `docs/cloud_development.md` — Codespaces + Colab (standalone repo URLs)
+- [x] `.github/workflows/ci.yml` — tests on Python 3.10–3.12
+- [x] `.devcontainer/devcontainer.json` — one-click Codespaces
+- [x] `pyproject.toml` — version, license, classifiers, entry point
+- [x] `tests/` — 80+ passing tests including public API contract
+- [ ] Run `ri-engine demo` locally and spot-check evolved prompts
+- [ ] Set repo visibility to **public** (if desired) via GitHub settings or `VISIBILITY=public ./scripts/publish-private-repo.sh`
+- [ ] Update Colab badge URL if repo name or owner changes
+
 ---
 
 ## Architecture (minimal)

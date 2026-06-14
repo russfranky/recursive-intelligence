@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Create a standalone PRIVATE GitHub repo (not nested in russfranky/russfranky).
+# Push a clean copy of recursive-intelligence to a GitHub repo.
+# Use for forks, org mirrors, or changing visibility (private | public).
 #
 # Run on your Mac with your GitHub login:
 #   cd path/to/recursive-intelligence
@@ -14,7 +15,7 @@ set -euo pipefail
 
 OWNER="${GITHUB_OWNER:-russfranky}"
 REPO="${REPO_NAME:-recursive-intelligence}"
-VISIBILITY="${VISIBILITY:-private}"
+VISIBILITY="${VISIBILITY:-public}"
 WORKDIR="$(cd "$(dirname "$0")/.." && pwd)"
 
 echo "→ Publishing $WORKDIR to $OWNER/$REPO ($VISIBILITY)"

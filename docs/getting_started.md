@@ -87,7 +87,7 @@ Copy the entire box and paste it into:
 
 - **ChatGPT** → Custom GPT instructions or system message
 - **Claude** → Project instructions
-- **Any coding agent** → project system prompt or rules file
+- **Cursor / Copilot** → project rules or agent system prompt
 - **Any API** → `system` parameter
 
 ### Saved file

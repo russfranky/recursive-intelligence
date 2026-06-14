@@ -6,7 +6,7 @@ Target repo is `russfranky/recursive-intelligence`; goal is more finds and first
 
 | Audience | Query / entry point | README hook |
 |----------|---------------------|-------------|
-| Developers using coding agents | system prompt, agent instructions | `coding-assistant` template + 60s install block |
+| Developers using Cursor, Copilot, etc. | system prompt, agent instructions | `coding-assistant` template + 60s install block |
 | Support leads | ChatGPT custom instructions | `customer-support` template |
 | Tool evaluators | prompt engineering CLI offline | `ri-engine demo` — 6/6 F→A |
 | Python devs | improve prompt API | `from ri_engine import improve` |
@@ -29,7 +29,7 @@ pip install -e . && ri-engine improve --template customer-support
 
 ## Integration hooks
 
-- **Project instructions:** `ri-engine improve --template coding-assistant` → paste into agent system prompt
+- **Project instructions:** `ri-engine improve --template coding-assistant` → paste into ChatGPT, Claude, Cursor, or your agent system prompt
 - **Colab:** badge in README → `notebooks/ri_engine_quickstart.ipynb`
 - **Codespaces:** badge in README → devcontainer auto-install
 - **Python API:** `from ri_engine import improve`
@@ -42,7 +42,7 @@ pip install -e . && ri-engine improve --template customer-support
 
 ## GitHub topics / keywords
 
-`prompt-engineering`, `llm`, `system-prompts`, `cli`, `open-source`, `prompt-improvement`, `chatgpt`, `claude`, `copilot`, `agents`
+`prompt-engineering`, `llm`, `system-prompts`, `cli`, `open-source`, `prompt-improvement`, `chatgpt`, `claude`, `cursor`, `copilot`, `agents`
 
 ## Self-eval
 

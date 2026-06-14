@@ -14,6 +14,7 @@ TOPICS=(
   prompt-improvement
   chatgpt
   claude
+  cursor
   copilot
   agents
 )

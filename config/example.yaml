@@ -1,0 +1,39 @@
+# Recursive Intelligence — Example Run
+# Based on Uzwyshyn: Agentic AI, Recursion, Biology and Selection Environments
+
+seed_prompt: |
+  You are a research agent. Given a topic, produce a structured analysis with
+  key claims, evidence, and open questions.
+
+objective: |
+  Evolve this into a self-improving research prompt that produces interdisciplinary
+  insights by dissolving domain membranes — finding latent correlations like
+  Jacquard loom ↔ binary programmability. The final prompt must include recursive
+  self-evaluation and measurable quality criteria.
+
+max_generations: 5
+population_size: 6
+survivors_count: 2
+convergence_threshold: 0.03
+convergence_window: 2
+variation_temperature: 0.75
+enable_membrane_bridge: true
+
+domains:
+  - "evolutionary biology (VSR: variation, selection, retention)"
+  - "software engineering (iterative loops, stored programs)"
+  - "industrial history (Jacquard loom, programmable automation)"
+  - "financial systems (cascade inference, sensor fusion)"
+  - "cognitive science (signal vs proxy optimization)"
+
+fitness_weights:
+  clarity: 0.20
+  novelty: 0.30
+  utility: 0.35
+  coherence: 0.15
+
+output_path: ./output/example_run.json
+
+metadata:
+  source: "Uzwyshyn — Agentic AI, Recursion, Biology and Selection Environments"
+  author: "Recursive Intelligence Engine v0.1"

@@ -1,0 +1,41 @@
+# Use Case 4: Cursor Coding Agent
+# Evolve a minimal coding assistant into a production Cursor agent prompt
+
+name: "Cursor Coding Agent"
+category: "Agentic Development"
+description: "Production-grade agent prompt for autonomous coding in Cursor"
+
+seed_prompt: |
+  You are a coding assistant. Help the user write and fix code.
+
+objective: |
+  Evolve into a Cursor-optimized coding agent prompt that: reads codebase before
+  editing, makes minimal focused diffs, runs tests after changes, handles failures
+  with retries, commits with clear messages, avoids over-engineering, and includes
+  explicit done-criteria. Must counteract engagement optimization (verbose explanations).
+
+max_generations: 6
+population_size: 8
+survivors_count: 2
+convergence_threshold: 0.025
+convergence_window: 2
+enable_membrane_bridge: true
+
+domains:
+  - "software craftsmanship (minimal diffs, conventions)"
+  - "SRE (observability, rollback, blast radius)"
+  - "editorial (concise prose, no filler)"
+  - "manufacturing (just-in-time, no overproduction)"
+  - "game theory (incentives, proxy metrics)"
+
+fitness_weights:
+  clarity: 0.30
+  novelty: 0.10
+  utility: 0.45
+  coherence: 0.15
+
+output_path: ./output/benchmark/cursor_coding_agent.json
+
+metadata:
+  use_case: "cursor_coding_agent"
+  baseline_quality: "weak"

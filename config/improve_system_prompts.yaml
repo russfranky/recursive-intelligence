@@ -1,0 +1,40 @@
+# Meta-run: use the RI engine to evolve its own operator system prompts
+
+objective: |
+  Evolve this operator system prompt to maximize agent reliability, recursive
+  self-improvement hooks, measurable output contracts, failure-mode guards, and
+  cross-operator coherence within the VSR loop. The prompt must remain concise,
+  executable by an LLM on first read, and include explicit output format constraints.
+
+max_generations: 6
+population_size: 8
+survivors_count: 2
+convergence_threshold: 0.025
+convergence_window: 2
+variation_temperature: 0.8
+enable_membrane_bridge: true
+
+domains:
+  - "prompt engineering (constraint-first, output contracts)"
+  - "evolutionary biology (VSR: variation, selection, retention)"
+  - "compiler design (AST transforms, type contracts)"
+  - "control systems (feedback loops, error correction)"
+  - "operating systems (schedulers, process isolation)"
+  - "cognitive science (signal vs proxy optimization)"
+
+fitness_weights:
+  clarity: 0.25
+  novelty: 0.15
+  utility: 0.40
+  coherence: 0.20
+
+output_path: ./output/system_prompt_evolution.json
+
+metadata:
+  run_type: "meta_improvement"
+  targets:
+    - variation.md
+    - selection.md
+    - retention.md
+    - membrane_bridge.md
+    - meta_improvement.md

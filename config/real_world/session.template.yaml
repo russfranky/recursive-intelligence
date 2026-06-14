@@ -1,0 +1,32 @@
+# Real-World Test Session
+# Fill in seed_prompt and objective, then: ri-engine real-world run
+
+name: "Real-World Test"
+description: "Describe what you're testing — e.g. customer support bot, internal SOP agent"
+category: "Operations"
+audience: "end_user"
+
+seed_prompt: |
+  Paste your current prompt here.
+
+objective: |
+  Describe what success looks like:
+  - Who will use this prompt?
+  - What should the AI output look like?
+  - How will you measure success in production?
+
+provider: mock
+max_generations: 6
+population_size: 8
+survivors_count: 2
+convergence_threshold: 0.025
+convergence_window: 2
+enable_membrane_bridge: true
+
+domains: []
+
+metadata:
+  use_case: real_world
+  test_id: ""
+  client: ""
+  apply_linguistic_gate: true

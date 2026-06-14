@@ -1,0 +1,132 @@
+{
+  "timestamp": "2026-06-13T14:30:27.934783+00:00",
+  "spectrum_leanings": [
+    "plain",
+    "latinate",
+    "mixed",
+    "neutral",
+    "technical",
+    "conversational"
+  ],
+  "cells_pooled": 9,
+  "registry_path": "/workspace/recursive-intelligence/config/linguistic_registry.json",
+  "coverage": {
+    "leaning_distribution": {
+      "plain": 4,
+      "conversational": 5
+    },
+    "spectrum_complete": 6,
+    "categories_covered": 9,
+    "audiences_covered": 8
+  },
+  "entries": [
+    {
+      "id": "software_engineering:developer",
+      "category": "Software Engineering",
+      "audience": "developer",
+      "recommended_leaning": "plain",
+      "confidence": 0.63,
+      "alternatives": [
+        "conversational",
+        "mixed"
+      ],
+      "rationale": "plain wins composite 1.00 (quality=100%, lat_ratio=0.39, read=0.85); runner-up conversational at 1.00"
+    },
+    {
+      "id": "agentic_development:developer",
+      "category": "Agentic Development",
+      "audience": "developer",
+      "recommended_leaning": "plain",
+      "confidence": 0.63,
+      "alternatives": [
+        "conversational",
+        "mixed"
+      ],
+      "rationale": "plain wins composite 1.00 (quality=100%, lat_ratio=0.40, read=0.84); runner-up conversational at 1.00"
+    },
+    {
+      "id": "operations:end_user",
+      "category": "Operations",
+      "audience": "end_user",
+      "recommended_leaning": "conversational",
+      "confidence": 0.6469999999999999,
+      "alternatives": [
+        "plain",
+        "mixed"
+      ],
+      "rationale": "conversational wins composite 1.00 (quality=100%, lat_ratio=0.56, read=0.85); runner-up plain at 0.99"
+    },
+    {
+      "id": "research_intelligence:researcher",
+      "category": "Research & Intelligence",
+      "audience": "researcher",
+      "recommended_leaning": "conversational",
+      "confidence": 0.632,
+      "alternatives": [
+        "plain",
+        "mixed"
+      ],
+      "rationale": "conversational wins composite 1.00 (quality=100%, lat_ratio=0.40, read=0.82); runner-up plain at 1.00"
+    },
+    {
+      "id": "revenue:prospect",
+      "category": "Revenue",
+      "audience": "prospect",
+      "recommended_leaning": "plain",
+      "confidence": 0.63,
+      "alternatives": [
+        "conversational",
+        "latinate"
+      ],
+      "rationale": "plain wins composite 1.00 (quality=100%, lat_ratio=0.44, read=0.87); runner-up conversational at 1.00"
+    },
+    {
+      "id": "security:operator",
+      "category": "Security",
+      "audience": "operator",
+      "recommended_leaning": "conversational",
+      "confidence": 0.639,
+      "alternatives": [
+        "plain",
+        "mixed"
+      ],
+      "rationale": "conversational wins composite 1.00 (quality=100%, lat_ratio=0.53, read=0.87); runner-up plain at 1.00"
+    },
+    {
+      "id": "legal_compliance:regulator",
+      "category": "Legal & Compliance",
+      "audience": "regulator",
+      "recommended_leaning": "plain",
+      "confidence": 0.63,
+      "alternatives": [
+        "conversational",
+        "mixed"
+      ],
+      "rationale": "plain wins composite 1.00 (quality=100%, lat_ratio=0.40, read=0.83); runner-up conversational at 1.00"
+    },
+    {
+      "id": "clinical_medical:clinician",
+      "category": "Clinical & Medical",
+      "audience": "clinician",
+      "recommended_leaning": "conversational",
+      "confidence": 0.641,
+      "alternatives": [
+        "plain",
+        "mixed"
+      ],
+      "rationale": "conversational wins composite 1.00 (quality=100%, lat_ratio=0.47, read=0.82); runner-up plain at 0.99"
+    },
+    {
+      "id": "executive_communications:executive",
+      "category": "Executive Communications",
+      "audience": "executive",
+      "recommended_leaning": "conversational",
+      "confidence": 0.636,
+      "alternatives": [
+        "plain",
+        "mixed"
+      ],
+      "rationale": "conversational wins composite 1.00 (quality=100%, lat_ratio=0.44, read=0.84); runner-up plain at 1.00"
+    }
+  ]
+}

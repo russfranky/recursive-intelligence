@@ -1,0 +1,13 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+output/*
+!output/.gitkeep
+prompts/.backup/
+*.json
+!.gitkeep
+!config/linguistic_registry.json
+!config/linguistic_pool_report.json
+config/real_world/active.yaml
+output/real_world/

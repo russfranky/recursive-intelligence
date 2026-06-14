@@ -1,0 +1,7 @@
+# Security Response — plug-and-play template
+display_name: Security Incident Response
+description: Triage alerts fast with severity ratings, containment steps, and escalation rules.
+audience: Security and IT operations teams
+category: Security
+
+extends: use_cases/security_incident.yaml

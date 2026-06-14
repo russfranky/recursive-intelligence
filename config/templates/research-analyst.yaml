@@ -1,0 +1,7 @@
+# Research Analyst — plug-and-play template
+display_name: Research Analyst
+description: Produce structured research with evidence, confidence levels, and clear conclusions.
+audience: Analysts, strategists, and knowledge workers
+category: Research & Intelligence
+
+extends: use_cases/research_analyst.yaml

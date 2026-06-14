@@ -1,0 +1,88 @@
+# Full-spectrum linguistic leaning pool — category × audience cells
+# Used by: ri-engine pool-linguistic-registry
+
+spectrum_leanings:
+  - plain
+  - latinate
+  - mixed
+  - neutral
+  - technical
+  - conversational
+
+entries:
+  # --- Existing use cases (6) ---
+  - id: software_engineering:developer
+    category: Software Engineering
+    audience: developer
+    task_type: agent_prompt
+    source: config/use_cases/code_review.yaml
+
+  - id: agentic_development:developer
+    category: Agentic Development
+    audience: developer
+    task_type: agent_prompt
+    source: config/use_cases/cursor_coding_agent.yaml
+
+  - id: operations:end_user
+    category: Operations
+    audience: end_user
+    task_type: agent_prompt
+    source: config/use_cases/customer_support.yaml
+
+  - id: research_intelligence:researcher
+    category: Research & Intelligence
+    audience: researcher
+    task_type: agent_prompt
+    source: config/use_cases/research_analyst.yaml
+
+  - id: revenue:prospect
+    category: Revenue
+    audience: prospect
+    task_type: agent_prompt
+    source: config/use_cases/sales_outreach.yaml
+
+  - id: security:operator
+    category: Security
+    audience: operator
+    task_type: agent_prompt
+    source: config/use_cases/security_incident.yaml
+
+  # --- Extended spectrum (formal / specialist domains) ---
+  - id: legal_compliance:regulator
+    category: Legal & Compliance
+    audience: regulator
+    task_type: compliance_document
+    seed_prompt: |
+      You are a compliance reviewer. Review this policy and tell me if it meets regulatory requirements.
+    objective: |
+      Evolve into a regulatory compliance review prompt that: cites applicable frameworks (SOC2, GDPR, HIPAA),
+      classifies findings by severity, documents remediation requirements with deadlines,
+      uses formal precise language appropriate for audit trails, and produces legally defensible output.
+    metadata:
+      use_case: legal_compliance
+
+  - id: clinical_medical:clinician
+    category: Clinical & Medical
+    audience: clinician
+    task_type: clinical_document
+    seed_prompt: |
+      You are a medical assistant. Summarize this patient case for the attending physician.
+    objective: |
+      Evolve into a clinical summary prompt that: uses standard medical terminology,
+      structures assessment/plan format, flags contraindications and drug interactions,
+      maintains clinical precision without unnecessary simplification, and includes confidence levels.
+    metadata:
+      use_case: clinical_medical
+
+  - id: executive_communications:executive
+    category: Executive Communications
+    audience: executive
+    task_type: executive_brief
+    seed_prompt: |
+      You are an executive assistant. Write a summary of this quarterly report for leadership.
+    objective: |
+      Evolve into an executive brief prompt that: leads with decision-relevant insights,
+      quantifies impact, avoids operational detail unless decision-blocking,
+      balances clarity with strategic formality, and fits on one page.
+    metadata:
+      use_case: executive_communications

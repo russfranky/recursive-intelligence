@@ -10,7 +10,7 @@ seed_prompt: |
 objective: |
   When this works, the agent will increase repo discoverability and real usage: clear value prop
   in README, searchable keywords, copy-paste quick wins, social proof, integration hooks for
-  Cursor/Colab/PyPI, and honest CTAs that convert visitors into ri-engine users within 60 seconds.
+  Colab/PyPI/Codespaces, and honest CTAs that convert visitors into ri-engine users within 60 seconds.
   Include audience table, GitHub topics, integration snippets, and structured deliverable format.
 
 max_generations: 6

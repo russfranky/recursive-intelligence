@@ -21,7 +21,7 @@ entries:
     category: Agentic Development
     audience: developer
     task_type: agent_prompt
-    source: config/use_cases/cursor_coding_agent.yaml
+    source: config/use_cases/coding_agent.yaml
 
   - id: operations:end_user
     category: Operations

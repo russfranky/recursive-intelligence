@@ -9,11 +9,12 @@ TOPICS=(
   prompt-engineering
   llm
   system-prompts
-  cursor
   cli
   open-source
   prompt-improvement
   chatgpt
+  claude
+  copilot
   agents
 )
 

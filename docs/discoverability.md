@@ -11,7 +11,7 @@ How to get **recursive-intelligence** found and used — evolved via ri-engine's
 
 | You are… | You want… | Start here |
 |----------|-----------|------------|
-| Cursor / Copilot user | Better system prompts & `.cursorrules` | `ri-engine improve --template coding-assistant` |
+| Developer / coding agent user | Better system prompts for coding assistants | `ri-engine improve --template coding-assistant` |
 | Support / ops lead | ChatGPT instructions that resolve issues | `ri-engine improve --template customer-support` |
 | Developer evaluating tools | Proof without API keys | `ri-engine demo` |
 | Python builder | Drop-in `improve()` API | `from ri_engine import improve` |
@@ -24,7 +24,7 @@ How to get **recursive-intelligence** found and used — evolved via ri-engine's
 pip install -e . && ri-engine improve --template customer-support
 ```
 
-Copy **Your Improved Prompt — Copy This** into ChatGPT, Claude, or Cursor. Done.
+Copy **Your Improved Prompt — Copy This** into ChatGPT, Claude, or your AI tool. Done.
 
 ---
 
@@ -34,28 +34,28 @@ Copy **Your Improved Prompt — Copy This** into ChatGPT, Claude, or Cursor. Don
 
 ```bash
 gh repo edit russfranky/recursive-intelligence --add-topic prompt-engineering --add-topic llm \
-  --add-topic system-prompts --add-topic cursor --add-topic cli --add-topic open-source \
-  --add-topic prompt-improvement --add-topic chatgpt --add-topic agents
+  --add-topic system-prompts --add-topic cli --add-topic open-source \
+  --add-topic prompt-improvement --add-topic chatgpt --add-topic claude --add-topic agents
 ```
 
 ### PyPI / package keywords
 
-See `pyproject.toml` — keywords include `prompt-engineering`, `system-prompts`, `cursor`, `chatgpt`.
+See `pyproject.toml` — keywords include `prompt-engineering`, `system-prompts`, `chatgpt`, `claude`.
 
 ### README headings people search
 
 - prompt improvement / prompt engineering CLI
 - system prompt generator
-- Cursor rules generator
+- coding assistant prompt tool
 - offline prompt tool (no API key)
 
 ---
 
 ## Integration hooks
 
-### Cursor
+### Project instructions
 
-Add to `.cursor/rules` or project instructions:
+Add to your agent system prompt or project rules file:
 
 ```markdown
 For prompt work, use ri-engine: `ri-engine improve --template coding-assistant`

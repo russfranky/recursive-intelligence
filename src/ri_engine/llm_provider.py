@@ -98,7 +98,7 @@ class MockLLMProvider:
                 "CORRELATION: Jacquard loom ↔ binary programmability | STRUCTURE: stored program separate from hardware | "
                 "MUTATION: treat each research claim as a punch card — independently verifiable, composable into larger patterns."
             )
-        if "coding" in user.lower() or "cursor" in user.lower():
+        if "coding" in user.lower():
             return (
                 "CORRELATION: JIT manufacturing ↔ minimal diffs | STRUCTURE: produce only what's needed, when needed | "
                 "MUTATION: every line in the diff must justify its existence — if removing it doesn't break tests, remove it."

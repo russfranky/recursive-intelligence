@@ -144,6 +144,18 @@ ri-engine improve --template discoverability-agent
 
 Canonical prompt: **`docs/discoverability_agent_prompt.md`** · Playbook: [`docs/discoverability.md`](discoverability.md)
 
+### Occam's razor (default on)
+
+Simplicity pressure across VSR — penalize bloat, tie-break minimal sufficient prompts:
+
+```bash
+ri-engine improve --template occams-razor
+```
+
+Docs: [`docs/occams_razor_agent_prompt.md`](occams_razor_agent_prompt.md) · Deliverable: [`docs/occams_razor_deliverable.md`](occams_razor_deliverable.md)
+
+Disable per run: `metadata={"enable_occams_razor": False}`
+
 ### Seed → evolved (publication agent)
 
 | Stage | Content |

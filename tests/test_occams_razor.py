@@ -50,6 +50,30 @@ def test_occams_enabled_default_true():
     assert occams_enabled(RunConfig(seed_prompt="a", objective="b"))
 
 
+def test_adjust_fitness_skips_when_utility_low():
+    lean = adjust_fitness(0.9, " ".join(["word"] * 50), utility=0.5)
+    fat = adjust_fitness(0.9, " ".join(["word"] * 2500), utility=0.5)
+    assert lean == fat == 0.9
+
+
+def test_prune_lineage_traits_caps_and_dedupes():
+    from ri_engine.occams_razor import prune_lineage_traits
+
+    raw = "\n".join(
+        f"- [TRAIT:constraint_first] Rule {i} (evidence: high)" for i in range(10)
+    )
+    pruned = prune_lineage_traits(raw, max_traits=6)
+    assert pruned.count("[TRAIT:") <= 6
+
+
+def test_occam_strategy_order_prioritizes_minimal():
+    from ri_engine.occams_razor import occam_strategy_order
+
+    base = ["membrane_dissolution", "minimal_essential", "constraint_first"]
+    ordered = occam_strategy_order(base)
+    assert ordered[0] == "minimal_essential"
+
+
 def test_occams_can_disable_via_metadata():
     cfg = RunConfig(
         seed_prompt="a",

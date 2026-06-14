@@ -44,8 +44,19 @@ def composite_simplicity(content: str) -> float:
     return max(0.0, min(1.0, raw))
 
 
-def adjust_fitness(base: float, content: str, *, weight: float = 0.12) -> float:
-    """Blend task fitness with simplicity (Occam's razor)."""
+def adjust_fitness(
+    base: float,
+    content: str,
+    *,
+    weight: float = 0.12,
+    utility: float | None = None,
+) -> float:
+    """Blend task fitness with simplicity (Occam's razor).
+
+    Skips simplicity penalty when utility < 0.7 — never sacrifice sufficiency for brevity.
+    """
+    if utility is not None and utility < 0.7:
+        return base
     sim = composite_simplicity(content)
     return base * (1.0 - weight) + sim * weight
 
@@ -56,9 +67,63 @@ def apply_occam_to_candidates(candidates: list[Candidate], *, weight: float = 0.
             continue
         c.scores = dict(c.scores)
         c.scores["simplicity"] = composite_simplicity(c.content)
-        c.fitness = adjust_fitness(c.fitness, c.content, weight=weight)
+        utility = c.scores.get("utility")
+        c.fitness = adjust_fitness(
+            c.fitness,
+            c.content,
+            weight=weight,
+            utility=utility,
+        )
         c.metadata["occam_simplicity"] = c.scores["simplicity"]
     return candidates
+
+
+_OCCAM_STRATEGY_PRIORITY = (
+    "minimal_essential",
+    "constraint_first",
+    "measurable_outcomes",
+    "failure_mode_guards",
+    "recursive_self_eval",
+    "adversarial_critique",
+    "cross_domain_metaphor",
+    "membrane_dissolution",
+)
+
+
+def occam_strategy_order(base: list[str]) -> list[str]:
+    """Bias variation toward minimal strategies when Occam is enabled."""
+    seen: set[str] = set()
+    ordered: list[str] = []
+    for name in _OCCAM_STRATEGY_PRIORITY:
+        if name in base and name not in seen:
+            ordered.append(name)
+            seen.add(name)
+    for name in base:
+        if name not in seen:
+            ordered.append(name)
+    return ordered
+
+
+def prune_lineage_traits(lineage: str, *, max_traits: int = 6) -> str:
+    """Cap retention output and drop duplicate trait names (Occam's razor)."""
+    from ri_engine.trait_parser import parse_traits
+
+    traits = parse_traits(lineage)
+    if not traits:
+        return lineage
+    seen_names: set[str] = set()
+    kept: list[str] = []
+    for t in traits:
+        key = t.normalized_name()
+        if key in seen_names:
+            continue
+        seen_names.add(key)
+        instr = t.instruction[:80].rstrip()
+        ev = f" (evidence: {t.evidence[:60]})" if t.evidence else ""
+        kept.append(f"- [TRAIT:{t.name}] {instr}{ev}")
+        if len(kept) >= max_traits:
+            break
+    return "\n".join(kept) if kept else lineage
 
 
 def rank_with_occam_tiebreak(candidates: list[Candidate]) -> list[Candidate]:
@@ -67,35 +132,3 @@ def rank_with_occam_tiebreak(candidates: list[Candidate]) -> list[Candidate]:
         candidates,
         key=lambda c: (-(c.fitness or 0.0), len(c.content.split()), len(c.content)),
     )
-
-
-def select_survivors_occam(
-    ranked: list[Candidate],
-    survivors_count: int,
-    *,
-    tie_threshold: float = 0.01,
-) -> list[Candidate]:
-    """Pick survivors; when fitness is within threshold, prefer simpler prompts."""
-    if not ranked:
-        return []
-    ordered = rank_with_occam_tiebreak(ranked)
-    survivors: list[Candidate] = []
-    for c in ordered:
-        if len(survivors) >= survivors_count:
-            break
-        if not survivors:
-            survivors.append(c)
-            continue
-        if abs((c.fitness or 0) - (survivors[-1].fitness or 0)) <= tie_threshold:
-            # Occam tie-break already applied via rank_with_occam_tiebreak ordering
-            survivors.append(c)
-        elif (c.fitness or 0) >= (survivors[-1].fitness or 0) - tie_threshold:
-            survivors.append(c)
-        else:
-            break
-    while len(survivors) < survivors_count and len(survivors) < len(ordered):
-        for c in ordered:
-            if c not in survivors:
-                survivors.append(c)
-                break
-    return survivors[:survivors_count]

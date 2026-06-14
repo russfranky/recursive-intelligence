@@ -4,6 +4,7 @@ from ri_engine.events import EventKind, RunEvent
 from ri_engine.llm_provider import LLMProvider, load_prompt
 from ri_engine.models import Candidate, RunConfig
 from ri_engine.observer import NullObserver, RunObserver
+from ri_engine.occams_razor import occams_enabled, prune_lineage_traits
 
 
 class RetentionEngine:
@@ -59,6 +60,8 @@ Apply Occam's razor: max 6 traits, merge duplicates, drop lowest-evidence patter
 Output a brief (3–6 bullet points) lineage memory for the Variation engine."""
 
         lineage = self.llm.complete(self.SYSTEM, user, temperature=0.3).strip()
+        if occams_enabled(config):
+            lineage = prune_lineage_traits(lineage)
         self._emit(
             EventKind.INFO,
             "lineage memory synthesized",

@@ -10,13 +10,12 @@ Best for: terminal UI, runbook, plateau cycling, macro registry, committing chan
 
 ### Steps
 
-1. Open the repo on GitHub: [github.com/russfranky/russfranky](https://github.com/russfranky/russfranky)
+1. Open the repo on GitHub: [github.com/russfranky/recursive-intelligence](https://github.com/russfranky/recursive-intelligence)
 2. Click **Code** → **Codespaces** → **Create codespace on main**
-3. Wait for the dev container to build (`pip install -e .` runs automatically)
+3. Wait for the dev container to build (`pip install -e ".[all]"` runs automatically)
 4. In the terminal:
 
 ```bash
-# Already in recursive-intelligence/
 ri-engine templates
 ri-engine improve --template customer-support
 ri-engine improve --template customer-support --until-plateau --runbook
@@ -50,8 +49,8 @@ Best for: sharing demos, calling `improve()` from cells, quick experiments witho
 
 ### Steps
 
-1. Open the notebook (pick one):
-   - [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/russfranky/russfranky/blob/main/recursive-intelligence/notebooks/ri_engine_quickstart.ipynb)
+1. Open the notebook:
+   - [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/russfranky/recursive-intelligence/blob/main/notebooks/ri_engine_quickstart.ipynb)
    - Or upload `notebooks/ri_engine_quickstart.ipynb` manually
 2. **Runtime → Run all** (first run clones the repo and installs)
 3. Edit seed/objective cells and re-run improvement cells
@@ -84,7 +83,7 @@ flowchart LR
 | Task | Use |
 |------|-----|
 | Draft desired outcome + test `improve()` quickly | **Colab** |
-| Run Grok-style terminal UI, plateau, runbook | **Codespaces** |
+| Run terminal UI, plateau, runbook | **Codespaces** |
 | Inspect macro trait pool | **Codespaces** — `ri-engine expert macro-registry` |
 | Share a demo link with non-developers | **Colab** badge |
 | Edit engine code + run tests | **Codespaces** — `pytest tests/ -q` |
@@ -126,7 +125,7 @@ Both work with the **mock provider** at $0 API cost.
 ## Troubleshooting
 
 **Codespaces: `ri-engine: command not found`**  
-Re-run: `pip install -e ".[all]"` from `recursive-intelligence/`.
+Re-run: `pip install -e ".[all]"` from the repo root.
 
 **Colab: clone fails**  
 Check repo is public or Colab has access; update `REPO_URL` in the notebook if you forked.

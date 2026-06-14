@@ -9,7 +9,7 @@
     "conversational"
   ],
   "cells_pooled": 9,
-  "registry_path": "/workspace/recursive-intelligence/config/linguistic_registry.json",
+  "registry_path": "config/linguistic_registry.json",
   "coverage": {
     "leaning_distribution": {
       "plain": 4,

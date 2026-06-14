@@ -52,6 +52,7 @@ Objective: {config.objective}
 
 Extract the fittest traits from these survivors for breeding the next generation.
 Focus on: what to keep, what to amplify, what constraints proved effective.
+Apply Occam's razor: max 6 traits, merge duplicates, drop lowest-evidence patterns, shortest imperative phrasing.
 
 {"".join(blocks)}
 

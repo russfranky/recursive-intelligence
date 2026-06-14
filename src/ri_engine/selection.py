@@ -6,6 +6,11 @@ from ri_engine.events import EventKind, RunEvent
 from ri_engine.llm_provider import LLMProvider, load_prompt
 from ri_engine.models import Candidate, RunConfig
 from ri_engine.observer import NullObserver, RunObserver
+from ri_engine.occams_razor import (
+    apply_occam_to_candidates,
+    occams_enabled,
+    rank_with_occam_tiebreak,
+)
 
 
 class SelectionEnvironment:
@@ -53,7 +58,14 @@ class SelectionEnvironment:
                 scores=candidate.scores,
                 candidate_id=candidate.id,
             )
-        return sorted(scored, key=lambda c: c.fitness or 0, reverse=True)
+        if occams_enabled(config):
+            apply_occam_to_candidates(scored)
+            self._emit(
+                EventKind.INFO,
+                "Occam's razor applied — simplicity scored and blended into fitness",
+                generation=generation,
+            )
+        return rank_with_occam_tiebreak(scored)
 
     def select_survivors(
         self,
@@ -83,16 +95,17 @@ class SelectionEnvironment:
             blocks.append(f"---CANDIDATE {i}---\n{c.content}\n")
         user = f"""# Selection Environment Evaluation
 Objective: {config.objective}
-Fitness dimensions: {", ".join(config.fitness_weights.keys())}
+Fitness dimensions: {", ".join(config.fitness_weights.keys())}, simplicity (0.0–1.0)
 
 Score each candidate 0.0–1.0 on each dimension.
-Penalize: engagement-bait, vague goals, missing recursive hooks, proxy metrics.
-Reward: measurable outcomes, self-evaluation loops, cross-domain insight, guardrails.
+Penalize: engagement-bait, vague goals, missing recursive hooks, proxy metrics, unnecessary bloat.
+Reward: measurable outcomes, self-evaluation loops, cross-domain insight, guardrails, minimal sufficient length.
+Apply Occam's razor: prefer the shortest prompt that still meets utility ≥0.7.
 
 {"".join(blocks)}
 
 Respond ONLY with lines like:
-CANDIDATE 0: clarity=0.85, novelty=0.70, utility=0.90, coherence=0.80"""
+CANDIDATE 0: clarity=0.85, novelty=0.70, utility=0.90, coherence=0.80, simplicity=0.88"""
 
         response = self.llm.complete(self.system_for(config), user, temperature=0.2)
         parsed, fallback_count = self._parse_scores(candidates, response)
@@ -131,6 +144,7 @@ CANDIDATE 0: clarity=0.85, novelty=0.70, utility=0.90, coherence=0.80"""
                     "novelty": 0.5 + (hash(c.id) % 40) / 100,
                     "utility": 0.5 + (len(c.content) % 35) / 100,
                     "coherence": 0.55 + (hash(c.content[:50]) % 25) / 100,
+                    "simplicity": 0.5 + (max(0, 800 - len(c.content.split())) % 30) / 100,
                 }
         return candidates, fallback_count
 

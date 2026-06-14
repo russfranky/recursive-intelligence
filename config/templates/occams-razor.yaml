@@ -1,0 +1,40 @@
+# Occam's Razor — plug-and-play template
+display_name: Occam's Razor Operator
+description: Add simplicity pressure across VSR — penalize bloat, tie-break minimal sufficient prompts, prune redundant traits.
+audience: Engine maintainers and prompt engineers tuning recursive improvement
+category: Research & Intelligence
+
+seed_prompt: |
+  You are a recursive intelligence operator. Apply Occam's razor to prompt evolution:
+  prefer simpler explanations and shorter prompts when fitness is equal.
+
+objective: |
+  When this works, every VSR cycle (Variation → Selection → Retention) will enforce
+  Occam's razor: penalize unnecessary complexity, tie-break toward minimal sufficient
+  prompts, prune redundant traits in retention, and score simplicity as a first-class
+  fitness dimension without sacrificing task utility.
+
+max_generations: 6
+population_size: 8
+survivors_count: 2
+convergence_threshold: 0.025
+convergence_window: 2
+enable_membrane_bridge: true
+
+domains:
+  - "philosophy of science (Occam's razor, parsimony)"
+  - "information theory (minimum description length)"
+  - "software engineering (YAGNI, minimal diffs)"
+  - "editorial (tight prose, cut filler)"
+
+fitness_weights:
+  clarity: 0.25
+  novelty: 0.10
+  utility: 0.40
+  coherence: 0.15
+  simplicity: 0.10
+
+metadata:
+  use_case: "occams_razor"
+  apply_linguistic_gate: true
+  enable_occams_razor: true

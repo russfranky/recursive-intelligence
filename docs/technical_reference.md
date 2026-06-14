@@ -17,6 +17,7 @@ Linguistic Gate → Macro Priors → [Membrane Bridge] → Variation → Selecti
 | Selection | `selection.py` | Multi-dimensional fitness scoring |
 | Retention | `retention.py` | Lineage memory + convergence |
 | Membrane | `membrane.py` | Cross-domain correlation (optional) |
+| Occam's razor | `occams_razor.py` | Simplicity scoring + fitness blend (default on) |
 | Linguistic gate | `language_leanings.py` | Pre-VSR style resolution |
 | **Macro learning** | `macro_registry.py` | **Internal** — pool traits from selected prompts; inject priors on next run |
 
@@ -81,6 +82,22 @@ Use `improve()` unless you need full report access or custom observers.
 ## Client layer
 
 `client_view.py` translates technical reports into `your_improved_prompt.json` for non-expert CLI users.
+
+## Occam's razor (default on)
+
+Every VSR cycle applies simplicity pressure via `occams_razor.py`:
+
+- **Selection** scores `simplicity` and blends it into fitness (12% weight by default)
+- **Tie-break** at equal fitness prefers shorter, fewer-section prompts
+- **Retention** instructs trait pruning (max 6, merge duplicates)
+
+Disable per run:
+
+```python
+improve(..., metadata={"enable_occams_razor": False})
+```
+
+Evolve Occam rules: `ri-engine improve --template occams-razor` · canonical prompt: `docs/occams_razor_agent_prompt.md`
 
 ## Research background
 

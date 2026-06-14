@@ -9,5 +9,6 @@ prompts/.backup/
 !.gitkeep
 !config/linguistic_registry.json
 !config/linguistic_pool_report.json
+!.devcontainer/devcontainer.json
 config/real_world/active.yaml
 output/real_world/

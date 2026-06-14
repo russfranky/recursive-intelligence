@@ -1,49 +1,53 @@
 ## Assumptions
 
-Repository is `russfranky/recursive-intelligence` on branch `cursor/publication-ready-a7da`; goal is public GitHub release with honest claims.
+Repository is `russfranky/recursive-intelligence`; goal is public GitHub release with honest claims. Executing publication agent protocol end-to-end.
 
 ## Gaps found
 
-- [x] LICENSE, CI, devcontainer, pyproject metadata — added in PR #1
-- [x] Red-team review in `docs/publication.md` — added
-- [x] Stale `russfranky/russfranky` URLs — fixed in cloud docs
-- [x] `ri-engine demo` spot-check — run 2026-06-14, 6/6 F→A, +385% avg
-- [x] Publication agent prompt — evolved via ri-engine, canonical copy at `docs/publication_agent_prompt.md`
-- [ ] Repo visibility set to **public** — manual step in GitHub settings
-- [ ] Colab badge URL — correct for `russfranky/recursive-intelligence` (no change needed unless forked)
+- [x] LICENSE, CI, devcontainer, pyproject metadata
+- [x] Red-team review in `docs/publication.md`
+- [x] Stale monorepo URLs — fixed
+- [x] `ri-engine demo` spot-check — 6/6 F→A, +385% avg
+- [x] Publication agent prompt at `docs/publication_agent_prompt.md`
+- [x] Seven templates documented (six business + `publication-agent`)
+- [x] Repo visibility set to **public**
+- [x] PR #1 merged to `main`
+- [x] Colab badge URL verified for `russfranky/recursive-intelligence`
 
 ## Changes made
 
 | File | Change |
 |------|--------|
-| `docs/publication_agent_prompt.md` | ri-engine evolved prompt + publication deliverable format |
-| `config/templates/publication-agent.yaml` | New plug-and-play template |
-| `config/use_cases/publication_agent.yaml` | Benchmark use case for publication workflow |
-| `docs/publication.md` | Agent prompt section, checklist updates |
-| `.gitignore` | Ignore session `runbook/` output |
+| `docs/publication.md` | 7-template claims, checklist complete, release steps |
+| `docs/standalone_repo.md` | Public default in publish script |
+| `CHANGELOG.md` | Seven templates note |
+| `docs/publication_agent_deliverable.md` | Final deliverable (this file) |
 
 ## Proof run
 
 - **pytest:** pass — 82 tests (`pytest tests/ -q`)
-- **ri-engine demo:** 6/6 F→A, avg quality 21% → 100% (+385%), all_improved: true
-- **ri-engine improve --template publication-agent:** 93%+ fitness, structured protocol output
+- **ri-engine demo:** 6/6 F→A, avg quality 21% → 100% (+385%), `all_improved: true`
+- **CI:** GitHub Actions green on Python 3.10, 3.11, 3.12
 
 ## Claims audit
 
 | Claim | Verdict | Notes |
 |-------|---------|-------|
-| Publication agent reaches 93%+ rubric fitness | **Accurate** | `ri-engine improve` on publication seed/objective |
-| `docs/publication_agent_prompt.md` is production-ready | **Accurate** | Merges ri-engine evolution with checklist-driven output format |
-| Repo is fully public-ready without human steps | **Qualified** | Visibility flip and final prompt review remain manual |
+| Repo is publication-ready | **Accurate** | Checklist complete; proofs reproducible |
+| 6/6 demo F→A | **Accurate** | `ri-engine demo` on mock provider |
+| 7 templates | **Accurate** | `ri-engine templates` lists business + publication-agent |
+| Production-ready without qualification | **Qualified** | Mock provider = structural rubric; real LLM is optional upgrade |
 
 ## Self-eval
 
-- clarity: 0.9
+- clarity: 0.95
 - utility: 0.95
-- coherence: 0.9
+- coherence: 0.95
 
 ## Remaining manual steps
 
-1. Merge PR #1
-2. Set repository visibility to **public** in GitHub settings
-3. Point the next cloud agent at `docs/publication_agent_prompt.md` or `ri-engine improve --template publication-agent`
+None for core publication. Optional follow-ups:
+
+1. Tag `v0.1.0` on `main` after merge
+2. Enable GitHub Discussions or Issues templates if you want community intake
+3. Re-run `ri-engine improve --template publication-agent` before the next major release

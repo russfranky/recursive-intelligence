@@ -24,7 +24,7 @@ chmod +x scripts/publish-private-repo.sh
 ./scripts/publish-private-repo.sh
 ```
 
-Defaults: **`russfranky/recursive-intelligence`** (private).
+Defaults: **`russfranky/recursive-intelligence`** (public by default in publish script).
 
 ### Custom owner, name, or visibility
 

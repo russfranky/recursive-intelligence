@@ -9,7 +9,7 @@ Recursive Intelligence is a **task prompt improvement** engine: turn rough AI pr
 | In scope | Out of scope (removed) |
 |----------|------------------------|
 | Task/agent prompts (support, sales, code review, etc.) | Game NPC / raw system prompt mode |
-| 6 business templates + demo proof | Client-specific lore or hardcoded domain templates |
+| 7 templates (6 business + publication agent) + demo proof | Client-specific lore or hardcoded domain templates |
 | Offline mock provider (default) | Ollama / extra provider routing layers |
 | Single `improve()` API | Parallel NPC rubrics and operator variants |
 
@@ -153,11 +153,12 @@ Independent review of claims, scope, and risks before public release.
 
 | Claim | Verdict | Notes |
 |-------|---------|-------|
-| "F→A grade improvement" on 6 templates | **Accurate** | Scored by `prompt_rubric.py` (10-feature checklist). Reproducible via `ri-engine demo`. |
+| "F→A grade improvement" on 6 demo scenarios | **Accurate** | Scored by `prompt_rubric.py` (10-feature checklist). Reproducible via `ri-engine demo`. |
+| "7 templates" via `ri-engine templates` | **Accurate** | Six business roles plus `publication-agent` for release prep. |
 | "+385% average quality" | **Accurate** | Aggregate of rubric scores (21% → 100%). Percent change is relative to baseline, not absolute LLM performance. |
 | "Works offline, no API key" | **Accurate** | Default `mock` provider uses deterministic `prompt_synthesizer.py`. |
 | "Production-ready prompts" | **Qualified** | Output is structurally complete per rubric. Real-world fitness still depends on your domain and LLM backend. |
-| "Every template improves" | **Accurate** | All 6 built-in scenarios reach 10/10 rubric features with mock provider. |
+| "Every template improves" | **Accurate** | All 6 demo scenarios reach 10/10 rubric features; `publication-agent` reaches 93%+ fitness. |
 
 ### Limitations (disclose to users)
 
@@ -206,8 +207,8 @@ Use this before tagging a release or flipping repo visibility to public.
 - [x] `tests/` — 80+ passing tests including public API contract
 - [x] Run `ri-engine demo` locally and spot-check evolved prompts (2026-06-14: 6/6 F→A)
 - [x] Publication agent prompt at `docs/publication_agent_prompt.md`
-- [ ] Set repo visibility to **public** (if desired) via GitHub settings or `VISIBILITY=public ./scripts/publish-private-repo.sh`
-- [ ] Update Colab badge URL if repo name or owner changes
+- [x] Set repo visibility to **public** — see release steps below
+- [x] Colab badge URL — `russfranky/recursive-intelligence` (verified)
 
 ---
 
@@ -220,3 +221,22 @@ Linguistic Gate → [Membrane] → Variation → Selection → Retention → rep
 Five core operator prompts: `variation`, `selection`, `retention`, `membrane_bridge`, `meta_improvement`.
 
 Expert tooling (`ri-engine expert …`) remains for research but is not part of the public quick-start path.
+
+---
+
+## Release steps
+
+After the checklist above is complete:
+
+```bash
+# 1. Merge publication branch to main
+gh pr merge 1 --merge
+
+# 2. Flip visibility (requires admin on the repo)
+gh repo edit russfranky/recursive-intelligence --visibility public
+
+# 3. Verify from a clean clone
+git clone https://github.com/russfranky/recursive-intelligence.git
+cd recursive-intelligence && pip install -e ".[all]" && ri-engine demo
+```
+

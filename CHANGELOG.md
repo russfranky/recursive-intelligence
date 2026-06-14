@@ -7,7 +7,7 @@ All notable changes to this project are documented here.
 ### Added
 
 - Public `improve()` API and `ri-engine` CLI for task prompt improvement
-- Six business templates (support, sales, security, coding, research, code review)
+- Seven plug-and-play templates (six business roles + publication agent)
 - Offline mock provider — no API key required for demo and templates
 - Plateau cycling with session resume and local runbook compilation
 - Benchmark demo (`ri-engine demo`) proving F→A quality gains across 6 scenarios

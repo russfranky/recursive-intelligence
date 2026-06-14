@@ -115,6 +115,15 @@ Track over time (manual or GitHub insights):
 - Colab notebook opens (if analytics available)
 - Issues mentioning "how do I improve my prompt"
 
+### Initiate (one command)
+
+```bash
+chmod +x scripts/initiate-discoverability.sh
+./scripts/initiate-discoverability.sh
+```
+
+Runs plateau + runbook for the discoverability agent and attempts to set GitHub topics (topics require repo admin locally).
+
 Re-run the discoverability agent when positioning changes:
 
 ```bash

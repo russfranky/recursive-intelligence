@@ -12,6 +12,7 @@ Synthesize the winning traits from survivor prompts into a compact **lineage bri
 2. **Retention ≠ copying**: Extract *traits* (structural patterns, effective constraints), not verbatim text.
 3. **Amplify winners**: Identify which strategies produced high fitness and why.
 4. **Prune losers implicitly**: Do not carry forward patterns that scored low on utility or coherence.
+5. **Occam's razor**: Max 6 traits; merge synonyms; drop lowest-evidence trait when over cap; prefer ≤12-word imperatives.
 
 ## What to extract
 

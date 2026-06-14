@@ -5,6 +5,7 @@ import uuid
 from ri_engine.events import EventKind, RunEvent
 from ri_engine.llm_provider import LLMProvider, load_prompt
 from ri_engine.models import Candidate, RunConfig
+from ri_engine.occams_razor import occam_strategy_order, occams_enabled
 from ri_engine.observer import NullObserver, RunObserver
 
 
@@ -107,17 +108,20 @@ class VariationEngine:
     def _strategies_for(self, config: RunConfig) -> list[str]:
         order = (config.metadata or {}).get("macro_strategy_order") or []
         if not order:
-            return list(self.STRATEGIES)
-        seen: set[str] = set()
-        merged: list[str] = []
-        for name in order:
-            if name in self.STRATEGIES and name not in seen:
-                merged.append(name)
-                seen.add(name)
-        for name in self.STRATEGIES:
-            if name not in seen:
-                merged.append(name)
-        return merged
+            base = list(self.STRATEGIES)
+        else:
+            seen: set[str] = set()
+            base = []
+            for name in order:
+                if name in self.STRATEGIES and name not in seen:
+                    base.append(name)
+                    seen.add(name)
+            for name in self.STRATEGIES:
+                if name not in seen:
+                    base.append(name)
+        if occams_enabled(config):
+            return occam_strategy_order(base)
+        return base
 
     def _mutate(
         self,
@@ -128,6 +132,11 @@ class VariationEngine:
         generation: int,
         index: int,
     ) -> tuple[str, bool]:
+        occam_line = (
+            "Apply Occam's razor: omit sections that do not increase utility; merge duplicate constraints.\n"
+            if occams_enabled(config)
+            else ""
+        )
         user = f"""# Recursive Intelligence — Variation Pass
 Generation: {generation}
 Strategy: {strategy}
@@ -143,7 +152,7 @@ Domains for cross-pollination: {", ".join(config.domains) or "any adjacent field
 ## Instructions
 Produce ONE improved prompt variant using strategy "{strategy}".
 The variant must remain executable by an agent and include a hook for the next recursive iteration.
-Output ONLY the new prompt — no commentary."""
+{occam_line}Output ONLY the new prompt — no commentary."""
 
         variant = self.llm.complete(
             self.system_for(config), user, temperature=config.variation_temperature

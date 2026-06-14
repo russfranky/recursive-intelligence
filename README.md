@@ -98,9 +98,10 @@ Runs 6 real business scenarios (support, sales, security, coding, research, code
 | `research-analyst` | Structured research and analysis |
 | `publication-agent` | Preparing a repo for public GitHub release |
 | `discoverability-agent` | Growing repo adoption — README, keywords, CTAs |
+| `occams-razor` | Add simplicity pressure across the VSR loop |
 
 ```bash
-ri-engine improve --template discoverability-agent
+ri-engine improve --template occams-razor
 ```
 
 ---

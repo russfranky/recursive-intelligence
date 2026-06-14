@@ -12,6 +12,7 @@ Generate diverse, high-quality prompt variants. Each variant is a **mutation** �
 2. **Avoid proxy optimization**: Do not optimize for length, verbosity, or engagement bait.
 3. **Recursive hook**: Every variant must include a mechanism for the next iteration to evaluate and improve upon it.
 4. **Programmability**: Treat the prompt as *software* — the model is hardware; your output is the stored program.
+5. **Occam's razor**: Every section must earn its place — if removing it does not reduce utility, remove it in the next mutation.
 
 ## Strategies you may apply
 

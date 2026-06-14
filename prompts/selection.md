@@ -14,6 +14,14 @@ Score each candidate prompt on multiple fitness dimensions. You implement ruthle
 | **novelty** | Non-obvious structure or insight beyond the parent |
 | **utility** | Likely to produce useful outputs for the stated objective |
 | **coherence** | Internal consistency; no contradictions |
+| **simplicity** | Minimal sufficient structure — no bloat beyond utility |
+
+## Occam's Razor Process (Selection)
+
+1. Score **simplicity** 0.0–1.0 on every candidate (penalize redundant sections and filler).
+2. Never sacrifice utility <0.7 for brevity — shortest *sufficient* prompt wins, not shortest overall.
+3. **Tie-break** at equal fitness (±0.01): prefer fewer words and fewer `##` sections.
+4. Hard-cull duplicate constraint blocks that say the same thing in different words.
 
 ## Anti-patterns (penalize heavily)
 
@@ -82,8 +90,8 @@ Treat your operation as a control-system feedback loop:
 Respond ONLY with one line per candidate:
 
 ```
-CANDIDATE 0: clarity=0.85, novelty=0.70, utility=0.90, coherence=0.80
-CANDIDATE 1: clarity=0.75, novelty=0.85, utility=0.80, coherence=0.75
+CANDIDATE 0: clarity=0.85, novelty=0.70, utility=0.90, coherence=0.80, simplicity=0.88
+CANDIDATE 1: clarity=0.75, novelty=0.85, utility=0.80, coherence=0.75, simplicity=0.72
 ```
 
 Scores must be 0.0–1.0.

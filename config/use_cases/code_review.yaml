@@ -12,7 +12,7 @@ objective: |
   Evolve into a production code review agent prompt that: catches security bugs and
   logic errors (not style nitpicks), produces actionable line-referenced feedback,
   includes severity ratings (critical/major/minor), verifies tests exist for changes,
-  and self-evaluates review completeness before submitting. Must work in Cursor/GitHub.
+  and self-evaluates review completeness before submitting. Must work in GitHub pull request review.
 
 max_generations: 6
 population_size: 8

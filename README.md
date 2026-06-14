@@ -2,7 +2,7 @@
 
 **Turn rough AI prompts into production-ready ones — automatically.**
 
-Improve system prompts for **Cursor**, **ChatGPT**, **Claude**, and any AI agent. No API key required. One command, copy-paste result.
+Improve system prompts for **ChatGPT**, **Claude**, **Copilot**, and any AI agent. No API key required. One command, copy-paste result.
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/russfranky/recursive-intelligence)
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/russfranky/recursive-intelligence/blob/main/notebooks/ri_engine_quickstart.ipynb)
@@ -25,7 +25,7 @@ Copy the improved prompt into your AI tool. [Full discoverability guide →](doc
 
 | You are… | Start here |
 |----------|------------|
-| Cursor / Copilot user | `ri-engine improve --template coding-assistant` |
+| Developer / coding agent user | `ri-engine improve --template coding-assistant` |
 | Support or ops lead | `ri-engine improve --template customer-support` |
 | Evaluating the tool (no API key) | `ri-engine demo` |
 | Python integrator | `from ri_engine import improve` |
@@ -92,7 +92,7 @@ Runs 6 real business scenarios (support, sales, security, coding, research, code
 |----------|----------|
 | `customer-support` | Help desks and support teams |
 | `code-review` | Engineering teams reviewing pull requests |
-| `coding-assistant` | Developers using Cursor, Copilot, etc. |
+| `coding-assistant` | Developers using coding agents and Copilot |
 | `sales-outreach` | Sales emails that get replies |
 | `security-response` | Security alert triage and response |
 | `research-analyst` | Structured research and analysis |

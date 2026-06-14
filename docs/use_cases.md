@@ -17,7 +17,7 @@ python3 examples/run_benchmark.py
 | Use Case | Before | After | Δ | Grade | Features |
 |----------|--------|-------|---|-------|----------|
 | **Code Review Agent** | 17% | **100%** | +488% | F→A | 0→10 |
-| **Cursor Coding Agent** | 24% | **100%** | +317% | F→A | 0→10 |
+| **AI Coding Assistant** | 24% | **100%** | +317% | F→A | 0→10 |
 | **Customer Support Agent** | 17% | **100%** | +477% | F→A | 0→10 |
 | **Research Analyst** | 26% | **100%** | +280% | F→A | 0→10 |
 | **Sales Outreach Agent** | 25% | **100%** | +300% | F→A | 0→10 |
@@ -52,7 +52,7 @@ ri-engine --config config/use_cases/code_review.yaml --quiet
 
 ---
 
-## Use Case 2: Cursor Coding Agent
+## Use Case 2: AI Coding Assistant
 
 **Problem:** Generic coding assistant over-explains and makes oversized diffs.
 
@@ -64,7 +64,7 @@ ri-engine --config config/use_cases/code_review.yaml --quiet
 - Self-eval on diff minimalism
 - Membrane insight: JIT manufacturing ↔ minimal diffs
 
-**Config:** `config/use_cases/cursor_coding_agent.yaml`
+**Config:** `config/use_cases/coding_agent.yaml`
 
 ---
 
@@ -160,4 +160,4 @@ output/benchmark/<use_case_id>/
 └── run_report.json     # Full VSR evolution log
 ```
 
-Deploy any `evolved_prompt.md` directly as your Cursor rule or agent system prompt.
+Deploy any `evolved_prompt.md` directly as your agent system prompt.

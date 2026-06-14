@@ -1,6 +1,6 @@
-# Cursor Agent Integration — Recursive Intelligence Loop
+# Agent Integration — Recursive Intelligence Loop
 
-Use this workflow to run the Recursive Intelligence Engine as an automated improvement loop inside Cursor or any agentic environment.
+Use this workflow to run the Recursive Intelligence Engine as an automated improvement loop inside any agentic environment.
 
 ## Phase 1: Seed
 
@@ -40,7 +40,7 @@ ri-engine --config config/my_agent.yaml --provider openai
 
 ## Phase 3: Deploy
 
-Copy `best_prompt` from the output JSON into your Cursor rules, `.cursorrules`, or agent system prompt.
+Copy `best_prompt` from the output JSON into your agent system prompt or project instructions file.
 
 ## Phase 4: Recursive Meta-Loop
 

@@ -107,8 +107,8 @@ def infer_role(parent: str, objective: str) -> str:
         return "Sales Outreach Agent"
     if "research" in objective.lower():
         return "Research Analyst Agent"
-    if "coding" in objective.lower() or "cursor" in objective.lower():
-        return "Cursor Coding Agent"
+    if "coding" in objective.lower():
+        return "AI Coding Assistant"
     return "Task Agent"
 
 
@@ -161,7 +161,7 @@ def infer_process_steps(role: str, objective: str) -> str:
 4. **Predictions**: include ≥1 testable prediction
 5. **Gaps**: explicit open questions for next iteration
 6. **Self-eval**: would a skeptical expert find this actionable?"""
-    if "coding" in obj or "cursor" in obj or "coding" in role_l:
+    if "coding" in obj or "coding" in role_l:
         return """\
 ## Coding Protocol
 1. **Read first**: understand existing code before editing
@@ -241,7 +241,7 @@ SELF_SCORE: reply_probability=0.X, spam_risk=0.X
 ## Open Questions
 - [for next iteration]
 ```"""
-    if "coding" in obj or "cursor" in obj or "coding" in role_l:
+    if "coding" in obj or "coding" in role_l:
         return """\
 ## Output Format
 1. Brief plan (≤3 bullets)

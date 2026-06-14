@@ -134,7 +134,17 @@ After evolution, the publication-specific deliverable format lives at:
 
 Point your next cloud agent or Cursor session at that file before running publication work. Example structured output: [`docs/publication_agent_deliverable.md`](publication_agent_deliverable.md).
 
-### Seed → evolved (this repo)
+### Discoverability agent
+
+Grow adoption with README hooks, keywords, and honest CTAs:
+
+```bash
+ri-engine improve --template discoverability-agent
+```
+
+Canonical prompt: **`docs/discoverability_agent_prompt.md`** · Playbook: [`docs/discoverability.md`](discoverability.md)
+
+### Seed → evolved (publication agent)
 
 | Stage | Content |
 |-------|---------|

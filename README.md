@@ -2,14 +2,33 @@
 
 **Turn rough AI prompts into production-ready ones — automatically.**
 
-No technical background required. Install, pick a template, run one command, copy your improved prompt into ChatGPT, Cursor, Claude, or any AI tool.
+Improve system prompts for **Cursor**, **ChatGPT**, **Claude**, and any AI agent. No API key required. One command, copy-paste result.
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/russfranky/recursive-intelligence)
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/russfranky/recursive-intelligence/blob/main/notebooks/ri_engine_quickstart.ipynb)
 
+**Try in 60 seconds (offline):**
+
+```bash
+pip install -e . && ri-engine improve --template customer-support
+```
+
+Copy the improved prompt into your AI tool. [Full discoverability guide →](docs/discoverability.md)
+
 **Run in the cloud (free tier):** [Codespaces + Colab guide](docs/cloud_development.md) — use Colab for quick API experiments, Codespaces for the full CLI, runbook, and plateau workflow.
 
-**License:** [MIT](LICENSE) · **Changelog:** [CHANGELOG.md](CHANGELOG.md)
+**License:** [MIT](LICENSE) · **Changelog:** [CHANGELOG.md](CHANGELOG.md) · **Grow usage:** [discoverability guide](docs/discoverability.md)
+
+---
+
+## Who it's for
+
+| You are… | Start here |
+|----------|------------|
+| Cursor / Copilot user | `ri-engine improve --template coding-assistant` |
+| Support or ops lead | `ri-engine improve --template customer-support` |
+| Evaluating the tool (no API key) | `ri-engine demo` |
+| Python integrator | `from ri_engine import improve` |
 
 ---
 
@@ -78,9 +97,10 @@ Runs 6 real business scenarios (support, sales, security, coding, research, code
 | `security-response` | Security alert triage and response |
 | `research-analyst` | Structured research and analysis |
 | `publication-agent` | Preparing a repo for public GitHub release |
+| `discoverability-agent` | Growing repo adoption — README, keywords, CTAs |
 
 ```bash
-ri-engine improve --template publication-agent
+ri-engine improve --template discoverability-agent
 ```
 
 ---

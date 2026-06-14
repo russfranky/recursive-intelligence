@@ -207,7 +207,15 @@ Use this before tagging a release or flipping repo visibility to public.
 - [x] `tests/` — 80+ passing tests including public API contract
 - [x] Run `ri-engine demo` locally and spot-check evolved prompts (2026-06-14: 6/6 F→A)
 - [x] Publication agent prompt at `docs/publication_agent_prompt.md`
-- [x] Set repo visibility to **public** — see release steps below
+- [x] PR #1 merged to `main` (2026-06-14)
+- [ ] Set repo visibility to **public** — requires repo admin (cloud agent token cannot change visibility):
+
+```bash
+gh repo edit russfranky/recursive-intelligence \
+  --visibility public \
+  --accept-visibility-change-consequences
+```
+
 - [x] Colab badge URL — `russfranky/recursive-intelligence` (verified)
 
 ---
@@ -229,13 +237,19 @@ Expert tooling (`ri-engine expert …`) remains for research but is not part of 
 After the checklist above is complete:
 
 ```bash
-# 1. Merge publication branch to main
-gh pr merge 1 --merge
+# 1. Merge publication branch to main — DONE (PR #1, 2026-06-14)
 
-# 2. Flip visibility (requires admin on the repo)
-gh repo edit russfranky/recursive-intelligence --visibility public
+# 2. Flip visibility (requires repo admin — run locally)
+gh repo edit russfranky/recursive-intelligence \
+  --visibility public \
+  --accept-visibility-change-consequences
 
-# 3. Verify from a clean clone
+# 3. Tag release (optional)
+git checkout main && git pull
+git tag -a v0.1.0 -m "First public release: ri-engine prompt improvement studio"
+git push origin v0.1.0
+
+# 4. Verify from a clean clone
 git clone https://github.com/russfranky/recursive-intelligence.git
 cd recursive-intelligence && pip install -e ".[all]" && ri-engine demo
 ```

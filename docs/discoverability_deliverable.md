@@ -56,3 +56,11 @@ pip install -e . && ri-engine improve --template customer-support
 2. `ri-engine improve --template customer-support` (or your role)
 3. Copy improved prompt into your AI tool
 4. Run `ri-engine demo` if you need proof first
+
+## Initiation status (2026-06-14)
+
+- [x] PR #3 merged to `main`
+- [x] Discoverability agent runbook approved (`runbook/RUNBOOK.md`)
+- [x] `scripts/initiate-discoverability.sh` added
+- [ ] GitHub topics — run `./scripts/set-repo-topics.sh` as repo admin
+- [ ] Repo visibility public — run `gh repo edit ... --visibility public` as admin

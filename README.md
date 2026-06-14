@@ -77,9 +77,10 @@ Runs 6 real business scenarios (support, sales, security, coding, research, code
 | `sales-outreach` | Sales emails that get replies |
 | `security-response` | Security alert triage and response |
 | `research-analyst` | Structured research and analysis |
+| `publication-agent` | Preparing a repo for public GitHub release |
 
 ```bash
-ri-engine improve --template code-review
+ri-engine improve --template publication-agent
 ```
 
 ---

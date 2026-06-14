@@ -115,6 +115,36 @@ ri-engine expert improve-prompts        # operator prompt evolution
 
 ---
 
+## Publication agent prompt
+
+Use ri-engine on itself to produce a checklist-driven agent for release prep.
+
+### Generate (CLI)
+
+```bash
+ri-engine improve --template publication-agent
+ri-engine improve --template publication-agent --until-plateau --runbook
+```
+
+### Canonical copy (curated)
+
+After evolution, the publication-specific deliverable format lives at:
+
+**`docs/publication_agent_prompt.md`**
+
+Point your next cloud agent or Cursor session at that file before running publication work. Example structured output: [`docs/publication_agent_deliverable.md`](publication_agent_deliverable.md).
+
+### Seed → evolved (this repo)
+
+| Stage | Content |
+|-------|---------|
+| Seed | `You are a software documentation agent. Help prepare open-source repositories for public release.` |
+| Objective | Complete publication-ready repo with docs, CI, license, honest claims, no follow-up gaps |
+| Fitness | 93%+ (4–5 VSR rounds) |
+| Enhancement | Added audit protocol, proof commands, scoped claims table, markdown deliverable format |
+
+---
+
 ## Red-team review
 
 Independent review of claims, scope, and risks before public release.
@@ -174,7 +204,8 @@ Use this before tagging a release or flipping repo visibility to public.
 - [x] `.devcontainer/devcontainer.json` — one-click Codespaces
 - [x] `pyproject.toml` — version, license, classifiers, entry point
 - [x] `tests/` — 80+ passing tests including public API contract
-- [ ] Run `ri-engine demo` locally and spot-check evolved prompts
+- [x] Run `ri-engine demo` locally and spot-check evolved prompts (2026-06-14: 6/6 F→A)
+- [x] Publication agent prompt at `docs/publication_agent_prompt.md`
 - [ ] Set repo visibility to **public** (if desired) via GitHub settings or `VISIBILITY=public ./scripts/publish-private-repo.sh`
 - [ ] Update Colab badge URL if repo name or owner changes
 

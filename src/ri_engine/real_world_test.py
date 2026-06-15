@@ -5,6 +5,7 @@ Usage:
   ri-engine real-world prep          # validate system, scaffold session
   ri-engine real-world run           # run config/real_world/active.yaml
   ri-engine real-world run -c path   # run a specific session config
+  ri-engine real-world workflow      # Claude Code middle-loop self-test
 """
 
 from __future__ import annotations
@@ -33,6 +34,7 @@ from ri_engine.models import RunConfig
 from ri_engine.prompt_rubric import compare_prompts, score_task_prompt
 from ri_engine.prompt_synthesizer import finalize_prompt
 from ri_engine.resilient_llm import wrap_provider
+from ri_engine.terminal_ui import make_console
 from ri_engine.visualizer import ProcessVisualizer
 from ri_engine.paths import config_dir, prompts_dir, workspace_dir
 
@@ -42,7 +44,7 @@ ACTIVE_CONFIG = REAL_WORLD_CONFIG_DIR / "active.yaml"
 SESSION_TEMPLATE = REAL_WORLD_CONFIG_DIR / "session.template.yaml"
 PROMPTS_DIR = prompts_dir()
 
-console = Console()
+console = make_console()
 
 
 def prep_real_world_test(*, force: bool = False) -> dict[str, Any]:
@@ -164,7 +166,14 @@ def load_session_config(path: Path | None = None) -> dict[str, Any]:
         raise FileNotFoundError(
             f"No session config at {cfg_path}. Run: ri-engine real-world prep"
         )
-    return yaml.safe_load(cfg_path.read_text(encoding="utf-8"))
+    data = yaml.safe_load(cfg_path.read_text(encoding="utf-8"))
+    if not isinstance(data, dict):
+        raise ValueError(f"Invalid session config: {cfg_path}")
+    from ri_engine.workflow_self_test import resolve_seed_from_session
+
+    data = dict(data)
+    data["seed_prompt"] = resolve_seed_from_session(data)
+    return data
 
 
 def build_run_config(data: dict[str, Any]) -> RunConfig:
@@ -335,15 +344,61 @@ def run_real_world_test(
     latest_path = OUTPUT_DIR / "latest_result.json"
     latest_path.write_text(json.dumps(summary, indent=2), encoding="utf-8")
 
+    battery_path = config.metadata.get("task_battery")
+    battery_report: dict[str, Any] | None = None
+    if battery_path:
+        from ri_engine.workflow_self_test import compare_battery_scores
+
+        battery_report = compare_battery_scores(
+            config.seed_prompt,
+            evolved,
+            path=battery_path,
+        )
+        summary["task_battery"] = battery_report
+        (session_dir / "task_battery.json").write_text(
+            json.dumps(battery_report, indent=2),
+            encoding="utf-8",
+        )
+        latest_path.write_text(json.dumps(summary, indent=2), encoding="utf-8")
     if expert:
         console.print(Panel(evolved, title="Evolved Prompt (Technical)"))
     elif not quiet:
         print_client_result(console, report, output_path=result_path)
 
+    if battery_report and not quiet:
+        _print_task_battery(battery_report)
+
     if not quiet:
         console.print(f"\n[dim]Session artifacts: {session_dir}[/dim]")
 
     return summary
+
+
+def _print_task_battery(report: dict[str, Any]) -> None:
+    evolved = report["evolved"]
+    seed = report["seed"]
+    style = "green" if evolved.get("battery_passed") else "yellow"
+    console.print()
+    console.print(Panel(
+        f"Pass rate: [{style}]{evolved['pass_rate']:.0%}[/{style}] "
+        f"({evolved['passed']}/{evolved['total']}) · "
+        f"threshold {evolved['pass_threshold']:.0%}\n"
+        f"Seed → evolved: {seed['pass_rate']:.0%} → {evolved['pass_rate']:.0%} "
+        f"({'↑' if report['improved'] else '↓'} {report['delta_pass_rate']:+.0%})",
+        title="Workflow task battery (middle loop)",
+        border_style="cyan",
+    ))
+    table = Table(show_header=True, header_style="bold")
+    table.add_column("Task")
+    table.add_column("Evolved")
+    table.add_column("Detail")
+    for task in evolved.get("tasks", []):
+        mark = "[green]✓[/green]" if task["passed"] else "[red]✗[/red]"
+        table.add_row(task["id"], mark, task["detail"][:60])
+    console.print(table)
+    console.print(
+        "[dim]Structural checks only — confirm with live Claude Code runs on held-out tasks.[/dim]"
+    )
 
 
 def _print_prep(manifest: dict[str, Any]) -> None:
@@ -380,6 +435,23 @@ def main_run(config_path: str | None = None, provider: str | None = None, expert
     path = Path(config_path) if config_path else None
     try:
         run_real_world_test(path, provider=provider, expert=expert, quiet=quiet)
+    except FileNotFoundError as exc:
+        console.print(f"[red]{exc}[/red]")
+        return 1
+    return 0
+
+
+def main_workflow(provider: str | None = None, expert: bool = False, quiet: bool = False) -> int:
+    """Run the Claude Code workflow middle-loop self-test."""
+    from ri_engine.workflow_self_test import default_workflow_config_path, run_workflow_self_test
+
+    try:
+        run_workflow_self_test(
+            config_path=default_workflow_config_path(),
+            provider=provider,
+            expert=expert,
+            quiet=quiet,
+        )
     except FileNotFoundError as exc:
         console.print(f"[red]{exc}[/red]")
         return 1

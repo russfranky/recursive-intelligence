@@ -69,3 +69,27 @@ ri-engine config show
 
 - [agent_integration.md](agent_integration.md) — recursive improve loop
 - [getting_started.md](getting_started.md) — install and first run
+
+## Middle loop — know when to stop iterating
+
+Structural rubric scores (inner loop) are not enough. Run the **workflow self-test**
+to score the evolved prompt against a fixed task battery:
+
+```bash
+ri-engine real-world workflow
+```
+
+This runs `config/workflow_self_test.yaml` and scores pass/fail on checks like:
+no code-review bleed, compact output, research → spec → implement, runbook reference.
+
+Results land in `output/real_world/sessions/<id>/task_battery.json`.
+
+| Signal | Meaning |
+|--------|---------|
+| Battery pass rate ≥ 85% | Prompt structurally fits the workflow |
+| Seed → evolved ↑ | Improvement run helped |
+| Battery flat + `--until-plateau` flat | Middle loop next — run Claude Code on held-out tasks |
+| Task pass rate flat | As good as your evidence allows; revise objective if failures repeat |
+
+Honest scope: the battery checks **prompt structure**, not live Claude Code behavior.
+Confirm with real agent runs before claiming production readiness.

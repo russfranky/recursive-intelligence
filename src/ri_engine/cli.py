@@ -56,12 +56,18 @@ def main(argv: list[str] | None = None) -> int:
         return _run_config(args)
 
     if args.command == "real-world":
-        from ri_engine.real_world_test import main_prep, main_run
+        from ri_engine.real_world_test import main_prep, main_run, main_workflow
         if args.rw_command == "prep" or args.rw_command is None:
             return main_prep(force=getattr(args, "force", False))
         if args.rw_command == "run":
             return main_run(
                 config_path=getattr(args, "config", None),
+                provider=getattr(args, "provider", None),
+                expert=getattr(args, "expert", False),
+                quiet=getattr(args, "quiet", False),
+            )
+        if args.rw_command == "workflow":
+            return main_workflow(
                 provider=getattr(args, "provider", None),
                 expert=getattr(args, "expert", False),
                 quiet=getattr(args, "quiet", False),
@@ -278,6 +284,13 @@ def _build_parser() -> argparse.ArgumentParser:
     rw_run.add_argument("--provider", choices=["mock", "openai", "anthropic"], help="Override session provider")
     rw_run.add_argument("--quiet", "-q", action="store_true")
     rw_run.add_argument("--expert", action="store_true")
+    rw_workflow = rw_sub.add_parser(
+        "workflow",
+        help="Middle loop: evolve Claude Code workflow prompt + score task battery",
+    )
+    rw_workflow.add_argument("--provider", choices=["mock", "openai", "anthropic"], help="Override session provider")
+    rw_workflow.add_argument("--quiet", "-q", action="store_true")
+    rw_workflow.add_argument("--expert", action="store_true")
 
     # --- Expert commands (hidden from casual --help via separate group) ---
     expert = sub.add_parser("expert", help="Advanced / technical commands")

@@ -8,8 +8,11 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_SESSION_PATH = ROOT / "output" / "improvement_session.json"
+from ri_engine.paths import workspace_dir
+
+
+def default_session_path() -> Path:
+    return workspace_dir() / "output" / "improvement_session.json"
 
 
 @dataclass
@@ -37,7 +40,7 @@ class ImprovementSession:
 
 
 def save_session(session: ImprovementSession, path: Path | str | None = None) -> Path:
-    out = Path(path) if path else DEFAULT_SESSION_PATH
+    out = Path(path) if path else default_session_path()
     out.parent.mkdir(parents=True, exist_ok=True)
     session.updated_at = datetime.now(timezone.utc).isoformat()
     out.write_text(json.dumps(session.to_dict(), indent=2), encoding="utf-8")
@@ -45,7 +48,7 @@ def save_session(session: ImprovementSession, path: Path | str | None = None) ->
 
 
 def load_session(path: Path | str | None = None) -> ImprovementSession | None:
-    p = Path(path) if path else DEFAULT_SESSION_PATH
+    p = Path(path) if path else default_session_path()
     if not p.exists():
         return None
     data = json.loads(p.read_text(encoding="utf-8"))
@@ -53,6 +56,6 @@ def load_session(path: Path | str | None = None) -> ImprovementSession | None:
 
 
 def clear_session(path: Path | str | None = None) -> None:
-    p = Path(path) if path else DEFAULT_SESSION_PATH
+    p = Path(path) if path else default_session_path()
     if p.exists():
         p.unlink()

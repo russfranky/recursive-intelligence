@@ -19,10 +19,18 @@ import yaml
 
 from ri_engine.models import RunConfig
 from ri_engine.register_analysis import RegisterMetrics, analyze_register, composite_task_score
+from ri_engine.paths import config_dir, resolve_resource_path, workspace_dir
 
-ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_REGISTRY_PATH = ROOT / "config" / "linguistic_registry.json"
-DEFAULT_SPECTRUM_PATH = ROOT / "config" / "linguistic_spectrum.yaml"
+DEFAULT_SPECTRUM_PATH = config_dir() / "linguistic_spectrum.yaml"
+
+
+def default_registry_path() -> Path:
+    """Prefer a local registry in the working directory; fall back to bundled defaults."""
+    local = workspace_dir() / "config" / "linguistic_registry.json"
+    if local.exists():
+        return local
+    bundled = config_dir() / "linguistic_registry.json"
+    return bundled if bundled.exists() else local
 
 # Full linguistic direction spectrum
 SPECTRUM_LEANINGS: tuple[str, ...] = (
@@ -221,7 +229,7 @@ class LinguisticRegistry:
     """Persistent pool of categorical language leanings."""
 
     def __init__(self, path: Path | None = None):
-        self.path = path or DEFAULT_REGISTRY_PATH
+        self.path = path or default_registry_path()
         self.version = 1
         self.timestamp = ""
         self.entries: dict[str, LanguageLeaningEntry] = {}
@@ -435,7 +443,7 @@ def load_spectrum_entries(spectrum_path: Path | None = None) -> list[dict[str, A
     entries: list[dict[str, Any]] = []
     for item in data.get("entries", []):
         if source := item.get("source"):
-            src_path = ROOT / source if not Path(source).is_absolute() else Path(source)
+            src_path = resolve_resource_path(source)
             uc = yaml.safe_load(src_path.read_text(encoding="utf-8"))
             item = {
                 **item,

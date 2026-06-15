@@ -16,12 +16,12 @@ from ri_engine.system_prompt_evolver import (
     SystemPromptEvolver,
     _strip_generated_sections,
 )
+from ri_engine.paths import config_dir, prompts_dir, workspace_dir
 
-ROOT = Path(__file__).resolve().parents[2]
-PROMPTS_DIR = ROOT / "prompts"
-BACKUP_DIR = ROOT / "prompts" / ".backup"
-OUTPUT_DIR = ROOT / "output" / "evolved_prompts"
-CONFIG_PATH = ROOT / "config" / "improve_system_prompts.yaml"
+PROMPTS_DIR = prompts_dir()
+BACKUP_DIR = workspace_dir() / "prompts" / ".backup"
+OUTPUT_DIR = workspace_dir() / "output" / "evolved_prompts"
+CONFIG_PATH = config_dir() / "improve_system_prompts.yaml"
 
 
 def _load_config(cfg_path: Path) -> RunConfig:

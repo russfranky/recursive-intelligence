@@ -57,3 +57,6 @@ ri-engine = "ri_engine.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+ri_engine = ["bundled/**/*"]

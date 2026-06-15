@@ -18,7 +18,6 @@ from rich.table import Table
 
 from ri_engine.engine import RecursiveIntelligenceEngine
 from ri_engine.language_leanings import (
-    DEFAULT_REGISTRY_PATH,
     DEFAULT_SPECTRUM_PATH,
     SPECTRUM_LEANINGS,
     LeaningScore,

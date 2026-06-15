@@ -49,10 +49,13 @@ class RunConfig:
     enable_membrane_bridge: bool = True
     domains: list[str] = field(default_factory=list)
     fitness_weights: dict[str, float] = field(default_factory=lambda: {
-        "clarity": 0.25,
-        "novelty": 0.25,
-        "utility": 0.30,
-        "coherence": 0.20,
+        "objective_alignment": 0.30,
+        "clarity": 0.20,
+        "utility": 0.20,
+        "coherence": 0.15,
+        "simplicity": 0.10,
+        "register_fit": 0.05,
+        "novelty": 0.03,
     })
     output_path: str | None = None
     metadata: dict[str, Any] = field(default_factory=dict)

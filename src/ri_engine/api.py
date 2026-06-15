@@ -23,7 +23,7 @@ from ri_engine.client_view import load_template
 from ri_engine.engine import RecursiveIntelligenceEngine
 from ri_engine.llm_provider import MockLLMProvider, create_provider
 from ri_engine.models import RunConfig
-from ri_engine.prompt_synthesizer import finalize_prompt
+from ri_engine.improve_pipeline import build_improve_metadata, pick_improved_prompt
 from ri_engine.resilient_llm import wrap_provider
 
 
@@ -42,9 +42,16 @@ class ImproveResult:
     converged: bool
     report: dict[str, Any]
     engine_prompt: str = field(default="")
+    diagnostics: dict[str, Any] = field(default_factory=dict)
 
     @classmethod
-    def from_report(cls, report: dict[str, Any], *, improved_prompt: str) -> ImproveResult:
+    def from_report(
+        cls,
+        report: dict[str, Any],
+        *,
+        improved_prompt: str,
+        diagnostics: dict[str, Any] | None = None,
+    ) -> ImproveResult:
         meta = report.get("meta", {})
         return cls(
             improved_prompt=improved_prompt,
@@ -53,6 +60,7 @@ class ImproveResult:
             converged=bool(meta.get("converged", False)),
             report=report,
             engine_prompt=str(report.get("best_prompt", "")),
+            diagnostics=diagnostics or {},
         )
 
     def to_dict(self) -> dict[str, Any]:
@@ -66,6 +74,7 @@ class ImproveResult:
             "converged": self.converged,
             "linguistic_leaning": gate.get("leaning"),
             "fitness_trajectory": self.report.get("fitness_trajectory", []),
+            "diagnostics": self.diagnostics,
         }
 
 
@@ -105,6 +114,10 @@ def improve(
     fitness_weights: dict[str, float] | None = None,
     skip_clarity_check: bool = False,
     force_goal: bool = False,
+    linguistic_gate: str = "auto",
+    leaning: str | None = None,
+    enable_macro_learning: bool = False,
+    return_diagnostics: bool = False,
 ) -> ImproveResult:
     """
     Improve a task prompt recursively (Variation → Selection → Retention).
@@ -122,14 +135,23 @@ def improve(
         enable_membrane_bridge: Cross-domain insight injection (default True).
         metadata: Extra run metadata (category, audience, linguistic gate).
         domains: Optional domain hints for membrane cross-pollination.
-        fitness_weights: Override clarity/novelty/utility/coherence weights.
+        fitness_weights: Override selection dimension weights.
+        linguistic_gate: ``auto``, ``off``, ``neutral``, or a forced leaning name.
+        leaning: Force register leaning (overrides auto gate).
+        enable_macro_learning: Persistent macro trait registry (default off).
+        return_diagnostics: Include ablation/baseline diagnostics on the result.
 
     Returns:
         ImproveResult with ``improved_prompt`` from the VSR + finalize path.
     """
     _validate_inputs(seed_prompt, objective)
 
-    meta = {"apply_linguistic_gate": True, "enable_macro_learning": True, **(metadata or {})}
+    meta = build_improve_metadata(
+        metadata=metadata,
+        linguistic_gate=linguistic_gate,
+        leaning=leaning,
+        enable_macro_learning=enable_macro_learning,
+    )
     objective_text = objective.strip()
 
     if not skip_clarity_check and not force_goal:
@@ -158,19 +180,21 @@ def improve(
     report = RecursiveIntelligenceEngine(llm).run(config)
 
     gate = report.get("linguistic_gate", {})
-    leaning = gate.get("leaning") or meta.get("linguistic_leaning", "plain")
+    resolved_leaning = gate.get("leaning") or meta.get("linguistic_leaning", "mixed")
     membrane = ""
     if config.enable_membrane_bridge:
         membrane = MockLLMProvider()._bridge(config.objective)
-    improved = finalize_prompt(
-        config.seed_prompt,
-        config.objective,
-        "constraint_first",
-        membrane,
-        leaning=leaning,
+    improved, diagnostics = pick_improved_prompt(
+        seed=config.seed_prompt,
+        objective=config.objective,
+        report=report,
+        leaning=str(resolved_leaning),
+        membrane=membrane,
     )
+    if not return_diagnostics:
+        diagnostics = {}
 
-    return ImproveResult.from_report(report, improved_prompt=improved)
+    return ImproveResult.from_report(report, improved_prompt=improved, diagnostics=diagnostics)
 
 
 @dataclass
@@ -211,7 +235,7 @@ def improve_until_plateau(
     seed_prompt: str,
     objective: str,
     *,
-    max_cycles: int = 10,
+    max_cycles: int = 3,
     plateau_threshold: float = 0.01,
     plateau_window: int = 2,
     continue_from_session: bool = False,
@@ -356,7 +380,7 @@ def improve_until_plateau(
             plateaued=session.plateaued,
             fitness_delta=delta,
         )
-    elif (improve_kwargs.get("metadata") or {}).get("enable_macro_learning", True) and session.plateaued:
+    elif (improve_kwargs.get("metadata") or {}).get("enable_macro_learning", False) and session.plateaued:
         from ri_engine.macro_registry import MIN_FITNESS_TO_RECORD, record_selection
         from ri_engine.models import Candidate, RunConfig
 

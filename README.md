@@ -38,6 +38,18 @@ ri-engine improve \
   --goal "When this works, the AI will produce a structured answer with measurable success criteria"
 ```
 
+### Ablation / research flags
+
+```bash
+ri-engine improve --seed "…" --goal "…" --linguistic-gate auto   # default
+ri-engine improve --seed "…" --goal "…" --linguistic-gate off
+ri-engine improve --seed "…" --goal "…" --leaning plain
+ri-engine improve --seed "…" --goal "…" --diagnostics
+ri-engine improve --seed "…" --goal "…" --use-persistent-macro-registry
+```
+
+Local gate ablation (no API key): `python3 experiments/run_gate_ablation.py`
+
 ### Python API
 
 ```python
@@ -85,12 +97,17 @@ ri-engine improve --seed … --goal … --expert
 Linguistic Gate → Macro Priors → [Membrane] → Variation → Selection → Retention → repeat
 ```
 
-1. **Linguistic gate** — picks register leaning (plain Anglo-Saxon vs latinate, etc.) from your goal and pooled registry evidence
+1. **Linguistic gate** (experimental prior) — weighted objective text + weak registry prior; defaults to mixed when confidence is low
 2. **Variation** — generates prompt variants (8 strategies)
-3. **Selection** — scores candidates (clarity, utility, coherence, simplicity via Occam's razor)
+3. **Selection** — scores candidates (objective alignment, clarity, utility, coherence, register fit, simplicity)
 4. **Retention** — carries winning traits forward; detects convergence
+5. **Baseline check** — compares VSR output against one-shot `finalize_prompt()`; returns the simpler baseline if VSR does not win meaningfully
 
 Default provider is **mock** (offline, deterministic). Optional: `--provider openai` or `--provider anthropic`.
+
+**Mock mode scope:** mock mode is a deterministic offline test of the recursive improvement process. It measures structural prompt quality using local heuristics (`prompt_rubric.py`). It does **not** prove that the resulting prompt will improve downstream LLM task performance. Use real-provider evaluation for behavioral claims.
+
+Persistent macro trait registry is **off by default**; pass `--use-persistent-macro-registry` for cross-run learning experiments.
 
 ---
 

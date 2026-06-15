@@ -154,8 +154,34 @@ def _build_parser() -> argparse.ArgumentParser:
     improve.add_argument(
         "--max-cycles",
         type=int,
-        default=10,
-        help="Max outer cycles when using --until-plateau (default: 10)",
+        default=3,
+        help="Max outer cycles when using --until-plateau (default: 3)",
+    )
+    improve.add_argument(
+        "--linguistic-gate",
+        choices=["auto", "off", "neutral", "plain", "latinate", "mixed", "technical", "conversational"],
+        default="auto",
+        help="Linguistic gate mode (default: auto — experimental prior)",
+    )
+    improve.add_argument(
+        "--leaning",
+        choices=["plain", "latinate", "mixed", "neutral", "technical", "conversational"],
+        help="Force a register leaning (ablation)",
+    )
+    improve.add_argument(
+        "--no-linguistic-gate",
+        action="store_true",
+        help="Disable the linguistic gate",
+    )
+    improve.add_argument(
+        "--use-persistent-macro-registry",
+        action="store_true",
+        help="Enable cross-run macro trait registry (research; default off)",
+    )
+    improve.add_argument(
+        "--diagnostics",
+        action="store_true",
+        help="Print baseline vs VSR ablation diagnostics",
     )
     improve.add_argument(
         "--plateau-threshold",
@@ -306,23 +332,25 @@ def _run_expert(args: argparse.Namespace) -> int:
 
 
 def _finalize_client_prompt(config: RunConfig, report: dict) -> dict:
-    """Produce a clean, copy-ready prompt without evolution artifacts."""
+    """Pick improved prompt (baseline vs VSR) and attach diagnostics."""
+    from ri_engine.improve_pipeline import pick_improved_prompt
     from ri_engine.llm_provider import MockLLMProvider
-    from ri_engine.prompt_synthesizer import finalize_prompt
 
     gate = report.get("linguistic_gate", {})
-    leaning = gate.get("leaning") or config.metadata.get("linguistic_leaning", "plain")
+    leaning = gate.get("leaning") or config.metadata.get("linguistic_leaning", "mixed")
     membrane = ""
     if config.enable_membrane_bridge:
         membrane = MockLLMProvider()._bridge(config.objective)
-    report = dict(report)
-    report["best_prompt"] = finalize_prompt(
-        config.seed_prompt,
-        config.objective,
-        "constraint_first",
-        membrane,
-        leaning=leaning,
+    improved, diagnostics = pick_improved_prompt(
+        seed=config.seed_prompt,
+        objective=config.objective,
+        report=report,
+        leaning=str(leaning),
+        membrane=membrane,
     )
+    report = dict(report)
+    report["best_prompt"] = improved
+    report["improvement_diagnostics"] = diagnostics
     return report
 
 
@@ -391,6 +419,8 @@ def _run_improve(args: argparse.Namespace) -> int:
     out_path = Path(args.output) if args.output else None
     if expert:
         _print_expert_report(console, report)
+        if getattr(args, "diagnostics", False) and (diag := report.get("improvement_diagnostics")):
+            console.print(Panel(json.dumps(diag, indent=2), title="Ablation diagnostics", border_style="cyan"))
         if out_path:
             out_path.write_text(json.dumps(report, indent=2), encoding="utf-8")
             console.print(f"\n[green]Technical report: {out_path}[/green]")
@@ -657,10 +687,25 @@ def _run_demo(args: argparse.Namespace) -> int:
     return 0
 
 
+def _improve_metadata(args: argparse.Namespace, base: dict[str, Any] | None = None) -> dict[str, Any]:
+    meta = dict(base or {})
+    if getattr(args, "no_linguistic_gate", False):
+        meta["linguistic_gate_mode"] = "off"
+        meta["apply_linguistic_gate"] = False
+    elif lg := getattr(args, "linguistic_gate", None):
+        meta["linguistic_gate_mode"] = lg
+        meta["apply_linguistic_gate"] = lg != "off"
+    if leaning := getattr(args, "leaning", None):
+        meta["linguistic_leaning"] = leaning
+    meta["enable_macro_learning"] = bool(getattr(args, "use_persistent_macro_registry", False))
+    return meta
+
+
 def _resolve_config(args: argparse.Namespace) -> RunConfig:
     if getattr(args, "template", None):
         data = load_template(args.template)
         meta = template_to_metadata(data)
+        meta.update(_improve_metadata(args, meta))
         return RunConfig(
             seed_prompt=data["seed_prompt"],
             objective=data["objective"],
@@ -692,7 +737,7 @@ def _resolve_config(args: argparse.Namespace) -> RunConfig:
             survivors_count=getattr(args, "survivors", 2),
             enable_membrane_bridge=not getattr(args, "no_membrane", False),
             output_path=getattr(args, "output", None),
-            metadata={"apply_linguistic_gate": True},
+            metadata=_improve_metadata(args),
         )
 
     raise ValueError(

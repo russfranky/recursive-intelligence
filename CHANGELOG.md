@@ -2,6 +2,23 @@
 
 All notable changes to this project are documented here.
 
+## [0.1.4] - 2026-06-15
+
+### Added
+
+- Linguistic gate ablation API: `--linguistic-gate`, `--leaning`, `--no-linguistic-gate`, `--diagnostics`
+- Baseline vs VSR comparison (`pick_improved_prompt`) with minimum gain and length guardrails
+- Rubric: objective alignment, register fit, instruction economy; reduced self-eval weight
+- Local ablation experiment: `experiments/run_gate_ablation.py` + fixture cases YAML
+
+### Changed
+
+- Auto gate uses weighted objective (55%) + registry prior (25%) + context (15%); low confidence → mixed
+- Persistent macro trait registry disabled by default (`--use-persistent-macro-registry` to enable)
+- Selection fitness weights: objective_alignment 0.30, novelty 0.03
+- Plateau cycling default max cycles capped at 3
+- Mock mode scope disclaimer in README and diagnostics output
+
 ## [0.1.3] - 2026-06-15
 
 ### Changed

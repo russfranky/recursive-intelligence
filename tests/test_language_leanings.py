@@ -53,9 +53,24 @@ def test_resolve_uses_registry_when_present(tmp_path: Path):
         metadata={"category": "Security", "audience": "operator"},
     )
     gate = resolve_linguistic_direction(config, reg)
-    assert gate.leaning == "plain"
-    assert gate.source == "registry"
-    assert gate.confidence == 0.91
+    assert gate.registry_leaning == "plain"
+    assert gate.registry_signal == 0.75  # capped registry prior weight
+    assert gate.registry_id == "security:operator"
+    assert gate.source == "auto"
+    # Weak objective alone may default to mixed at low combined confidence.
+    assert gate.leaning in ("plain", "mixed")
+
+    operational = RunConfig(
+        seed_prompt="You are a security analyst.",
+        objective=(
+            "Give step-by-step emergency shutdown instructions that an operator "
+            "can follow under time pressure."
+        ),
+        metadata={"category": "Security", "audience": "operator"},
+    )
+    gate_op = resolve_linguistic_direction(operational, reg)
+    assert gate_op.leaning == "plain"
+    assert gate_op.confidence >= 0.52
 
 
 def test_apply_linguistic_gate_injects_clause():

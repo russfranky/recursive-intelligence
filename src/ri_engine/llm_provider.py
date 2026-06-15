@@ -4,7 +4,7 @@ import re
 from pathlib import Path
 from typing import Protocol
 
-from ri_engine.prompt_rubric import score_task_prompt
+from ri_engine.prompt_rubric import composite_prompt_score, score_task_prompt
 from ri_engine.language_leanings import detect_linguistic_leaning, score_leaning_fit
 from ri_engine.register_analysis import analyze_register
 from ri_engine.prompt_synthesizer import synthesize_variant
@@ -39,24 +39,27 @@ class MockLLMProvider:
     def _score(self, user: str) -> str:
         blocks = re.findall(r"---CANDIDATE (\d+)---\s*(.*?)(?=---CANDIDATE|\Z)", user, re.S)
         lines = []
+        objective = self._extract_objective(user)
         for cid, body in blocks:
             content = body.strip()
             rubric = score_task_prompt(content)
             reg = analyze_register(content)
             leaning = detect_linguistic_leaning(user)
+            align = composite_prompt_score(content, objective, leaning=leaning)["objective_alignment"]
+            reg_fit = composite_prompt_score(content, objective, leaning=leaning)["register_fit"]
             clarity = 0.5 + rubric.dimensions.get("specificity", 0) * 0.3 + rubric.dimensions.get("structure", 0) * 0.2
-            novelty = 0.5 + (hash(body) % 30) / 100
+            novelty = 0.45 + (hash(body) % 15) / 100
             utility = 0.4 + rubric.dimensions.get("feature_coverage", 0) * 0.5
             coherence = 0.5 + rubric.dimensions.get("length", 0) * 0.2 + rubric.total * 0.3
 
             fit = score_leaning_fit(leaning, rubric.total, reg)
-            boost = (fit - 0.5) * 0.25
+            boost = (fit - 0.5) * 0.15
             clarity = min(0.98, clarity + boost)
-            utility = min(0.98, utility + boost * 1.2)
-            coherence = min(0.98, coherence + boost * 0.8)
+            utility = min(0.98, utility + boost * 0.8)
+            coherence = min(0.98, coherence + boost * 0.6)
 
             if leaning == "latinate":
-                novelty = min(0.98, novelty + reg.latinate_ratio * 0.08)
+                novelty = min(0.75, novelty + reg.latinate_ratio * 0.05)
             elif leaning in ("plain", "conversational"):
                 clarity = min(0.98, clarity + (1 - reg.latinate_ratio) * 0.08 + reg.readability_score * 0.06)
                 utility = min(0.98, utility + reg.readability_score * 0.08)
@@ -68,7 +71,8 @@ class MockLLMProvider:
             lines.append(
                 f"CANDIDATE {cid}: clarity={min(clarity, 0.98):.2f}, "
                 f"novelty={min(novelty, 0.98):.2f}, utility={min(utility, 0.98):.2f}, "
-                f"coherence={min(coherence, 0.98):.2f}"
+                f"coherence={min(coherence, 0.98):.2f}, "
+                f"objective_alignment={align:.2f}, register_fit={reg_fit:.2f}"
             )
         return "\n".join(lines) if lines else "CANDIDATE 0: clarity=0.7, novelty=0.6, utility=0.7, coherence=0.75"
 

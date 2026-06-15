@@ -141,10 +141,12 @@ CANDIDATE 0: clarity=0.85, novelty=0.70, utility=0.90, coherence=0.80, simplicit
                 fallback_count += 1
                 c.scores = {
                     "clarity": 0.5 + (hash(c.content) % 30) / 100,
-                    "novelty": 0.5 + (hash(c.id) % 40) / 100,
+                    "novelty": 0.45 + (hash(c.id) % 15) / 100,
                     "utility": 0.5 + (len(c.content) % 35) / 100,
                     "coherence": 0.55 + (hash(c.content[:50]) % 25) / 100,
                     "simplicity": 0.5 + (max(0, 800 - len(c.content.split())) % 30) / 100,
+                    "objective_alignment": 0.5,
+                    "register_fit": 0.5,
                 }
         return candidates, fallback_count
 

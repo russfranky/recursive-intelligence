@@ -61,6 +61,7 @@ def test_macro_learning_across_two_improve_runs(tmp_path, monkeypatch):
         max_generations=2,
         population_size=4,
         metadata={"template": "customer-support"},
+        enable_macro_learning=True,
     )
     assert r1.fitness >= 0.65
 
@@ -73,6 +74,7 @@ def test_macro_learning_across_two_improve_runs(tmp_path, monkeypatch):
         max_generations=2,
         population_size=4,
         metadata={"template": "customer-support"},
+        enable_macro_learning=True,
     )
     assert r2.report.get("macro_priors") or r2.report.get("macro_learning")
 

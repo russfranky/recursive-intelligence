@@ -162,10 +162,14 @@ class LanguageLeaningEntry:
 class LinguisticGateResult:
     leaning: str
     confidence: float
-    source: str  # registry | prior | inference | override | probe
+    source: str  # registry | prior | inference | override | probe | auto | off
     registry_id: str | None = None
     clause_applied: str = ""
     rationale: str = ""
+    objective_signal: float = 0.0
+    registry_signal: float = 0.0
+    objective_leaning: str = ""
+    registry_leaning: str = ""
 
 
 def leaning_clause(leaning: str) -> str:
@@ -295,13 +299,34 @@ def _normalize_key(category: str, audience: str) -> str:
     return f"{slug}:{aud}"
 
 
+def _objective_text_signal(objective: str) -> tuple[str, float]:
+    """Objective-text leaning signal with confidence."""
+    text = objective.lower()
+    explicit_checks = [
+        ("latinate", ("latinate register", "formal latinate", "formal institutional", "compliance language")),
+        ("plain", ("plain anglo-saxon", "plain language", "shutdown instructions", "step-by-step", "time pressure")),
+        ("mixed", ("non-specialists", "formal distinctions", "plain anglo-saxon for instructions")),
+        ("technical", ("stack trace", "root cause", "api error", "logs", "reproduction steps")),
+        ("conversational", ("friendly", "writing coach", "supportive", "user-friendly")),
+    ]
+    for leaning, phrases in explicit_checks:
+        if any(p in text for p in phrases):
+            return leaning, 0.82
+    detected = detect_linguistic_leaning(objective)
+    if detected != "plain":
+        return detected, 0.65
+    return "plain", 0.45
+
+
 def resolve_linguistic_direction(
     config: RunConfig,
     registry: LinguisticRegistry | None = None,
 ) -> LinguisticGateResult:
     """
-    Resolve the most productive linguistic direction before VSR exposure.
-    Order: explicit override → objective detection → registry → priors → seed inference.
+    Resolve linguistic direction before VSR.
+
+    Auto mode uses weighted objective text (55%) + weak registry prior (25%) +
+    category/audience context (15%). Low confidence defaults to ``mixed``.
     """
     meta = config.metadata or {}
     if override := meta.get("linguistic_leaning"):
@@ -311,76 +336,80 @@ def resolve_linguistic_direction(
             source="override",
             clause_applied=leaning_clause(str(override)),
             rationale="Explicit metadata override",
+            objective_leaning=str(override),
+            objective_signal=1.0,
         )
 
-    detected = detect_linguistic_leaning(config.objective)
-    if detected != "plain" or "mandatory linguistic leaning" in config.objective.lower():
+    mode = str(meta.get("linguistic_gate_mode", "auto"))
+    if mode == "off":
         return LinguisticGateResult(
-            leaning=detected,
-            confidence=0.95,
-            source="inference",
-            clause_applied=leaning_clause(detected),
-            rationale="Explicit leaning directive in objective",
+            leaning="neutral",
+            confidence=0.0,
+            source="off",
+            rationale="Linguistic gate disabled",
+        )
+    if mode in SPECTRUM_LEANINGS and mode != "auto":
+        return LinguisticGateResult(
+            leaning=mode,
+            confidence=1.0,
+            source="override",
+            clause_applied=leaning_clause(mode),
+            rationale=f"Forced linguistic gate mode: {mode}",
+            objective_leaning=mode,
+            objective_signal=1.0,
         )
 
+    obj_lean, obj_conf = _objective_text_signal(config.objective)
     reg = registry or LinguisticRegistry().load()
     category = str(meta.get("category", ""))
     audience = str(meta.get("audience", "operator"))
     use_case_id = str(meta.get("use_case", meta.get("use_case_id", "")))
 
-    if entry := reg.lookup(
-        category=category,
-        audience=audience,
-        use_case_id=use_case_id,
-    ):
-        return LinguisticGateResult(
-            leaning=entry.recommended_leaning,
-            confidence=entry.confidence,
-            source="registry",
-            registry_id=entry.id,
-            clause_applied=leaning_clause(entry.recommended_leaning),
-            rationale=entry.rationale or f"Pooled registry winner for {entry.id}",
-        )
+    reg_lean, reg_conf, reg_id = "mixed", 0.0, None
+    if entry := reg.lookup(category=category, audience=audience, use_case_id=use_case_id):
+        reg_lean = entry.recommended_leaning
+        reg_conf = min(entry.confidence, 0.75)
+        reg_id = entry.id
 
-    # Category / audience priors
     cat_prior = CATEGORY_LEANING_PRIORS.get(category.lower(), "")
     aud_prior = AUDIENCE_LEANING_PRIORS.get(audience.lower(), "")
-    if cat_prior and aud_prior:
-        leaning = cat_prior if cat_prior == aud_prior else aud_prior
-        confidence = 0.72 if cat_prior == aud_prior else 0.58
-        return LinguisticGateResult(
-            leaning=leaning,
-            confidence=confidence,
-            source="prior",
-            clause_applied=leaning_clause(leaning),
-            rationale=f"Category prior ({cat_prior}) + audience prior ({aud_prior})",
-        )
-    if aud_prior:
-        return LinguisticGateResult(
-            leaning=aud_prior,
-            confidence=0.55,
-            source="prior",
-            clause_applied=leaning_clause(aud_prior),
-            rationale=f"Audience prior: {audience} → {aud_prior}",
-        )
+    context_lean = aud_prior or cat_prior or obj_lean
+    context_conf = 0.55 if aud_prior and cat_prior and aud_prior == cat_prior else 0.45
 
-    # Seed register analysis as last resort before default
-    seed_reg = analyze_register(config.seed_prompt)
-    if seed_reg.register_label == "latinate" and seed_reg.latinate_ratio > 0.6:
-        return LinguisticGateResult(
-            leaning="latinate",
-            confidence=0.5,
-            source="probe",
-            clause_applied=leaning_clause("latinate"),
-            rationale="Seed skews Latinate — low confidence probe",
+    votes: dict[str, float] = {}
+    for lean, weight in (
+        (obj_lean, obj_conf * 0.55),
+        (reg_lean, reg_conf * 0.25),
+        (context_lean, context_conf * 0.15),
+    ):
+        votes[lean] = votes.get(lean, 0.0) + weight
+
+    winner = max(votes, key=votes.get)
+    confidence = votes[winner]
+    if confidence < 0.52:
+        winner = "mixed"
+        confidence = max(confidence, 0.5)
+        rationale = (
+            f"Low confidence ({confidence:.0%}) — defaulting to mixed. "
+            f"objective={obj_lean}({obj_conf:.0%}), registry={reg_lean}({reg_conf:.0%})"
+        )
+    else:
+        rationale = (
+            f"Auto gate: objective={obj_lean}({obj_conf:.0%}), "
+            f"registry={reg_lean}({reg_conf:.0%}), context={context_lean} → {winner}"
         )
 
     return LinguisticGateResult(
-        leaning="plain",
-        confidence=0.65,
-        source="prior",
-        clause_applied=leaning_clause("plain"),
-        rationale="Default plain leaning for agent/task prompts",
+        leaning=winner,
+        confidence=confidence,
+        source="auto",
+        registry_id=reg_id,
+        clause_applied=leaning_clause(winner),
+        rationale=rationale,
+        objective_signal=obj_conf,
+        registry_signal=reg_conf,
+        objective_leaning=obj_lean,
+        registry_leaning=reg_lean,
     )
 
 

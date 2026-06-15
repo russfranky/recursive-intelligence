@@ -14,10 +14,13 @@ from ri_engine.selection import SelectionEnvironment
 from ri_engine.variation import VariationEngine
 
 DEFAULT_FITNESS_WEIGHTS = {
-    "clarity": 0.25,
-    "novelty": 0.25,
-    "utility": 0.30,
-    "coherence": 0.20,
+    "objective_alignment": 0.30,
+    "clarity": 0.20,
+    "utility": 0.20,
+    "coherence": 0.15,
+    "simplicity": 0.10,
+    "register_fit": 0.05,
+    "novelty": 0.03,
 }
 
 
@@ -73,6 +76,10 @@ class RecursiveIntelligenceEngine:
                 "source": gate.source,
                 "registry_id": gate.registry_id,
                 "rationale": gate.rationale,
+                "objective_signal": gate.objective_signal,
+                "registry_signal": gate.registry_signal,
+                "objective_leaning": gate.objective_leaning,
+                "registry_leaning": gate.registry_leaning,
             }
             self._emit(
                 EventKind.INFO,
@@ -81,7 +88,7 @@ class RecursiveIntelligenceEngine:
                 data={**gate_report, "leaning": gate.leaning},
             )
 
-        if meta.get("enable_macro_learning", True):
+        if meta.get("enable_macro_learning", False):
             from ri_engine.macro_registry import apply_macro_priors
 
             config, macro = apply_macro_priors(config)
@@ -301,7 +308,7 @@ class RecursiveIntelligenceEngine:
         if macro_report is not None:
             report["macro_priors"] = macro_report
 
-        if history and (config.metadata or {}).get("enable_macro_learning", True):
+        if history and (config.metadata or {}).get("enable_macro_learning", False):
             from ri_engine.macro_registry import classify_objective, record_selection
 
             final = history[-1]

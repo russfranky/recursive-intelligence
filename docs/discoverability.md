@@ -11,7 +11,7 @@ How to get **recursive-intelligence** found and used — evolved via ri-engine's
 
 | You are… | You want… | Start here |
 |----------|-----------|------------|
-| Developer using Cursor, Copilot, etc. | Better system prompts for coding assistants | `ri-engine improve --template coding-assistant` |
+| Developer using AI coding tools | Better system prompts for coding assistants | `ri-engine improve --template coding-assistant` |
 | Support / ops lead | ChatGPT instructions that resolve issues | `ri-engine improve --template customer-support` |
 | Developer evaluating tools | Proof without API keys | `ri-engine demo` |
 | Python builder | Drop-in `improve()` API | `from ri_engine import improve` |
@@ -24,7 +24,7 @@ How to get **recursive-intelligence** found and used — evolved via ri-engine's
 pip install recursive-intelligence
 ```
 
-Copy **Your Improved Prompt — Copy This** into ChatGPT, Claude, Cursor, or your AI tool. Done.
+Copy **Your Improved Prompt — Copy This** into ChatGPT, Claude, or your AI tool. Done.
 
 ---
 
@@ -35,12 +35,12 @@ Copy **Your Improved Prompt — Copy This** into ChatGPT, Claude, Cursor, or you
 ```bash
 gh repo edit russfranky/recursive-intelligence --add-topic prompt-engineering --add-topic llm \
   --add-topic system-prompts --add-topic cli --add-topic open-source \
-  --add-topic prompt-improvement --add-topic chatgpt --add-topic claude --add-topic cursor --add-topic agents
+  --add-topic prompt-improvement --add-topic chatgpt --add-topic claude --add-topic agents
 ```
 
 ### PyPI / package keywords
 
-See `pyproject.toml` — keywords include `prompt-engineering`, `system-prompts`, `chatgpt`, `claude`, `cursor`.
+See `pyproject.toml` — keywords include `prompt-engineering`, `system-prompts`, `chatgpt`, `claude`.
 
 ### README headings people search
 

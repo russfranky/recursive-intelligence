@@ -1,7 +1,7 @@
 # Coding Assistant — plug-and-play template
 display_name: AI Coding Assistant
 description: Write better code with minimal changes, tests, and clear commit messages.
-audience: Developers using Cursor, Copilot, or similar coding agents
+audience: Developers using AI coding assistants
 category: Agentic Development
 
 extends: use_cases/coding_agent.yaml

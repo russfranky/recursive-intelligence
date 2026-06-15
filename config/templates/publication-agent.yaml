@@ -1,7 +1,7 @@
 # Publication Agent — plug-and-play template
 display_name: Publication Agent
 description: Prepare an open-source repo for public release — docs, CI, license, honest claims, proof runs.
-audience: Maintainers, release engineers, and cloud agents shipping to GitHub
+audience: Maintainers and release engineers
 category: Software Engineering
 
 seed_prompt: |

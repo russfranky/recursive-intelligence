@@ -230,7 +230,7 @@ Use this before tagging a release or flipping repo visibility to public.
 - [x] Run `ri-engine demo` locally and spot-check evolved prompts (2026-06-14: 6/6 F→A)
 - [x] Publication agent prompt at `docs/publication_agent_prompt.md`
 - [x] PR #1 merged to `main` (2026-06-14)
-- [ ] Set repo visibility to **public** — requires repo admin (cloud agent token cannot change visibility):
+- [ ] Set repo visibility to **public** — requires repo admin:
 
 ```bash
 gh repo edit russfranky/recursive-intelligence \

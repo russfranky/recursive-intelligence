@@ -35,10 +35,6 @@ GITHUB_OWNER=ThingsCorp REPO_NAME=ri-engine VISIBILITY=public \
 
 Requires `gh auth login` with permission to create repos on that account/org.
 
-### Why the cloud agent cannot create repos
-
-GitHub integration tokens in cloud agents can push to existing repos but **cannot** `createRepository`. Run the script locally once, or create an empty repo in the GitHub UI and push.
-
 ---
 
 ## After publishing

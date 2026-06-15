@@ -42,7 +42,7 @@ Avoid Latinate filler: facilitate, utilize, implement, comprehensive methodology
 
 | Audience | Search terms they use | Hook |
 |----------|----------------------|------|
-| Developers using Cursor, Copilot, etc. | system prompt, agent instructions | Improve coding assistant prompts in one command |
+| Developers using AI coding tools | system prompt, agent instructions | Improve coding assistant prompts in one command |
 | Support / ops leads | ChatGPT custom instructions, help desk AI | Templates for customer support |
 | Developers evaluating tools | prompt engineering CLI, offline LLM tool | `ri-engine demo` proof, no API key |
 | Python integrators | improve prompt API, prompt library | `from ri_engine import improve` |

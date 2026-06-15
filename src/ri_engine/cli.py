@@ -55,6 +55,9 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "config":
         return _run_config(args)
 
+    if args.command == "integrate":
+        return _run_integrate(args)
+
     if args.command == "real-world":
         from ri_engine.real_world_test import main_prep, main_run, main_workflow
         if args.rw_command == "prep" or args.rw_command is None:
@@ -264,6 +267,27 @@ def _build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Save setting in ./.ri-engine/settings.yaml (default: user config)",
     )
+
+    integrate = sub.add_parser(
+        "integrate",
+        help="Plug-and-play: scaffold ri-engine into this repo and run improve",
+    )
+    int_sub = integrate.add_subparsers(dest="integrate_command")
+    int_init = int_sub.add_parser("init", help="Scaffold seed, config, runbook, manifest (default)")
+    int_init.add_argument("--name", type=str, default="", help="Agent slug (default: <project>-agent)")
+    int_init.add_argument("--goal", type=str, default="", help="Initial objective / When this works…")
+    int_init.add_argument("--config-dir", type=str, default="ri/config", help="Config directory (default: ri/config)")
+    int_init.add_argument("--no-from-claude", action="store_true", help="Do not merge CLAUDE.md / AGENTS.md into seed")
+    int_init.add_argument("--claude-code", action="store_true", help="Enable Claude Code handoff in .ri-engine/settings.yaml")
+    int_init.add_argument("--force", action="store_true", help="Overwrite existing scaffold files")
+    int_sub.add_parser("status", help="Show integration manifest and file checks")
+    int_imp = int_sub.add_parser("improve", help="Run improve --until-plateau --runbook from manifest")
+    int_imp.add_argument("--provider", choices=["mock", "openai", "anthropic"])
+    int_imp.add_argument("--claude-code", action="store_true")
+    int_imp.add_argument("--no-claude-code", action="store_true")
+    int_imp.add_argument("--quiet", "-q", action="store_true")
+    int_imp.add_argument("--expert", action="store_true")
+    int_imp.add_argument("--once", action="store_true", help="Single improve run (no --until-plateau)")
 
     runbook = sub.add_parser("runbook", help="Browse and compile approved prompts for the next AI")
     rb_sub = runbook.add_subparsers(dest="runbook_command")
@@ -502,6 +526,94 @@ def _maybe_claude_code_handoff(
         return
     name = getattr(args, "claude_code_name", "") or getattr(args, "runbook_name", "") or "claude-code-agent"
     handoff_after_improve(console, report=report, output_path=output_path, runbook_name=name)
+
+
+def _run_integrate(args: argparse.Namespace) -> int:
+    from rich.panel import Panel
+    from rich.table import Table
+
+    from ri_engine.project_integrate import (
+        init_project_integration,
+        integration_status,
+        load_manifest,
+        run_integrated_improve,
+    )
+
+    cmd = getattr(args, "integrate_command", None)
+
+    if cmd == "status":
+        status = integration_status()
+        if not load_manifest():
+            console.print("[yellow]Not integrated.[/yellow] Run: [bold]ri-engine integrate init[/bold]")
+            return 0
+        manifest = status.get("manifest", {})
+        table = Table(title="ri-engine integration")
+        table.add_column("Key")
+        table.add_column("Value")
+        for key in ("project_name", "agent_slug", "config_path", "seed_path", "integrated_at"):
+            if key in manifest:
+                table.add_row(key, str(manifest[key]))
+        for path, ok in (status.get("paths_ok") or {}).items():
+            table.add_row(path, "[green]ok[/green]" if ok else "[red]missing[/red]")
+        console.print(table)
+        console.print(f"\n[bold]Next:[/bold] {status.get('improve_command', 'ri-engine integrate improve')}")
+        return 0
+
+    if cmd == "improve":
+        try:
+            claude: bool | None = None
+            if getattr(args, "claude_code", False):
+                claude = True
+            if getattr(args, "no_claude_code", False):
+                claude = False
+            result = run_integrated_improve(
+                provider=getattr(args, "provider", None),
+                until_plateau=not getattr(args, "once", False),
+                claude_code=claude,
+                quiet=getattr(args, "quiet", False),
+                expert=getattr(args, "expert", False),
+            )
+        except FileNotFoundError as exc:
+            console.print(f"[red]{exc}[/red]")
+            return 1
+        if result["exit_code"] == 0 and not getattr(args, "quiet", False):
+            console.print(Panel(result["curation_hint"], title="Hand-merge reminder", border_style="yellow"))
+        return int(result["exit_code"])
+
+    if load_manifest() and not getattr(args, "force", False) and cmd is None:
+        status = integration_status()
+        console.print(Panel(
+            f"Already integrated as [bold]{status.get('manifest', {}).get('agent_slug', '?')}[/bold].\n"
+            "Run [bold]ri-engine integrate improve[/bold] or [bold]ri-engine integrate init --force[/bold] to reset.",
+            title="ri-engine integrate",
+            border_style="cyan",
+        ))
+        return 0
+
+    if cmd not in (None, "init"):
+        console.print("[yellow]Usage: ri-engine integrate init | improve | status[/yellow]")
+        return 1
+
+    result = init_project_integration(
+        name=getattr(args, "name", "") or "",
+        objective=getattr(args, "goal", "") or "",
+        config_dir_name=getattr(args, "config_dir", "ri/config") or "ri/config",
+        from_claude=not getattr(args, "no_from_claude", False),
+        claude_code_handoff=getattr(args, "claude_code", False),
+        force=getattr(args, "force", False),
+    )
+    body = (
+        f"Project: [bold]{result['project_name']}[/bold] · Agent: [bold]{result['agent_slug']}[/bold]\n\n"
+        f"Manifest: `{result['manifest']}`\n"
+        f"Runbook: `{result['runbook']}`\n\n"
+    )
+    if result["created"]:
+        body += "Created:\n" + "\n".join(f"  · {p}" for p in result["created"]) + "\n\n"
+    if result["skipped"]:
+        body += "Skipped (exists):\n" + "\n".join(f"  · {p}" for p in result["skipped"]) + "\n\n"
+    body += "Next:\n" + "\n".join(f"  · {c}" for c in result["next_commands"])
+    console.print(Panel(body, title="Plug-and-play integration ready", border_style="green"))
+    return 0
 
 
 def _run_config(args: argparse.Namespace) -> int:
@@ -887,7 +999,7 @@ def _legacy_main(argv: list[str]) -> int | None:
     if not argv:
         return None
     if argv[0] in {
-        "improve", "demo", "templates", "expert", "real-world", "runbook",
+        "improve", "demo", "templates", "expert", "real-world", "runbook", "integrate",
         "improve-prompts", "benchmark", "register-proof",
         "pool-linguistic-registry", "substantial-gains",
     }:

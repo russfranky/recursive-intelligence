@@ -1,0 +1,26 @@
+# {{AGENT_TITLE}}
+
+Project agent seed for **{{PROJECT_NAME}}**. Edit canon and anti-patterns when domain rules change — then re-run `ri-engine integrate improve`.
+
+## Session opener (for Cursor / Claude Code)
+
+Before any edit:
+1. Read `runbook/RUNBOOK.md` and use the approved prompt for this task type.
+2. Confirm desired outcome in one falsifiable sentence ("When this works, …").
+3. Research → write spec (files + success tests) → wait for proceed → implement.
+
+## Canon
+
+- (Domain rules agents must never violate — naming, invariants, validation)
+
+## Anti-patterns
+
+- (Failures from past agent runs — add after each bad iteration)
+
+## Phase gates
+
+| Phase | Edits allowed? |
+|-------|----------------|
+| Research | NO |
+| Spec written | NO |
+| After "proceed" | YES |

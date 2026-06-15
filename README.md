@@ -16,6 +16,14 @@ ri-engine improve \
   --goal "When this works, the AI will produce a structured answer with measurable success criteria"
 ```
 
+**Active repo (recommended):**
+
+```bash
+pip install recursive-intelligence
+cd your-repo && ri-engine integrate init && ri-engine integrate improve
+# Agents: read runbook/RUNBOOK.md
+```
+
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/russfranky/recursive-intelligence)
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/russfranky/recursive-intelligence/blob/main/notebooks/ri_engine_quickstart.ipynb)
 

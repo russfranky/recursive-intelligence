@@ -30,6 +30,7 @@ Central index for **Recursive Intelligence Engine** (`ri-engine`).
 | [cloud_development.md](cloud_development.md) | GitHub Codespaces and Google Colab |
 | [claude_code_integration.md](claude_code_integration.md) | Claude Code handoff toggle |
 | [agent_integration.md](agent_integration.md) | Embed the engine in agent workflows |
+| [integration_patterns.md](integration_patterns.md) | Monorepo integration + Hubzz case study |
 | [use_cases.md](use_cases.md) | Benchmark fixtures and scenario notes |
 
 ## Architecture & reference

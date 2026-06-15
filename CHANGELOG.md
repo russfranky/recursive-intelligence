@@ -11,6 +11,9 @@ All notable changes to this project are documented here.
 - `config/workflow_self_test_tasks.yaml` — falsifiable structural task battery (8 checks)
 - Task battery scoring integrated into `real-world run` when `metadata.task_battery` is set
 - **docs/diagrams.md** — Mermaid charts (VSR, validation loops, Claude Code, collective intelligence)
+- **docs/integration_patterns.md** — monorepo integration case study (Hubzz) + hand-merge loop
+- **config/integration.template.yaml** — copy-to-repo starter config
+- CLI curation note when fitness ≥ 85% (high rubric ≠ domain-ready)
 
 ## [0.1.8] - 2026-06-15
 

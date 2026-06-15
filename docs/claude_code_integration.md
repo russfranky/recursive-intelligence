@@ -2,6 +2,23 @@
 
 Use **ri-engine** to improve prompts, then **Claude Code** to execute work in the repo. Handoff is **off by default** — turn it on when you want runbook + terminal instructions after each improve run.
 
+```mermaid
+sequenceDiagram
+  participant U as You
+  participant RI as ri-engine
+  participant RB as runbook/RUNBOOK.md
+  participant CC as Claude Code
+
+  U->>RI: improve --seed … --goal …
+  RI->>RI: VSR + finalize
+  RI->>RB: Approve prompt (handoff on)
+  RI->>U: Improved prompt + handoff panel
+  U->>CC: Read runbook/RUNBOOK.md …
+  CC->>CC: Research → spec → proceed → implement
+```
+
+Full diagrams: [diagrams.md](diagrams.md)
+
 ## Enable / disable
 
 ### User-wide (all projects)

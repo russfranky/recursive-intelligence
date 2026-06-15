@@ -2,11 +2,22 @@
 
 Central index for **Recursive Intelligence Engine** (`ri-engine`).
 
+## Diagrams
+
+**[diagrams.md](diagrams.md)** — Mermaid charts for users and contributors:
+
+- What you do in 30 seconds (seed + goal → improved prompt)
+- VSR pipeline and Occam guardrail
+- Recursive validation loops (inner / middle / outer)
+- Claude Code handoff sequence
+- Workflow task battery and collective intelligence phases
+
 ## Start here
 
 | Document | Audience | Description |
 |----------|----------|-------------|
 | [getting_started.md](getting_started.md) | Users | Install, first `improve` run, CLI walkthrough |
+| [diagrams.md](diagrams.md) | Users | Visual overview (Mermaid) |
 | [technical_reference.md](technical_reference.md) | Developers | VSR architecture, modules, API, Occam's razor |
 | [research_and_citations.md](research_and_citations.md) | Researchers | Inspiration, related work, how to cite |
 | [publication.md](publication.md) | Maintainers | Release scope, API contract, limitations |

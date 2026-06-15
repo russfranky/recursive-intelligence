@@ -4,6 +4,15 @@
 
 Give **ri-engine** a seed prompt and a goal. It runs **Variation → Selection → Retention** with a **linguistic gate** (plain / latinate / mixed register) and returns an improved prompt. Works offline by default.
 
+```mermaid
+flowchart LR
+  S["Seed"] --> E["ri-engine"]
+  G["Goal"] --> E
+  E --> P["Improved prompt"]
+```
+
+See [diagrams.md](diagrams.md) for the full VSR pipeline and validation loops.
+
 ## Install
 
 ```bash

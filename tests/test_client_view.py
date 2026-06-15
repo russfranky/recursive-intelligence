@@ -39,6 +39,7 @@ def test_build_client_summary_plain_language():
     }
     summary = build_client_summary(report)
     assert "vsr" in summary["headline"].lower() or "fitness" in summary["headline"].lower()
-    assert summary["quality_score"] == "92%"
+    assert summary["fitness_score"] == "92%"
+    assert summary.get("quality_score") == "92%"
     assert "your_improved_prompt" in summary
     assert len(summary["what_we_did"]) >= 3

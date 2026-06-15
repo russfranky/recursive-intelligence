@@ -111,15 +111,17 @@ def build_client_summary(report: dict) -> dict[str, Any]:
     summary: dict[str, Any] = {
         "headline": _headline(fitness, converged, rounds),
         "status": status,
+        "fitness_score": fitness_pct,
         "quality_score": fitness_pct,
         "improvement_rounds": rounds,
         "writing_style": style_note,
         "your_improved_prompt": clean_prompt_for_client(report.get("best_prompt", "")),
         "ready_to_use": True,
+        "scope_note": "Mock rubric score — not live LLM task performance",
         "what_we_did": [
             "Resolved linguistic leaning (plain / latinate / mixed / …) from your goal",
             "Ran Variation → Selection → Retention cycles",
-            "Applied Occam's razor tie-break where enabled",
+            "Compared VSR winner vs one-shot finalize (Occam guardrails)",
             f"Completed {rounds} improvement round{'s' if rounds != 1 else ''}",
         ],
         "next_step": "Copy 'your_improved_prompt' into your system prompt.",

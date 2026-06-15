@@ -260,7 +260,30 @@ def _leaning_block(leaning: str) -> str:
     return LEANING_BLOCKS.get(leaning, LEANING_BLOCKS["plain"])
 
 
-def synthesize_variant(user: str) -> str:
+def _objective_has_leaning_clause(text: str) -> bool:
+    return "mandatory linguistic leaning" in text.lower()
+
+
+def _objective_core_text(objective: str) -> str:
+    """User goal text without injected gate clauses."""
+    core = re.split(r"\n\nMANDATORY LINGUISTIC LEANING", objective, maxsplit=1, flags=re.I)[0]
+    return core.strip()
+
+
+def _is_simple_task(seed: str, objective: str) -> bool:
+    """Short seed+goal tasks should not get full benchmark boilerplate."""
+    core = _objective_core_text(objective)
+    combined = f"{seed} {core}".lower()
+    complex_markers = (
+        "mitre", "compliance", "emergency", "policy", "stack trace",
+        "owasp", "att&ck", "billing", "incident", "pull request",
+    )
+    if any(marker in combined for marker in complex_markers):
+        return False
+    return len(seed.split()) <= 25 and len(core.split()) <= 40
+
+
+def synthesize_variant(user: str, *, compact: bool = False) -> str:
     """Generate a structured production-grade prompt variant."""
     fields = extract_fields(user)
     strategy = fields.get("strategy", "constraint_first")
@@ -268,22 +291,50 @@ def synthesize_variant(user: str) -> str:
     objective = fields.get("objective", "Complete the task effectively.")
     membrane = fields.get("membrane", "")
     leaning = detect_linguistic_leaning(objective)
+    skip_register = _objective_has_leaning_clause(objective)
+    if compact or strategy == "minimal_essential":
+        compact = True
 
     role = infer_role(parent, objective)
     strategy_block = STRATEGY_BLOCKS.get(strategy, STRATEGY_BLOCKS["constraint_first"])
     process = infer_process_steps(role, objective)
     output_fmt = infer_output_format(role, objective)
 
+    if compact:
+        process = """\
+## Execution
+1. Address the objective directly.
+2. Return output in the specified format only."""
+        strategy_block = STRATEGY_BLOCKS["minimal_essential"]
+        output_fmt = "## Output Format\nStructured response matching the objective. No preamble."
+
     if leaning == "latinate":
         process = translate_to_latinate(process)
         strategy_block = translate_to_latinate(strategy_block)
         role = translate_to_latinate(role)
 
-    register_block = _leaning_block(leaning)
+    register_block = ""
+    if not skip_register and leaning not in ("neutral",):
+        register_block = _leaning_block(leaning)
 
     membrane_section = ""
-    if membrane and "none yet" not in membrane.lower() and len(membrane) > 20:
+    if (
+        not compact
+        and membrane
+        and "none yet" not in membrane.lower()
+        and len(membrane) > 20
+    ):
         membrane_section = f"\n## Cross-Domain Insight (Membrane Bridge)\n{membrane}\n"
+
+    extra_blocks = ""
+    if not compact:
+        extra_blocks = f"""
+{STRATEGY_BLOCKS['failure_mode_guards']}
+
+{STRATEGY_BLOCKS['measurable_outcomes']}
+
+{STRATEGY_BLOCKS['recursive_self_eval']}
+"""
 
     prompt = f"""# {role}
 
@@ -295,13 +346,7 @@ You are a **{role}**. Your objective:
 {register_block}
 
 {strategy_block}
-{membrane_section}
-{STRATEGY_BLOCKS['failure_mode_guards']}
-
-{STRATEGY_BLOCKS['measurable_outcomes']}
-
-{STRATEGY_BLOCKS['recursive_self_eval']}
-
+{membrane_section}{extra_blocks}
 {output_fmt}
 
 <!-- RI-EVAL: clarity, utility, coherence, completeness -->"""
@@ -322,12 +367,20 @@ def finalize_prompt(
 ) -> str:
     """Produce a clean finalized prompt without evolution contamination."""
     resolved = leaning or register
-    reg_clause = f"\n{leaning_clause(resolved)}" if leaning_clause(resolved) else ""
+    objective_s = objective.strip()
+    simple = _is_simple_task(seed, objective_s)
+    if simple:
+        strategy = "minimal_essential"
+
+    reg_clause = ""
+    if not _objective_has_leaning_clause(objective_s):
+        if clause := leaning_clause(resolved):
+            reg_clause = f"\n{clause}"
 
     user = f"""# Recursive Intelligence — Variation Pass
 Generation: 99
 Strategy: {strategy}
-Objective: {objective}{reg_clause}
+Objective: {objective_s}{reg_clause}
 
 ## Parent Prompt
 {seed}
@@ -338,4 +391,4 @@ Objective: {objective}{reg_clause}
 ## Instructions
 Produce ONE improved prompt variant using strategy "{strategy}".
 Output ONLY the new prompt — no commentary."""
-    return synthesize_variant(user)
+    return synthesize_variant(user, compact=simple)

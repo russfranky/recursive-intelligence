@@ -7,7 +7,7 @@ from typing import Protocol
 from ri_engine.prompt_rubric import composite_prompt_score, score_task_prompt
 from ri_engine.language_leanings import detect_linguistic_leaning, score_leaning_fit
 from ri_engine.register_analysis import analyze_register
-from ri_engine.prompt_synthesizer import synthesize_variant
+from ri_engine.prompt_synthesizer import _is_simple_task, extract_fields, synthesize_variant
 
 
 class LLMProvider(Protocol):
@@ -22,7 +22,12 @@ class MockLLMProvider:
 
     def complete(self, system: str, user: str, temperature: float = 0.7) -> str:
         if "VARIATION" in system or "Strategy:" in user:
-            return synthesize_variant(user)
+            fields = extract_fields(user)
+            compact = (
+                fields.get("strategy") == "minimal_essential"
+                or _is_simple_task(fields.get("parent", ""), fields.get("objective", ""))
+            )
+            return synthesize_variant(user, compact=compact)
         if "SELECT" in system or "Score each candidate" in user:
             return self._score(user)
         if "MEMBRANE" in system or "cross-domain" in user.lower():

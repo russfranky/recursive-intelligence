@@ -2,6 +2,15 @@
 
 All notable changes to this project are documented here.
 
+## [0.1.7] - 2026-06-15
+
+### Fixed
+
+- Compact finalize for simple seed+goal tasks (no benchmark boilerplate bloat)
+- Duplicate linguistic leaning: skip register block when gate clause already in objective
+- CLI/visualizer: "fitness" not "quality"; remove "production prompt out" copy
+- Client summary: mock-mode scope note and baseline-vs-VSR in "what changed"
+
 ## [0.1.6] - 2026-06-15
 
 ### Fixed

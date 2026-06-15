@@ -65,8 +65,8 @@ PHASE_QUIPS: dict[str, list[str]] = {
         "convergence. diminishing returns accepted gracefully.",
     ],
     "done": [
-        "done. rough prompt in, production prompt out.",
-        "finished. copy the result before it reverts to chaos.",
+        "done. seed in, fitness-scored prompt out.",
+        "finished. mock rubric scored — verify on your real task.",
     ],
 }
 
@@ -132,7 +132,7 @@ def print_welcome(console: Console | None = None) -> None:
     con = console or make_console()
     print_brand_bar(con)
     con.print()
-    con.print(Text("rough prompt in. production prompt out.", style="quip"))
+    con.print(Text("seed + goal in. VSR-scored prompt out.", style="quip"))
     con.print()
     rows = Table(show_header=False, box=None, padding=(0, 2), expand=True)
     rows.add_column(style="accent", width=14)
@@ -188,15 +188,18 @@ def print_result(console: Console, summary: dict) -> None:
     print_brand_bar(
         console,
         subtitle=summary.get("headline", "complete"),
-        right=str(summary.get("quality_score", "")),
+        right=str(summary.get("fitness_score", summary.get("quality_score", ""))),
     )
     console.print()
     meta = Table(show_header=False, box=None, padding=(0, 2))
     meta.add_column(style="muted")
     meta.add_column(style="prompt")
     meta.add_row("status", summary.get("status", ""))
+    meta.add_row("fitness", summary.get("fitness_score", summary.get("quality_score", "")))
     meta.add_row("style", summary.get("writing_style", ""))
     meta.add_row("rounds", str(summary.get("improvement_rounds", "")))
+    if note := summary.get("scope_note"):
+        meta.add_row("scope", note)
     console.print(meta)
     console.print()
     console.print(Text("what changed", style="accent"))

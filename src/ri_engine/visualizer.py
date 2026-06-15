@@ -355,7 +355,7 @@ class ProcessVisualizer:
     def _stream_stats(self) -> Panel:
         s = self.state
         line = Text.assemble(
-            ("quality ", "muted"),
+            ("fitness ", "muted"),
             (f"{s.best_fitness:.0%}" if s.best_fitness else "—", "success"),
             ("  ·  ", "muted"),
             ("versions ", "muted"),
@@ -477,7 +477,7 @@ class ProcessVisualizer:
         variant_pct = (s.variants_done / max(s.variants_total, 1)) * 100
         survive_pct = (s.survivors_count / max(s.population_size, 1)) * 100
 
-        table.add_row("quality score" if self.simple_mode else "best fitness", f"[green]{s.best_fitness:.1%}[/]" if s.best_fitness else "—")
+        table.add_row("best fitness" if self.simple_mode else "best fitness", f"[green]{s.best_fitness:.1%}[/]" if s.best_fitness else "—")
         table.add_row("improvement" if self.simple_mode else "Δ fitness", f"[cyan]+{s.fitness_delta:.1%}[/]" if s.fitness_delta else "—")
         table.add_row("versions tried" if self.simple_mode else "variants", f"{s.variants_done}/{s.variants_total}  [dim]({variant_pct:.0f}%)[/]")
         table.add_row("ruled out" if self.simple_mode else "eliminated", f"[red]{s.eliminated}[/]  [dim]({cull_pct:.0f}%)[/]")
@@ -530,7 +530,7 @@ class ProcessVisualizer:
         elapsed = time.monotonic() - self._started
         if self.simple_mode:
             lines = [
-                Text.assemble(("quality ", "muted"), (f"{s.best_fitness:.0%}", "success")),
+                Text.assemble(("fitness ", "muted"), (f"{s.best_fitness:.0%}", "success")),
                 Text.assemble(("rounds ", "muted"), (f"{s.generation}/{s.max_generations}", "prompt")),
                 Text.assemble(("time ", "muted"), (f"{elapsed:.0f}s", "prompt")),
                 Text(phase_quip("done", seed=s.generation), style="quip"),

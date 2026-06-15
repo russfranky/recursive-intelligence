@@ -11,6 +11,11 @@ ri-engine integrate init
 # Improve + approve to runbook (recommended each canon change)
 ri-engine integrate improve
 
+# Start over — preview then confirm
+ri-engine integrate reset
+ri-engine integrate reset --yes
+ri-engine integrate reset --yes --reinit   # reset + fresh init
+
 # Check integration status
 ri-engine integrate status
 ```

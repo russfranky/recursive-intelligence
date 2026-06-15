@@ -8,6 +8,7 @@ from ri_engine.project_integrate import (
     init_project_integration,
     integration_status,
     load_manifest,
+    reset_project_integration,
 )
 
 
@@ -64,3 +65,25 @@ def test_manifest_roundtrip(tmp_path, monkeypatch):
     init_project_integration(name="round-agent", objective="When this works, x.")
     data = yaml.safe_load((tmp_path / ".ri-engine" / "project.yaml").read_text(encoding="utf-8"))
     assert data["objective"].startswith("When this works")
+
+
+def test_reset_dry_run_then_execute(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    init_project_integration(name="reset-agent")
+    dry = reset_project_integration(yes=False)
+    assert dry["status"] == "dry_run"
+    assert any("reset-agent.yaml" in p for p in dry["would_remove"])
+
+    done = reset_project_integration(yes=True)
+    assert done["status"] == "reset"
+    assert not load_manifest()
+    assert not (tmp_path / "ri" / "config" / "reset-agent.yaml").is_file()
+
+
+def test_reset_reinit(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    init_project_integration(name="reinit-agent", objective="When this works, a.")
+    reset_project_integration(yes=True, reinit=True, name="reinit-agent")
+    manifest = load_manifest()
+    assert manifest is not None
+    assert manifest.agent_slug == "reinit-agent"

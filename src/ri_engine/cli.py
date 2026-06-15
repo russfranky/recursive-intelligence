@@ -289,6 +289,17 @@ def _build_parser() -> argparse.ArgumentParser:
     int_imp.add_argument("--expert", action="store_true")
     int_imp.add_argument("--once", action="store_true", help="Single improve run (no --until-plateau)")
 
+    int_reset = int_sub.add_parser("reset", help="Remove integration files and start over")
+    int_reset.add_argument("--yes", "-y", action="store_true", help="Confirm removal (default is dry-run preview)")
+    int_reset.add_argument("--name", type=str, default="", help="Agent slug if manifest is missing")
+    int_reset.add_argument("--keep-runbook", action="store_true", help="Keep runbook entries for this agent")
+    int_reset.add_argument("--keep-settings", action="store_true", help="Keep .ri-engine/settings.yaml")
+    int_reset.add_argument(
+        "--reinit",
+        action="store_true",
+        help="After reset, run integrate init immediately (requires --yes)",
+    )
+
     runbook = sub.add_parser("runbook", help="Browse and compile approved prompts for the next AI")
     rb_sub = runbook.add_subparsers(dest="runbook_command")
     rb_sub.add_parser("list", help="List approved runbook entries")
@@ -536,6 +547,7 @@ def _run_integrate(args: argparse.Namespace) -> int:
         init_project_integration,
         integration_status,
         load_manifest,
+        reset_project_integration,
         run_integrated_improve,
     )
 
@@ -580,18 +592,51 @@ def _run_integrate(args: argparse.Namespace) -> int:
             console.print(Panel(result["curation_hint"], title="Hand-merge reminder", border_style="yellow"))
         return int(result["exit_code"])
 
+    if cmd == "reset":
+        if getattr(args, "reinit", False) and not getattr(args, "yes", False):
+            console.print("[red]--reinit requires --yes[/red]")
+            return 1
+        result = reset_project_integration(
+            yes=getattr(args, "yes", False),
+            keep_runbook=getattr(args, "keep_runbook", False),
+            keep_settings=getattr(args, "keep_settings", False),
+            reinit=getattr(args, "reinit", False),
+            name=getattr(args, "name", "") or "",
+        )
+        if result["status"] == "dry_run":
+            body = "[bold]Dry run[/bold] — nothing removed yet.\n\n"
+            if result["would_remove"]:
+                body += "Would remove files:\n" + "\n".join(f"  · {p}" for p in result["would_remove"]) + "\n\n"
+            if result.get("would_clean_runbook"):
+                body += "Would remove runbook:\n" + "\n".join(
+                    f"  · {p}" for p in result["would_clean_runbook"]
+                ) + "\n\n"
+            body += result["message"]
+            console.print(Panel(body, title="integrate reset", border_style="yellow"))
+            return 0
+        body = f"Removed {len(result.get('removed', []))} item(s).\n\n"
+        if result.get("removed"):
+            body += "\n".join(f"  · {p}" for p in result["removed"]) + "\n\n"
+        body += "Next:\n" + "\n".join(f"  · {c}" for c in result["next_commands"])
+        if reinit := result.get("reinit"):
+            body += f"\n\nRe-init agent: [bold]{reinit.get('agent_slug')}[/bold]"
+        console.print(Panel(body, title="Integration reset complete", border_style="green"))
+        return 0
+
     if load_manifest() and not getattr(args, "force", False) and cmd is None:
         status = integration_status()
         console.print(Panel(
             f"Already integrated as [bold]{status.get('manifest', {}).get('agent_slug', '?')}[/bold].\n"
-            "Run [bold]ri-engine integrate improve[/bold] or [bold]ri-engine integrate init --force[/bold] to reset.",
+            "Run [bold]ri-engine integrate improve[/bold], "
+            "[bold]ri-engine integrate reset --yes[/bold], or "
+            "[bold]ri-engine integrate init --force[/bold].",
             title="ri-engine integrate",
             border_style="cyan",
         ))
         return 0
 
     if cmd not in (None, "init"):
-        console.print("[yellow]Usage: ri-engine integrate init | improve | status[/yellow]")
+        console.print("[yellow]Usage: ri-engine integrate init | improve | status | reset[/yellow]")
         return 1
 
     result = init_project_integration(

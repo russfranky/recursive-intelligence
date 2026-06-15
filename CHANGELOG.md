@@ -10,6 +10,7 @@ All notable changes to this project are documented here.
 - `config/workflow_self_test.yaml` — session config for workflow validation
 - `config/workflow_self_test_tasks.yaml` — falsifiable structural task battery (8 checks)
 - Task battery scoring integrated into `real-world run` when `metadata.task_battery` is set
+- **docs/diagrams.md** — Mermaid charts (VSR, validation loops, Claude Code, collective intelligence)
 
 ## [0.1.8] - 2026-06-15
 

@@ -33,6 +33,8 @@ ri-engine improve \
 
 Research inspiration: **Raymond Uzwyshyn Ph.D.** — agentic AI, recursion, and selection environments. See [CREDITS.md](CREDITS.md) and [docs/research_and_citations.md](docs/research_and_citations.md).
 
+**Visual overview:** [docs/diagrams.md](docs/diagrams.md) — Mermaid charts for VSR, validation loops, and Claude Code integration.
+
 ---
 
 ## Features
@@ -105,10 +107,14 @@ Full walkthrough: [docs/getting_started.md](docs/getting_started.md)
 
 ## How it works
 
-```
-Linguistic Gate → [Macro Priors] → [Membrane] → Variation → Selection → Retention → repeat
-                                                      ↓
-                                            Baseline vs VSR pick
+```mermaid
+flowchart TB
+  IN["Seed + goal"] --> LG["Linguistic gate"]
+  LG --> V["Variation → Selection → Retention"]
+  V --> C{"Converged?"}
+  C -->|no| V
+  C -->|yes| BR["Baseline vs VSR pick"]
+  BR --> OUT["Improved prompt"]
 ```
 
 1. **Linguistic gate** — experimental prior; defaults to mixed when confidence is low
@@ -116,6 +122,8 @@ Linguistic Gate → [Macro Priors] → [Membrane] → Variation → Selection �
 3. **Selection** — objective alignment, clarity, utility, coherence, register fit, simplicity
 4. **Retention** — lineage memory and convergence detection
 5. **Baseline check** — compare against one-shot `finalize_prompt()`
+
+More charts (Claude Code, validation loops, collective intelligence): [docs/diagrams.md](docs/diagrams.md)
 
 Architecture details: [docs/technical_reference.md](docs/technical_reference.md)
 
@@ -145,6 +153,7 @@ recursive-intelligence/
 | Document | Description |
 |----------|-------------|
 | [**docs/README.md**](docs/README.md) | **Documentation hub** |
+| [**diagrams.md**](docs/diagrams.md) | **Mermaid charts** — VSR, validation loops, Claude Code |
 | [claude_code_integration.md](docs/claude_code_integration.md) | Claude Code handoff setting (`ri-engine config claude-code on`) |
 | [getting_started.md](docs/getting_started.md) | Install and first run |
 | [technical_reference.md](docs/technical_reference.md) | Architecture and API |

@@ -1,0 +1,41 @@
+# Use Case 2: Customer Support Agent
+# Evolve ticket resolution prompt with empathy + accuracy + escalation rules
+
+name: "Customer Support Agent"
+category: "Operations"
+description: "Optimizes for resolution rate and CSAT, not engagement/time-on-ticket"
+
+seed_prompt: |
+  You are a customer support agent. Help the user with their issue politely.
+
+objective: |
+  Evolve into a support agent prompt that: resolves issues in minimum interactions,
+  detects when to escalate (billing, legal, abuse), never optimizes for chat length,
+  includes empathy without sycophancy, cites knowledge base sources, and measures
+  success by issue resolution not conversation duration. Include self-eval rubric.
+
+max_generations: 6
+population_size: 8
+survivors_count: 2
+convergence_threshold: 0.025
+convergence_window: 2
+enable_membrane_bridge: true
+
+domains:
+  - "cognitive science (signal vs proxy — CSAT vs resolution)"
+  - "medicine (triage protocols, differential diagnosis)"
+  - "diplomacy (de-escalation, interest-based negotiation)"
+  - "queueing theory (ticket routing, SLA optimization)"
+  - "behavioral economics (framing, loss aversion)"
+
+fitness_weights:
+  clarity: 0.30
+  novelty: 0.10
+  utility: 0.40
+  coherence: 0.20
+
+output_path: ./output/benchmark/customer_support.json
+
+metadata:
+  use_case: "customer_support"
+  baseline_quality: "weak"

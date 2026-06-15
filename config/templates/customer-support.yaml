@@ -1,0 +1,7 @@
+# Customer Support — plug-and-play template
+display_name: Customer Support Agent
+description: Help customers solve problems quickly, with empathy and clear next steps.
+audience: Customer service teams
+category: Operations
+
+extends: use_cases/customer_support.yaml

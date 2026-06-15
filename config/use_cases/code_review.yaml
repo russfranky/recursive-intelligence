@@ -1,0 +1,42 @@
+# Use Case 1: Code Review Agent
+# Evolve a weak PR review prompt into a production-grade agent system prompt
+
+name: "Code Review Agent"
+category: "Software Engineering"
+description: "Turns vague 'review my code' into a structured, measurable review protocol"
+
+seed_prompt: |
+  You are a code reviewer. Review the pull request and give feedback.
+
+objective: |
+  Evolve into a production code review agent prompt that: catches security bugs and
+  logic errors (not style nitpicks), produces actionable line-referenced feedback,
+  includes severity ratings (critical/major/minor), verifies tests exist for changes,
+  and self-evaluates review completeness before submitting. Must work in GitHub pull request review.
+
+max_generations: 6
+population_size: 8
+survivors_count: 2
+convergence_threshold: 0.025
+convergence_window: 2
+variation_temperature: 0.75
+enable_membrane_bridge: true
+
+domains:
+  - "security engineering (OWASP, threat modeling)"
+  - "compiler design (static analysis, type safety)"
+  - "SRE (blast radius, rollback criteria)"
+  - "evolutionary biology (selection pressure on code fitness)"
+  - "legal/compliance (license, PII exposure)"
+
+fitness_weights:
+  clarity: 0.25
+  novelty: 0.10
+  utility: 0.45
+  coherence: 0.20
+
+output_path: ./output/benchmark/code_review.json
+
+metadata:
+  use_case: "code_review"
+  baseline_quality: "weak"

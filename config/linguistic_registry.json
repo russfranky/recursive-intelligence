@@ -1,0 +1,608 @@
+{
+  "version": 1,
+  "timestamp": "2026-06-13T14:30:27.934152+00:00",
+  "spectrum_leanings": [
+    "plain",
+    "latinate",
+    "mixed",
+    "neutral",
+    "technical",
+    "conversational"
+  ],
+  "entries": {
+    "software_engineering:developer": {
+      "id": "software_engineering:developer",
+      "category": "Software Engineering",
+      "audience": "developer",
+      "task_type": "agent_prompt",
+      "recommended_leaning": "plain",
+      "confidence": 0.63,
+      "spectrum_scores": {
+        "plain": {
+          "quality": 1.0,
+          "composite": 1.0,
+          "fitness": 0.0,
+          "latinate_ratio": 0.3889,
+          "readability": 0.8477,
+          "token_estimate": 360,
+          "fitness_validated": 0.925
+        },
+        "latinate": {
+          "quality": 1.0,
+          "composite": 0.8978,
+          "fitness": 0.0,
+          "latinate_ratio": 0.8158,
+          "readability": 0.7967,
+          "token_estimate": 375
+        },
+        "mixed": {
+          "quality": 1.0,
+          "composite": 0.9006,
+          "fitness": 0.0,
+          "latinate_ratio": 0.2955,
+          "readability": 0.8522,
+          "token_estimate": 365
+        },
+        "neutral": {
+          "quality": 1.0,
+          "composite": 0.875,
+          "fitness": 0.0,
+          "latinate_ratio": 0.3095,
+          "readability": 0.8557,
+          "token_estimate": 319
+        },
+        "technical": {
+          "quality": 1.0,
+          "composite": 0.8696,
+          "fitness": 0.0,
+          "latinate_ratio": 0.3548,
+          "readability": 0.8145,
+          "token_estimate": 342
+        },
+        "conversational": {
+          "quality": 1.0,
+          "composite": 1.0,
+          "fitness": 0.0,
+          "latinate_ratio": 0.2581,
+          "readability": 0.8678,
+          "token_estimate": 353
+        }
+      },
+      "alternatives": [
+        "conversational",
+        "mixed"
+      ],
+      "rationale": "plain wins composite 1.00 (quality=100%, lat_ratio=0.39, read=0.85); runner-up conversational at 1.00",
+      "evidence_runs": 2,
+      "updated_at": "2026-06-13T14:30:27.812193+00:00"
+    },
+    "agentic_development:developer": {
+      "id": "agentic_development:developer",
+      "category": "Agentic Development",
+      "audience": "developer",
+      "task_type": "agent_prompt",
+      "recommended_leaning": "plain",
+      "confidence": 0.63,
+      "spectrum_scores": {
+        "plain": {
+          "quality": 1.0,
+          "composite": 1.0,
+          "fitness": 0.0,
+          "latinate_ratio": 0.3962,
+          "readability": 0.8423,
+          "token_estimate": 344,
+          "fitness_validated": 0.9175
+        },
+        "latinate": {
+          "quality": 1.0,
+          "composite": 0.9011,
+          "fitness": 0.0,
+          "latinate_ratio": 0.8333,
+          "readability": 0.7899,
+          "token_estimate": 360
+        },
+        "mixed": {
+          "quality": 1.0,
+          "composite": 0.9044,
+          "fitness": 0.0,
+          "latinate_ratio": 0.3023,
+          "readability": 0.8488,
+          "token_estimate": 349
+        },
+        "neutral": {
+          "quality": 1.0,
+          "composite": 0.875,
+          "fitness": 0.0,
+          "latinate_ratio": 0.3171,
+          "readability": 0.8521,
+          "token_estimate": 303
+        },
+        "technical": {
+          "quality": 1.0,
+          "composite": 0.875,
+          "fitness": 0.0,
+          "latinate_ratio": 0.3667,
+          "readability": 0.8084,
+          "token_estimate": 326
+        },
+        "conversational": {
+          "quality": 1.0,
+          "composite": 1.0,
+          "fitness": 0.0,
+          "latinate_ratio": 0.2667,
+          "readability": 0.8638,
+          "token_estimate": 337
+        }
+      },
+      "alternatives": [
+        "conversational",
+        "mixed"
+      ],
+      "rationale": "plain wins composite 1.00 (quality=100%, lat_ratio=0.40, read=0.84); runner-up conversational at 1.00",
+      "evidence_runs": 2,
+      "updated_at": "2026-06-13T14:30:27.827235+00:00"
+    },
+    "operations:end_user": {
+      "id": "operations:end_user",
+      "category": "Operations",
+      "audience": "end_user",
+      "task_type": "agent_prompt",
+      "recommended_leaning": "conversational",
+      "confidence": 0.6469999999999999,
+      "spectrum_scores": {
+        "plain": {
+          "quality": 1.0,
+          "composite": 0.9917,
+          "fitness": 0.0,
+          "latinate_ratio": 0.5625,
+          "readability": 0.827,
+          "token_estimate": 347
+        },
+        "latinate": {
+          "quality": 1.0,
+          "composite": 0.9258,
+          "fitness": 0.0,
+          "latinate_ratio": 0.9722,
+          "readability": 0.7741,
+          "token_estimate": 357
+        },
+        "mixed": {
+          "quality": 1.0,
+          "composite": 0.9596,
+          "fitness": 0.0,
+          "latinate_ratio": 0.5,
+          "readability": 0.8338,
+          "token_estimate": 352
+        },
+        "neutral": {
+          "quality": 1.0,
+          "composite": 0.875,
+          "fitness": 0.0,
+          "latinate_ratio": 0.5278,
+          "readability": 0.8348,
+          "token_estimate": 306
+        },
+        "technical": {
+          "quality": 1.0,
+          "composite": 0.9334,
+          "fitness": 0.0,
+          "latinate_ratio": 0.68,
+          "readability": 0.7924,
+          "token_estimate": 329
+        },
+        "conversational": {
+          "quality": 1.0,
+          "composite": 1.0,
+          "fitness": 0.0,
+          "latinate_ratio": 0.56,
+          "readability": 0.8483,
+          "token_estimate": 340,
+          "fitness_validated": 0.9275
+        }
+      },
+      "alternatives": [
+        "plain",
+        "mixed"
+      ],
+      "rationale": "conversational wins composite 1.00 (quality=100%, lat_ratio=0.56, read=0.85); runner-up plain at 0.99",
+      "evidence_runs": 2,
+      "updated_at": "2026-06-13T14:30:27.843620+00:00"
+    },
+    "research_intelligence:researcher": {
+      "id": "research_intelligence:researcher",
+      "category": "Research & Intelligence",
+      "audience": "researcher",
+      "task_type": "agent_prompt",
+      "recommended_leaning": "conversational",
+      "confidence": 0.632,
+      "spectrum_scores": {
+        "plain": {
+          "quality": 1.0,
+          "composite": 0.9991,
+          "fitness": 0.0,
+          "latinate_ratio": 0.4884,
+          "readability": 0.8021,
+          "token_estimate": 340
+        },
+        "latinate": {
+          "quality": 1.0,
+          "composite": 0.92,
+          "fitness": 0.0,
+          "latinate_ratio": 0.9355,
+          "readability": 0.748,
+          "token_estimate": 350
+        },
+        "mixed": {
+          "quality": 1.0,
+          "composite": 0.9544,
+          "fitness": 0.0,
+          "latinate_ratio": 0.3939,
+          "readability": 0.8093,
+          "token_estimate": 345
+        },
+        "neutral": {
+          "quality": 1.0,
+          "composite": 0.875,
+          "fitness": 0.0,
+          "latinate_ratio": 0.4194,
+          "readability": 0.8064,
+          "token_estimate": 299
+        },
+        "technical": {
+          "quality": 1.0,
+          "composite": 0.9162,
+          "fitness": 0.0,
+          "latinate_ratio": 0.55,
+          "readability": 0.7656,
+          "token_estimate": 322
+        },
+        "conversational": {
+          "quality": 1.0,
+          "composite": 1.0,
+          "fitness": 0.0,
+          "latinate_ratio": 0.4,
+          "readability": 0.8234,
+          "token_estimate": 333,
+          "fitness_validated": 0.9225
+        }
+      },
+      "alternatives": [
+        "plain",
+        "mixed"
+      ],
+      "rationale": "conversational wins composite 1.00 (quality=100%, lat_ratio=0.40, read=0.82); runner-up plain at 1.00",
+      "evidence_runs": 2,
+      "updated_at": "2026-06-13T14:30:27.858034+00:00"
+    },
+    "revenue:prospect": {
+      "id": "revenue:prospect",
+      "category": "Revenue",
+      "audience": "prospect",
+      "task_type": "agent_prompt",
+      "recommended_leaning": "plain",
+      "confidence": 0.63,
+      "spectrum_scores": {
+        "plain": {
+          "quality": 1.0,
+          "composite": 1.0,
+          "fitness": 0.0,
+          "latinate_ratio": 0.4419,
+          "readability": 0.8728,
+          "token_estimate": 356,
+          "fitness_validated": 0.89
+        },
+        "latinate": {
+          "quality": 1.0,
+          "composite": 0.9241,
+          "fitness": 0.0,
+          "latinate_ratio": 0.9677,
+          "readability": 0.8093,
+          "token_estimate": 368
+        },
+        "mixed": {
+          "quality": 1.0,
+          "composite": 0.9241,
+          "fitness": 0.0,
+          "latinate_ratio": 0.3333,
+          "readability": 0.8755,
+          "token_estimate": 362
+        },
+        "neutral": {
+          "quality": 1.0,
+          "composite": 0.875,
+          "fitness": 0.0,
+          "latinate_ratio": 0.3548,
+          "readability": 0.882,
+          "token_estimate": 316
+        },
+        "technical": {
+          "quality": 1.0,
+          "composite": 0.879,
+          "fitness": 0.0,
+          "latinate_ratio": 0.45,
+          "readability": 0.8395,
+          "token_estimate": 338
+        },
+        "conversational": {
+          "quality": 1.0,
+          "composite": 1.0,
+          "fitness": 0.0,
+          "latinate_ratio": 0.3,
+          "readability": 0.893,
+          "token_estimate": 349
+        }
+      },
+      "alternatives": [
+        "conversational",
+        "latinate"
+      ],
+      "rationale": "plain wins composite 1.00 (quality=100%, lat_ratio=0.44, read=0.87); runner-up conversational at 1.00",
+      "evidence_runs": 2,
+      "updated_at": "2026-06-13T14:30:27.871501+00:00"
+    },
+    "security:operator": {
+      "id": "security:operator",
+      "category": "Security",
+      "audience": "operator",
+      "task_type": "agent_prompt",
+      "recommended_leaning": "conversational",
+      "confidence": 0.639,
+      "spectrum_scores": {
+        "plain": {
+          "quality": 1.0,
+          "composite": 0.9956,
+          "fitness": 0.0,
+          "latinate_ratio": 0.5476,
+          "readability": 0.8545,
+          "token_estimate": 359
+        },
+        "latinate": {
+          "quality": 1.0,
+          "composite": 0.924,
+          "fitness": 0.0,
+          "latinate_ratio": 0.9667,
+          "readability": 0.8048,
+          "token_estimate": 369
+        },
+        "mixed": {
+          "quality": 1.0,
+          "composite": 0.9794,
+          "fitness": 0.0,
+          "latinate_ratio": 0.4688,
+          "readability": 0.8597,
+          "token_estimate": 365
+        },
+        "neutral": {
+          "quality": 1.0,
+          "composite": 0.875,
+          "fitness": 0.0,
+          "latinate_ratio": 0.5,
+          "readability": 0.8643,
+          "token_estimate": 319
+        },
+        "technical": {
+          "quality": 1.0,
+          "composite": 0.9265,
+          "fitness": 0.0,
+          "latinate_ratio": 0.6842,
+          "readability": 0.8221,
+          "token_estimate": 341
+        },
+        "conversational": {
+          "quality": 1.0,
+          "composite": 1.0,
+          "fitness": 0.0,
+          "latinate_ratio": 0.5263,
+          "readability": 0.875,
+          "token_estimate": 353,
+          "fitness_validated": 0.92
+        }
+      },
+      "alternatives": [
+        "plain",
+        "mixed"
+      ],
+      "rationale": "conversational wins composite 1.00 (quality=100%, lat_ratio=0.53, read=0.87); runner-up plain at 1.00",
+      "evidence_runs": 2,
+      "updated_at": "2026-06-13T14:30:27.886360+00:00"
+    },
+    "legal_compliance:regulator": {
+      "id": "legal_compliance:regulator",
+      "category": "Legal & Compliance",
+      "audience": "regulator",
+      "task_type": "compliance_document",
+      "recommended_leaning": "plain",
+      "confidence": 0.63,
+      "spectrum_scores": {
+        "plain": {
+          "quality": 1.0,
+          "composite": 1.0,
+          "fitness": 0.0,
+          "latinate_ratio": 0.4038,
+          "readability": 0.8307,
+          "token_estimate": 350,
+          "fitness_validated": 0.92
+        },
+        "latinate": {
+          "quality": 1.0,
+          "composite": 0.9022,
+          "fitness": 0.0,
+          "latinate_ratio": 0.8378,
+          "readability": 0.7768,
+          "token_estimate": 364
+        },
+        "mixed": {
+          "quality": 1.0,
+          "composite": 0.9076,
+          "fitness": 0.0,
+          "latinate_ratio": 0.3095,
+          "readability": 0.8356,
+          "token_estimate": 355
+        },
+        "neutral": {
+          "quality": 1.0,
+          "composite": 0.875,
+          "fitness": 0.0,
+          "latinate_ratio": 0.325,
+          "readability": 0.8367,
+          "token_estimate": 309
+        },
+        "technical": {
+          "quality": 1.0,
+          "composite": 0.878,
+          "fitness": 0.0,
+          "latinate_ratio": 0.3793,
+          "readability": 0.7957,
+          "token_estimate": 332
+        },
+        "conversational": {
+          "quality": 1.0,
+          "composite": 1.0,
+          "fitness": 0.0,
+          "latinate_ratio": 0.2759,
+          "readability": 0.8513,
+          "token_estimate": 343
+        }
+      },
+      "alternatives": [
+        "conversational",
+        "mixed"
+      ],
+      "rationale": "plain wins composite 1.00 (quality=100%, lat_ratio=0.40, read=0.83); runner-up conversational at 1.00",
+      "evidence_runs": 2,
+      "updated_at": "2026-06-13T14:30:27.899542+00:00"
+    },
+    "clinical_medical:clinician": {
+      "id": "clinical_medical:clinician",
+      "category": "Clinical & Medical",
+      "audience": "clinician",
+      "task_type": "clinical_document",
+      "recommended_leaning": "conversational",
+      "confidence": 0.641,
+      "spectrum_scores": {
+        "plain": {
+          "quality": 1.0,
+          "composite": 0.9944,
+          "fitness": 0.0,
+          "latinate_ratio": 0.5238,
+          "readability": 0.7988,
+          "token_estimate": 302
+        },
+        "latinate": {
+          "quality": 1.0,
+          "composite": 0.9253,
+          "fitness": 0.0,
+          "latinate_ratio": 0.9655,
+          "readability": 0.7448,
+          "token_estimate": 313
+        },
+        "mixed": {
+          "quality": 1.0,
+          "composite": 0.9793,
+          "fitness": 0.0,
+          "latinate_ratio": 0.4375,
+          "readability": 0.8073,
+          "token_estimate": 308
+        },
+        "neutral": {
+          "quality": 1.0,
+          "composite": 0.875,
+          "fitness": 0.0,
+          "latinate_ratio": 0.4667,
+          "readability": 0.8037,
+          "token_estimate": 262
+        },
+        "technical": {
+          "quality": 1.0,
+          "composite": 0.9326,
+          "fitness": 0.0,
+          "latinate_ratio": 0.6316,
+          "readability": 0.7574,
+          "token_estimate": 284
+        },
+        "conversational": {
+          "quality": 1.0,
+          "composite": 1.0,
+          "fitness": 0.0,
+          "latinate_ratio": 0.4737,
+          "readability": 0.823,
+          "token_estimate": 295,
+          "fitness_validated": 0.925
+        }
+      },
+      "alternatives": [
+        "plain",
+        "mixed"
+      ],
+      "rationale": "conversational wins composite 1.00 (quality=100%, lat_ratio=0.47, read=0.82); runner-up plain at 0.99",
+      "evidence_runs": 2,
+      "updated_at": "2026-06-13T14:30:27.912917+00:00"
+    },
+    "executive_communications:executive": {
+      "id": "executive_communications:executive",
+      "category": "Executive Communications",
+      "audience": "executive",
+      "task_type": "executive_brief",
+      "recommended_leaning": "conversational",
+      "confidence": 0.636,
+      "spectrum_scores": {
+        "plain": {
+          "quality": 1.0,
+          "composite": 0.9972,
+          "fitness": 0.0,
+          "latinate_ratio": 0.5122,
+          "readability": 0.8166,
+          "token_estimate": 302
+        },
+        "latinate": {
+          "quality": 1.0,
+          "composite": 0.9247,
+          "fitness": 0.0,
+          "latinate_ratio": 0.9643,
+          "readability": 0.762,
+          "token_estimate": 313
+        },
+        "mixed": {
+          "quality": 1.0,
+          "composite": 0.9701,
+          "fitness": 0.0,
+          "latinate_ratio": 0.4194,
+          "readability": 0.8245,
+          "token_estimate": 307
+        },
+        "neutral": {
+          "quality": 1.0,
+          "composite": 0.875,
+          "fitness": 0.0,
+          "latinate_ratio": 0.4483,
+          "readability": 0.824,
+          "token_estimate": 261
+        },
+        "technical": {
+          "quality": 1.0,
+          "composite": 0.9248,
+          "fitness": 0.0,
+          "latinate_ratio": 0.6111,
+          "readability": 0.7761,
+          "token_estimate": 284
+        },
+        "conversational": {
+          "quality": 1.0,
+          "composite": 1.0,
+          "fitness": 0.0,
+          "latinate_ratio": 0.4444,
+          "readability": 0.8409,
+          "token_estimate": 295,
+          "fitness_validated": 0.9375
+        }
+      },
+      "alternatives": [
+        "plain",
+        "mixed"
+      ],
+      "rationale": "conversational wins composite 1.00 (quality=100%, lat_ratio=0.44, read=0.84); runner-up plain at 1.00",
+      "evidence_runs": 2,
+      "updated_at": "2026-06-13T14:30:27.926389+00:00"
+    }
+  }
+}

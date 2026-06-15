@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Documentation
+    url: https://github.com/russfranky/recursive-intelligence/blob/main/docs/README.md
+    about: Read the documentation index before opening an issue
+  - name: Security advisory
+    url: https://github.com/russfranky/recursive-intelligence/security/advisories/new
+    about: Report a vulnerability privately

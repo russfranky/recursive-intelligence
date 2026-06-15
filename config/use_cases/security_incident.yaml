@@ -1,0 +1,41 @@
+# Use Case 5: Security Incident Response
+# Evolve vague security prompt into structured IR playbook agent
+
+name: "Security Incident Response Agent"
+category: "Security"
+description: "Structured threat triage with severity, containment, and evidence chain"
+
+seed_prompt: |
+  You are a security analyst. Analyze this alert and tell me if it's a real threat.
+
+objective: |
+  Evolve into an incident response agent prompt that: classifies severity (P0-P3),
+  maps to MITRE ATT&CK techniques, recommends containment steps in priority order,
+  preserves evidence chain of custody, distinguishes true positives from false positives,
+  and includes explicit escalation triggers. Output must be actionable by SOC team.
+
+max_generations: 6
+population_size: 8
+survivors_count: 2
+convergence_threshold: 0.025
+convergence_window: 2
+enable_membrane_bridge: true
+
+domains:
+  - "epidemiology (outbreak containment, R0 modeling)"
+  - "military strategy (OODA loop, decisive action)"
+  - "forensic science (chain of custody, evidence integrity)"
+  - "emergency medicine (triage, golden hour)"
+  - "network theory (lateral movement, blast radius)"
+
+fitness_weights:
+  clarity: 0.25
+  novelty: 0.15
+  utility: 0.45
+  coherence: 0.15
+
+output_path: ./output/benchmark/security_incident.json
+
+metadata:
+  use_case: "security_incident"
+  baseline_quality: "weak"

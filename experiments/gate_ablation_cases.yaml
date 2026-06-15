@@ -1,0 +1,48 @@
+# Local linguistic-gate ablation fixtures (no API key required).
+# Run: python3 experiments/run_gate_ablation.py
+
+cases:
+  - id: operational_plain
+    expected_leaning: plain
+    seed: "You are a helper."
+    goal: >-
+      When this works, the AI will give step-by-step emergency shutdown
+      instructions that an operator can follow under time pressure.
+
+  - id: formal_policy
+    expected_leaning: latinate
+    seed: "You are a helper."
+    goal: >-
+      When this works, the AI will draft a formal institutional policy section
+      with definitions, obligations, exceptions, and compliance language.
+
+  - id: mixed_explainer
+    expected_leaning: mixed
+    seed: "You are a helper."
+    goal: >-
+      When this works, the AI will explain a complex policy change to
+      non-specialists while preserving the important formal distinctions.
+
+  - id: technical_debugging
+    expected_leaning: technical
+    seed: "You are a helper."
+    goal: >-
+      When this works, the AI will help diagnose a Python API error using logs,
+      stack traces, reproduction steps, and likely root causes.
+
+  - id: conversational_coach
+    expected_leaning: conversational
+    seed: "You are a helper."
+    goal: >-
+      When this works, the AI will respond like a supportive writing coach
+      giving practical, friendly revision advice.
+
+conditions:
+  - "off"
+  - "neutral"
+  - "auto"
+  - "plain"
+  - "latinate"
+  - "mixed"
+  - "technical"
+  - "conversational"

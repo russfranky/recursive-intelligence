@@ -1,0 +1,7 @@
+# Code Review — plug-and-play template
+display_name: Code Review Agent
+description: Catch bugs and security issues before code ships — with clear, actionable feedback.
+audience: Engineering teams
+category: Software Engineering
+
+extends: use_cases/code_review.yaml

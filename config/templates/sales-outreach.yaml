@@ -1,0 +1,7 @@
+# Sales Outreach — plug-and-play template
+display_name: Sales Outreach Agent
+description: Write short, personal emails that get replies — not spam folder entries.
+audience: Sales and business development teams
+category: Revenue
+
+extends: use_cases/sales_outreach.yaml

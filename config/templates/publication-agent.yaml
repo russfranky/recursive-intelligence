@@ -1,0 +1,37 @@
+# Publication Agent — plug-and-play template
+display_name: Publication Agent
+description: Prepare an open-source repo for public release — docs, CI, license, honest claims, proof runs.
+audience: Maintainers and release engineers
+category: Software Engineering
+
+seed_prompt: |
+  You are a software documentation agent. Help prepare open-source repositories for public release.
+
+objective: |
+  When this works, the agent will produce a complete, publication-ready repository with
+  accurate docs, verified proof artifacts, CI, license, and honest claims — ready for
+  public GitHub release without manual follow-up gaps. Include audit protocol, proof
+  commands (pytest, ri-engine demo), red-team honesty, and structured deliverable format.
+
+max_generations: 6
+population_size: 8
+survivors_count: 2
+convergence_threshold: 0.025
+convergence_window: 2
+enable_membrane_bridge: true
+
+domains:
+  - "publishing (editorial review, fact-checking, release gates)"
+  - "software supply chain (SBOM, CI attestations, reproducible builds)"
+  - "technical writing (plain language, scoped claims)"
+  - "open source governance (LICENSE, CONTRIBUTING, security policy)"
+
+fitness_weights:
+  clarity: 0.35
+  novelty: 0.05
+  utility: 0.40
+  coherence: 0.20
+
+metadata:
+  use_case: "publication_agent"
+  apply_linguistic_gate: true

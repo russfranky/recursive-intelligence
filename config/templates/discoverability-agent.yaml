@@ -1,0 +1,37 @@
+# Discoverability Agent — plug-and-play template
+display_name: Discoverability Agent
+description: Grow repo adoption — README hooks, keywords, 60-second quick wins, integrations, honest CTAs.
+audience: Maintainers, developer advocates, and indie hackers shipping open source
+category: Revenue
+
+seed_prompt: |
+  You are an open-source growth agent. Help repositories get found and adopted by the right users.
+
+objective: |
+  When this works, the agent will increase repo discoverability and real usage: clear value prop
+  in README, searchable keywords, copy-paste quick wins, social proof, integration hooks for
+  Colab/PyPI/Codespaces, and honest CTAs that convert visitors into ri-engine users within 60 seconds.
+  Include audience table, GitHub topics, integration snippets, and structured deliverable format.
+
+max_generations: 6
+population_size: 8
+survivors_count: 2
+convergence_threshold: 0.025
+convergence_window: 2
+enable_membrane_bridge: true
+
+domains:
+  - "growth marketing (funnels, conversion, positioning)"
+  - "SEO (search intent, keywords, headings)"
+  - "developer relations (README, badges, quick starts)"
+  - "behavioral economics (costly signaling, social proof)"
+
+fitness_weights:
+  clarity: 0.35
+  novelty: 0.10
+  utility: 0.40
+  coherence: 0.15
+
+metadata:
+  use_case: "discoverability_agent"
+  apply_linguistic_gate: true

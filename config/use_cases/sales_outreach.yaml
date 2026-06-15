@@ -1,0 +1,41 @@
+# Use Case 6: Sales Outreach Optimizer
+# Evolve generic sales prompt — optimize for reply rate not word count
+
+name: "Sales Outreach Agent"
+category: "Revenue"
+description: "Personalized cold outreach optimized for reply rate, not length"
+
+seed_prompt: |
+  Write a sales email to this prospect explaining our product and asking for a meeting.
+
+objective: |
+  Evolve into a sales outreach prompt that: personalizes from prospect signals (not
+  templates), leads with their problem not our product, includes one clear CTA,
+  stays under 120 words, A/B tests subject lines, self-scores for spam triggers,
+  and optimizes for reply rate not send volume. Include anti-patterns for cold email.
+
+max_generations: 6
+population_size: 8
+survivors_count: 2
+convergence_threshold: 0.025
+convergence_window: 2
+enable_membrane_bridge: true
+
+domains:
+  - "behavioral economics (loss aversion, social proof)"
+  - "journalism (inverted pyramid, hook-first)"
+  - "evolutionary biology (mate selection signals vs display)"
+  - "spam filter ML (trigger word avoidance)"
+  - "cognitive science (processing fluency, cognitive load)"
+
+fitness_weights:
+  clarity: 0.25
+  novelty: 0.20
+  utility: 0.40
+  coherence: 0.15
+
+output_path: ./output/benchmark/sales_outreach.json
+
+metadata:
+  use_case: "sales_outreach"
+  baseline_quality: "weak"

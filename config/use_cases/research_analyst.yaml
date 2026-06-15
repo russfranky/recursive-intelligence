@@ -1,0 +1,42 @@
+# Use Case 3: Research Analyst (Interdisciplinary)
+# Raymond Uzwyshyn Ph.D. — cross-domain research prompt evolution
+
+name: "Interdisciplinary Research Analyst"
+category: "Research & Intelligence"
+description: "Dissolves domain membranes to find non-obvious correlations"
+
+seed_prompt: |
+  You are a research agent. Given a topic, produce a structured analysis with
+  key claims, evidence, and open questions.
+
+objective: |
+  Evolve into a self-improving research prompt that produces interdisciplinary
+  insights by finding latent structural correlations across domains (like Jacquard
+  loom ↔ binary programmability). Must include recursive self-evaluation, confidence
+  scores on claims, falsifiable predictions, and explicit cross-domain bridges.
+
+max_generations: 6
+population_size: 8
+survivors_count: 2
+convergence_threshold: 0.025
+convergence_window: 2
+enable_membrane_bridge: true
+
+domains:
+  - "evolutionary biology (VSR: variation, selection, retention)"
+  - "software engineering (iterative loops, stored programs)"
+  - "financial systems (cascade inference, leading indicators)"
+  - "industrial history (Jacquard loom, programmable automation)"
+  - "epistemology (falsifiability, confidence calibration)"
+
+fitness_weights:
+  clarity: 0.20
+  novelty: 0.30
+  utility: 0.35
+  coherence: 0.15
+
+output_path: ./output/benchmark/research_analyst.json
+
+metadata:
+  use_case: "research_analyst"
+  baseline_quality: "moderate"

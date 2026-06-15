@@ -7,7 +7,14 @@ from typing import Protocol
 from ri_engine.prompt_rubric import composite_prompt_score, score_task_prompt
 from ri_engine.language_leanings import detect_linguistic_leaning, score_leaning_fit
 from ri_engine.register_analysis import analyze_register
-from ri_engine.prompt_synthesizer import _is_simple_task, extract_fields, synthesize_variant
+from ri_engine.prompt_synthesizer import (
+    _is_code_review_context,
+    _is_coding_task,
+    _is_research_task,
+    _is_simple_task,
+    extract_fields,
+    synthesize_variant,
+)
 
 
 class LLMProvider(Protocol):
@@ -82,35 +89,36 @@ class MockLLMProvider:
         return "\n".join(lines) if lines else "CANDIDATE 0: clarity=0.7, novelty=0.6, utility=0.7, coherence=0.75"
 
     def _bridge(self, user: str) -> str:
-        if "review" in user.lower() or "code" in user.lower():
+        text = user.lower()
+        if _is_code_review_context(text, text):
             return (
                 "CORRELATION: code review ↔ immune system | STRUCTURE: clonal selection under antigen pressure | "
                 "MUTATION: generate counter-arguments (adversarial test cases) for each approved pattern before finalizing review."
             )
-        if "support" in user.lower():
+        if "support" in text:
             return (
                 "CORRELATION: support triage ↔ emergency medicine | STRUCTURE: golden hour + differential diagnosis | "
                 "MUTATION: classify issue severity first, then apply protocol — never start with generic empathy."
             )
-        if "security" in user.lower():
+        if "security" in text:
             return (
                 "CORRELATION: incident response ↔ epidemiology | STRUCTURE: R0 modeling + containment rings | "
                 "MUTATION: map blast radius before deep analysis — contain first, investigate second."
             )
-        if "sales" in user.lower():
+        if "sales" in text:
             return (
                 "CORRELATION: cold outreach ↔ mate selection signals | STRUCTURE: costly signaling vs display | "
                 "MUTATION: lead with costly signal (specific research about them), not display (product features)."
             )
-        if "research" in user.lower():
-            return (
-                "CORRELATION: Jacquard loom ↔ binary programmability | STRUCTURE: stored program separate from hardware | "
-                "MUTATION: treat each research claim as a punch card — independently verifiable, composable into larger patterns."
-            )
-        if "coding" in user.lower():
+        if _is_coding_task(text, text):
             return (
                 "CORRELATION: JIT manufacturing ↔ minimal diffs | STRUCTURE: produce only what's needed, when needed | "
                 "MUTATION: every line in the diff must justify its existence — if removing it doesn't break tests, remove it."
+            )
+        if _is_research_task(text, text):
+            return (
+                "CORRELATION: Jacquard loom ↔ binary programmability | STRUCTURE: stored program separate from hardware | "
+                "MUTATION: treat each research claim as a punch card — independently verifiable, composable into larger patterns."
             )
         return (
             "Latent correlation: programmable iteration (Jacquard loom ↔ software loops). "

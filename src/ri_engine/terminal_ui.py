@@ -71,11 +71,10 @@ PHASE_QUIPS: dict[str, list[str]] = {
 }
 
 WELCOME_HINTS = [
-    "templates",
-    "improve -t customer-support --until-plateau",
-    "improve --continue",
+    "improve --seed prompt.txt --goal \"When this works, the AI will …\"",
     "demo",
-    "--runbook",
+    "templates",
+    "expert benchmark",
 ]
 
 IMPROVE_HINTS = [

@@ -122,11 +122,11 @@ def build_client_summary(report: dict) -> dict[str, Any]:
     converged = meta.get("converged", False)
 
     leaning = gate.get("leaning", "plain")
-    style = LEANING_FRIENDLY.get(leaning, leaning)
+    style = leaning
     style_note = ""
     if gate:
         conf = gate.get("confidence", 0)
-        style_note = f"{style} ({conf:.0%} match for your task type)"
+        style_note = f"{leaning} ({conf:.0%} match from linguistic gate)"
 
     status = STATUS_FRIENDLY["converged" if converged else "completed"]
 
@@ -139,10 +139,10 @@ def build_client_summary(report: dict) -> dict[str, Any]:
         "your_improved_prompt": clean_prompt_for_client(report.get("best_prompt", "")),
         "ready_to_use": True,
         "what_we_did": [
-            "Matched the best writing style for your task type",
-            "Added clear steps, output format, and quality checks",
-            "Removed vague wording that causes AI mistakes",
-            f"Ran {rounds} round{'s' if rounds != 1 else ''} of automatic improvement",
+            "Resolved linguistic leaning (plain / latinate / mixed / …) from your goal",
+            "Ran Variation → Selection → Retention cycles",
+            "Applied Occam's razor tie-break where enabled",
+            f"Completed {rounds} improvement round{'s' if rounds != 1 else ''}",
         ],
         "next_step": "Copy 'your_improved_prompt' into your AI assistant as the system prompt.",
     }
@@ -224,14 +224,8 @@ def print_demo_summary(console: Console, summary: dict) -> None:
 
 
 def clean_prompt_for_client(prompt: str) -> str:
-    """Remove internal directives; use mainstream section labels."""
-    lines = []
-    for line in prompt.splitlines():
-        if "MANDATORY LINGUISTIC LEANING" in line or "MANDATORY REGISTER" in line:
-            continue
-        line = line.replace("## Linguistic Leaning", "## Tone & Style")
-        lines.append(line)
-    return "\n".join(lines).strip()
+    """Return the improved prompt unchanged — linguistic gate output stays intact."""
+    return prompt.strip()
 
 
 def expert_mode_enabled(args: Any) -> bool:

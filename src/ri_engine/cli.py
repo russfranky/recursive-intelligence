@@ -104,15 +104,13 @@ def _build_parser() -> argparse.ArgumentParser:
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=(
             "Examples:\n"
-            "  ri-engine templates\n"
-            "  ri-engine improve --template coding-assistant\n"
-            "  ri-engine improve --template coding-assistant --until-plateau --runbook\n"
-            "  ri-engine improve --continue --until-plateau\n"
-            "  ri-engine improve --seed my_prompt.txt --goal \"Help customers resolve billing issues\"\n"
-            "  ri-engine runbook list\n"
+            "  ri-engine improve --seed prompt.txt --goal \"When this works, the AI will …\"\n"
+            "  ri-engine improve --template code-review\n"
+            "  ri-engine improve --seed prompt.txt --goal \"…\" --until-plateau --runbook\n"
             "  ri-engine demo\n"
+            "  ri-engine expert benchmark\n"
             "\n"
-            "Expert mode: add --expert to see technical details."
+            "Expert mode: add --expert for raw VSR report fields."
         ),
     )
     sub = parser.add_subparsers(dest="command")
@@ -699,7 +697,7 @@ def _resolve_config(args: argparse.Namespace) -> RunConfig:
 
     raise ValueError(
         "Tell us what to improve:\n"
-        "  ri-engine improve --template customer-support\n"
+        "  ri-engine improve --template <name>\n"
         "  ri-engine improve --config my_task.yaml\n"
         "  ri-engine improve --seed prompt.txt --goal \"What you want it to do\""
     )

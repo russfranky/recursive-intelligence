@@ -195,7 +195,7 @@ def _format_kickback(
     lines.extend([
         "",
         "Re-run with --goal \"When this works, the AI will …\"",
-        "Or use a template: ri-engine templates",
+        "Or use a template: ri-engine improve --template <name>  (ri-engine templates)",
         "Force past gate: --force-goal (expert)",
     ])
     return "\n".join(lines)

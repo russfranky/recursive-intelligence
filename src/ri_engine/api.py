@@ -109,9 +109,8 @@ def improve(
     """
     Improve a task prompt recursively (Variation → Selection → Retention).
 
-    Returns a production-ready ``improved_prompt`` (finalized for deployment).
-    The raw VSR winner is available as ``result.engine_prompt`` and in
-    ``result.report["best_prompt"]``.
+    Returns ``improved_prompt`` with linguistic gate clauses preserved.
+    Raw VSR fields: ``result.engine_prompt``, ``result.report``.
 
     Args:
         seed_prompt: Starting prompt text.
@@ -126,7 +125,7 @@ def improve(
         fitness_weights: Override clarity/novelty/utility/coherence weights.
 
     Returns:
-        ImproveResult with ``improved_prompt`` ready to deploy.
+        ImproveResult with ``improved_prompt`` from the VSR + finalize path.
     """
     _validate_inputs(seed_prompt, objective)
 

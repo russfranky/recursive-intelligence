@@ -1,8 +1,8 @@
 """
-Client view — plain-language presentation layer for commercial users.
+Client view — CLI presentation for improve() results.
 
-Translates engine internals into outcomes anyone can understand.
-Technical details remain available via expert mode (--expert).
+Keeps engine output intact (including linguistic gate clauses). Expert mode
+exposes the full VSR report via --expert.
 """
 
 from __future__ import annotations
@@ -18,35 +18,25 @@ from ri_engine.paths import config_dir
 
 TEMPLATES_DIR = config_dir() / "templates"
 
-# Friendly labels (what users see)
-PHASE_FRIENDLY = {
-    "membrane": "Finding fresh ideas",
-    "variation": "Trying new versions",
-    "selection": "Picking the best",
-    "retention": "Keeping what works",
-    "converge": "Wrapping up",
-    "init": "Getting started",
-    "done": "Complete",
+STATUS_LABELS = {
+    "converged": "VSR converged — fitness plateau",
+    "completed": "VSR completed — all generations run",
+    "running": "Running VSR…",
 }
 
-LEANING_FRIENDLY = {
-    "plain": "Clear, everyday language",
-    "latinate": "Formal, professional tone",
-    "mixed": "Plain instructions + expert terms where needed",
-    "neutral": "No style preference — clarity first",
-    "technical": "Specialist vocabulary",
-    "conversational": "Friendly, natural tone",
-}
-
-STATUS_FRIENDLY = {
-    "converged": "Finished — quality plateau reached",
-    "completed": "Finished — all improvement rounds done",
-    "running": "Improving your prompt…",
+# Maps business category to gate audience (linguistic registry lookup key)
+_GATE_AUDIENCE: dict[str, str] = {
+    "Software Engineering": "developer",
+    "Agentic Development": "developer",
+    "Operations": "end_user",
+    "Research & Intelligence": "researcher",
+    "Revenue": "prospect",
+    "Security": "operator",
 }
 
 
 def list_templates() -> list[dict[str, str]]:
-    """Return plug-and-play templates for mainstream users."""
+    """Return benchmark/fixture templates (optional — not required for improve)."""
     templates: list[dict[str, str]] = []
     if not TEMPLATES_DIR.exists():
         return templates
@@ -77,17 +67,6 @@ def load_template(template_id: str) -> dict[str, Any]:
     return data
 
 
-# Maps business category to gate audience (internal — not shown to users)
-_GATE_AUDIENCE: dict[str, str] = {
-    "Software Engineering": "developer",
-    "Agentic Development": "developer",
-    "Operations": "end_user",
-    "Research & Intelligence": "researcher",
-    "Revenue": "prospect",
-    "Security": "operator",
-}
-
-
 def template_to_metadata(data: dict[str, Any]) -> dict[str, Any]:
     category = data.get("category", "")
     return {
@@ -111,31 +90,30 @@ def print_templates(console: Console) -> None:
 
 
 def build_client_summary(report: dict) -> dict[str, Any]:
-    """Convert technical engine report into a mainstream-friendly summary."""
+    """Summarize a VSR run for CLI output."""
     meta = report.get("meta", {})
     gate = report.get("linguistic_gate", {})
     config = report.get("config", {})
 
     fitness = report.get("best_fitness")
-    quality_pct = f"{fitness:.0%}" if fitness is not None else "—"
+    fitness_pct = f"{fitness:.0%}" if fitness is not None else "—"
     rounds = meta.get("generations_run", 0)
     converged = meta.get("converged", False)
 
     leaning = gate.get("leaning", "plain")
-    style = leaning
-    style_note = ""
+    style_note = leaning
     if gate:
         conf = gate.get("confidence", 0)
-        style_note = f"{leaning} ({conf:.0%} match from linguistic gate)"
+        style_note = f"{leaning} ({conf:.0%} from linguistic gate)"
 
-    status = STATUS_FRIENDLY["converged" if converged else "completed"]
+    status = STATUS_LABELS["converged" if converged else "completed"]
 
     summary: dict[str, Any] = {
         "headline": _headline(fitness, converged, rounds),
         "status": status,
-        "quality_score": quality_pct,
+        "quality_score": fitness_pct,
         "improvement_rounds": rounds,
-        "writing_style": style_note or style,
+        "writing_style": style_note,
         "your_improved_prompt": clean_prompt_for_client(report.get("best_prompt", "")),
         "ready_to_use": True,
         "what_we_did": [
@@ -144,11 +122,11 @@ def build_client_summary(report: dict) -> dict[str, Any]:
             "Applied Occam's razor tie-break where enabled",
             f"Completed {rounds} improvement round{'s' if rounds != 1 else ''}",
         ],
-        "next_step": "Copy 'your_improved_prompt' into your AI assistant as the system prompt.",
+        "next_step": "Copy 'your_improved_prompt' into your system prompt.",
     }
 
     if gate.get("rationale"):
-        summary["style_reason"] = _plain_rationale(gate["rationale"])
+        summary["style_reason"] = gate["rationale"]
 
     objective = config.get("objective", "")
     if objective:
@@ -159,35 +137,18 @@ def build_client_summary(report: dict) -> dict[str, Any]:
 
 def _headline(fitness: float | None, converged: bool, rounds: int) -> str:
     if fitness is None:
-        return "Prompt improvement complete"
+        return "VSR run complete"
     if fitness >= 0.85:
-        return "Your prompt is production-ready"
+        return f"VSR complete — fitness {fitness:.0%}"
     if fitness >= 0.65:
-        return "Your prompt is much stronger now"
+        return f"VSR complete — fitness {fitness:.0%} (room to iterate)"
     if converged:
-        return f"Improvement finished after {rounds} rounds"
-    return "Prompt improved — review and run again if needed"
-
-
-def _plain_rationale(technical: str) -> str:
-    """Strip jargon from gate rationale."""
-    replacements = [
-        ("composite", "overall score"),
-        ("lat_ratio", "formality level"),
-        ("latinate", "formal wording"),
-        ("read=", "readability "),
-        ("quality=", "quality "),
-        ("wins", "works best"),
-        ("runner-up", "second choice"),
-    ]
-    text = technical
-    for old, new in replacements:
-        text = text.replace(old, new)
-    return text
+        return f"VSR converged after {rounds} rounds"
+    return "VSR finished — review output and re-run if needed"
 
 
 def print_client_result(console: Console, report: dict, *, output_path: Path | None = None) -> dict:
-    """Print and optionally save a mainstream-friendly result summary."""
+    """Print and optionally save improve() summary."""
     summary = build_client_summary(report)
 
     from ri_engine.terminal_ui import print_result
@@ -195,11 +156,6 @@ def print_client_result(console: Console, report: dict, *, output_path: Path | N
     print_result(console, summary)
 
     if output_path:
-        payload = {
-            "client_summary": summary,
-            "technical_report": report if False else None,  # omit by default in client file
-        }
-        # Client file: summary only + prompt
         client_payload = {
             "headline": summary["headline"],
             "quality_score": summary["quality_score"],

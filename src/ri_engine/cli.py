@@ -100,7 +100,7 @@ def main(argv: list[str] | None = None) -> int:
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="ri-engine",
-        description="Prompt Improvement Studio — turn rough AI prompts into production-ready ones.",
+        description="Prompt Improvement Studio — recursive prompt improvement (VSR + linguistic gate).",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=(
             "Examples:\n"

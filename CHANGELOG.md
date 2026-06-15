@@ -2,6 +2,14 @@
 
 All notable changes to this project are documented here.
 
+## [0.1.3] - 2026-06-15
+
+### Changed
+
+- Refocus README and CLI on seed+goal and VSR + linguistic gate (not persona templates)
+- Stop stripping linguistic gate clauses from improved prompt output
+- Replace "production-ready" messaging with fitness/VSR terminology
+
 ## [0.1.2] - 2026-06-15
 
 ### Fixed

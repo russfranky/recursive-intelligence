@@ -38,7 +38,7 @@ def test_build_client_summary_plain_language():
         "config": {"objective": "Help customers"},
     }
     summary = build_client_summary(report)
-    assert "production-ready" in summary["headline"].lower() or "stronger" in summary["headline"].lower()
+    assert "vsr" in summary["headline"].lower() or "fitness" in summary["headline"].lower()
     assert summary["quality_score"] == "92%"
     assert "your_improved_prompt" in summary
     assert len(summary["what_we_did"]) >= 3

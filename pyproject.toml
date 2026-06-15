@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "recursive-intelligence"
-version = "0.1.9"
+version = "0.1.10"
 description = "Recursive prompt improvement — VSR loop with linguistic gate (ri-engine CLI)"
 readme = "README.md"
 license = { text = "MIT" }
@@ -50,6 +50,7 @@ Changelog = "https://github.com/russfranky/recursive-intelligence/blob/main/CHAN
 openai = ["openai>=1.0"]
 anthropic = ["anthropic>=0.25"]
 all = ["openai>=1.0", "anthropic>=0.25"]
+prompts = []  # marker: repo uses ri-engine integrate workflow (no extra deps)
 
 [project.scripts]
 ri-engine = "ri_engine.cli:main"

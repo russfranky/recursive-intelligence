@@ -2,6 +2,17 @@
 
 All notable changes to this project are documented here.
 
+## [0.1.10] - 2026-06-15
+
+### Added
+
+- **`ri-engine integrate`** — plug-and-play scaffold for active repos (`init`, `improve`, `status`)
+- Auto-creates `ri/config/`, `prompts/seed/`, `runbook/`, `.ri-engine/project.yaml`, team docs
+- Merges `CLAUDE.md` / `AGENTS.md` into seed when present; idempotent re-runs
+- `integrate improve` → `--until-plateau --runbook` from manifest (recursive loop entry point)
+- Optional `[prompts]` extra in pyproject (workflow marker, no deps)
+- Bundled scaffold templates under `config/integration/scaffold/`
+
 ## [0.1.9] - 2026-06-15
 
 ### Added

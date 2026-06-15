@@ -236,6 +236,20 @@ See [integration_patterns.md](integration_patterns.md) for the full case study.
 
 ---
 
+## 10. Plug-and-play integrate (`ri-engine integrate init`)
+
+One command for active repos — no manual copying:
+
+```mermaid
+flowchart LR
+  INIT["integrate init"] --> FILES["ri/config + seed + runbook + manifest"]
+  FILES --> IMP["integrate improve"]
+  IMP --> RB["runbook/RUNBOOK.md"]
+  RB --> AG["Agents"]
+```
+
+---
+
 ## Related docs
 
 | Topic | Document |

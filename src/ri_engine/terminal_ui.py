@@ -71,10 +71,11 @@ PHASE_QUIPS: dict[str, list[str]] = {
 }
 
 WELCOME_HINTS = [
+    "integrate init",
+    "integrate improve",
     "improve --seed prompt.txt --goal \"When this works, the AI will …\"",
     "demo",
     "templates",
-    "expert benchmark",
 ]
 
 IMPROVE_HINTS = [

@@ -1,0 +1,41 @@
+# {{PROJECT_NAME}} — ri-engine integration (auto-generated)
+# Improve: ri-engine integrate improve
+
+name: "{{AGENT_TITLE}}"
+description: "Approved agent prompt workflow for {{PROJECT_NAME}}"
+category: "Agentic Development"
+audience: "operator"
+
+seed_file: {{SEED_PATH}}
+
+seed_prompt: |
+  # {{AGENT_TITLE}}
+  See prompts/seed/{{AGENT_SLUG}}.md for canon and anti-patterns.
+
+objective: |
+  {{OBJECTIVE}}
+
+provider: mock
+max_generations: 8
+population_size: 8
+survivors_count: 2
+convergence_threshold: 0.025
+convergence_window: 2
+enable_membrane_bridge: true
+
+domains:
+  - "{{PROJECT_NAME}} domain constraints"
+  - "software craftsmanship (minimal diffs, read-before-edit)"
+
+fitness_weights:
+  clarity: 0.30
+  novelty: 0.05
+  utility: 0.45
+  coherence: 0.20
+
+metadata:
+  use_case: project_integration
+  apply_linguistic_gate: true
+  integrated_by: ri-engine integrate
+
+output_path: ./output/{{AGENT_SLUG}}-improved.json

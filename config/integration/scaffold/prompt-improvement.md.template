@@ -1,0 +1,41 @@
+# Prompt improvement — {{PROJECT_NAME}}
+
+Recursive prompt workflow powered by [ri-engine](https://github.com/russfranky/recursive-intelligence).
+
+## Quick commands
+
+```bash
+# One-time setup (already done if you ran integrate init)
+ri-engine integrate init
+
+# Improve + approve to runbook (recommended each canon change)
+ri-engine integrate improve
+
+# Check integration status
+ri-engine integrate status
+```
+
+## Layout
+
+| Path | Purpose |
+|------|---------|
+| `prompts/seed/{{AGENT_SLUG}}.md` | Hand-written canon + anti-patterns |
+| `{{CONFIG_PATH}}` | VSR config |
+| `runbook/RUNBOOK.md` | **Agents start here** |
+| `.ri-engine/project.yaml` | Integration manifest |
+
+## Recursive loop
+
+1. Edit seed (canon / anti-patterns) when agents fail a new way
+2. `ri-engine integrate improve` → VSR until plateau → runbook
+3. **Hand-merge** domain rules into `runbook/prompts/{{AGENT_SLUG}}.md` if output is generic
+4. Point Cursor / Claude Code at `runbook/RUNBOOK.md`
+
+High rubric fitness can still be generic — see [integration_patterns.md](https://github.com/russfranky/recursive-intelligence/blob/main/docs/integration_patterns.md).
+
+## Optional
+
+```bash
+ri-engine config claude-code on --project   # handoff panel after improve
+ri-engine real-world workflow               # middle-loop task battery
+```

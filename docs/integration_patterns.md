@@ -7,6 +7,28 @@ See also: [diagrams.md](diagrams.md) · [agent_integration.md](agent_integration
 
 ---
 
+## Plug-and-play (active repos)
+
+Drop into any repo — one command scaffolds the Hubzz-style layout and manifest:
+
+```bash
+pip install recursive-intelligence
+cd your-repo
+ri-engine integrate init
+ri-engine integrate improve
+```
+
+Creates `ri/config/`, `prompts/seed/`, `runbook/RUNBOOK.md`, `.ri-engine/project.yaml`, and `docs/prompt-improvement.md`. Merges `CLAUDE.md` / `AGENTS.md` into the seed when present.
+
+```bash
+ri-engine integrate status    # check manifest
+ri-engine integrate improve   # until-plateau + runbook (recursive loop)
+```
+
+Full pattern: [integration_patterns.md](integration_patterns.md)
+
+---
+
 ## What worked (Hubzz case study)
 
 A monorepo integrated `recursive-intelligence` for spatial/district agent work:
@@ -61,36 +83,34 @@ The curated result landed in `runbook/prompts/hubzz-spatial-district.md` — **p
 
 ```mermaid
 flowchart TB
-  subgraph repo["Your repo"]
-    SEED["prompts/seed/*.md<br/>hand-written canon"]
-    YAML["ri/config/*.yaml<br/>or config/*.yaml"]
-    RB["runbook/RUNBOOK.md<br/>approved prompts"]
-    DOC["docs/prompt-improvement.md<br/>team workflow"]
+  subgraph drop["Drop in (once)"]
+    PIP["pip install recursive-intelligence"]
+    INIT["ri-engine integrate init"]
   end
 
-  subgraph ri["ri-engine"]
-    IMP["improve --until-plateau --runbook"]
-    CUR["You: hand-merge domain rules"]
+  subgraph loop["Recursive loop"]
+    SEED["Edit prompts/seed/*.md"]
+    IMP["ri-engine integrate improve"]
+    MERGE["Hand-merge canon"]
+    RB["runbook/RUNBOOK.md"]
   end
 
-  subgraph agents["Cursor / Claude Code / CI"]
-    AG["Read runbook/RUNBOOK.md first"]
+  subgraph agents["Agents"]
+    AG["Cursor / Claude Code read runbook"]
   end
 
+  PIP --> INIT
+  INIT --> SEED
   SEED --> IMP
-  YAML --> IMP
-  IMP --> CUR
-  CUR --> RB
+  IMP --> MERGE
+  MERGE --> RB
   RB --> AG
-  DOC -.->|"documents loop"| repo
+  AG -->|"new failure mode"| SEED
 ```
 
-Copy the template:
+Copy the template manually: `config/integration.template.yaml` — or use **`ri-engine integrate init`**.
 
-```bash
-cp config/integration.template.yaml ri/config/my-agent.yaml
-# edit seed_file, objective, domains, anti-patterns in seed
-```
+See [integration_patterns.md](integration_patterns.md) for the full case study.
 
 ---
 

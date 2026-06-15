@@ -2,6 +2,13 @@
 
 All notable changes to this project are documented here.
 
+## [0.1.1] - 2026-06-15
+
+### Fixed
+
+- Repo root path resolution for editable installs and CI (`paths.py`)
+- PyPI publish workflow now also triggers on `v*` tag push
+
 ## [0.1.0] - 2026-06-14
 
 ### Added

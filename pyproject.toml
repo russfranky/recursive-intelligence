@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "recursive-intelligence"
-version = "0.1.0"
+version = "0.1.1"
 description = "Prompt Improvement Studio — turn rough AI prompts into production-ready ones automatically"
 readme = "README.md"
 license = { text = "MIT" }

@@ -88,6 +88,80 @@ def extract_fields(user: str) -> dict[str, str]:
     return fields
 
 
+def _seed_title(seed: str) -> str:
+    """First markdown heading or opening phrase — for length heuristics."""
+    stripped = seed.strip()
+    if not stripped:
+        return seed
+    lines = [ln.strip() for ln in stripped.splitlines() if ln.strip()]
+    if lines and lines[0].startswith("#"):
+        return lines[0].lstrip("#").strip()
+    return " ".join(stripped.split()[:8])
+
+
+def _condensed_seed(seed: str) -> str:
+    """Title + first paragraph for context heuristics when seed is a long doc."""
+    stripped = seed.strip()
+    if not stripped:
+        return seed
+    lines = [ln.strip() for ln in stripped.splitlines() if ln.strip()]
+    if not lines:
+        return seed
+    title = _seed_title(seed)
+    if not lines[0].startswith("#"):
+        return title
+    for ln in lines[1:]:
+        if ln.startswith("#"):
+            break
+        if ln.startswith("```") or ln.startswith("|") or ln.startswith("-"):
+            continue
+        return f"{title} {ln}".strip() or title
+    return title
+
+
+def _is_code_review_context(obj: str, role_l: str) -> bool:
+    text = f"{obj} {role_l}"
+    if any(
+        marker in text
+        for marker in (
+            "code review",
+            "pull request",
+            "pr review",
+            "reviewer",
+            "merge request",
+            "code reviewer",
+        )
+    ):
+        return True
+    return "review" in obj and any(x in obj for x in ("pull", " pr ", "merge", "codebase", "lint"))
+
+
+def _is_research_task(obj: str, role_l: str) -> bool:
+    if re.search(r"research before (editing|implement|coding|building|changing)", obj):
+        return False
+    text = f"{obj} {role_l}"
+    if "research analyst" in text:
+        return True
+    if "research" in role_l:
+        return True
+    return "research" in obj and any(x in text for x in ("claims", "falsifiable", "cross-domain", "analyst"))
+
+
+def _is_coding_task(obj: str, role_l: str) -> bool:
+    text = f"{obj} {role_l}"
+    return any(
+        marker in text
+        for marker in (
+            "claude code",
+            "coding assistant",
+            "ai coding",
+            "implement",
+            "minimal diff",
+            "before editing",
+        )
+    ) or "coding" in obj or "coding" in role_l
+
+
 def infer_role(parent: str, objective: str) -> str:
     """Infer agent role title from seed/objective."""
     for pattern in [
@@ -97,18 +171,20 @@ def infer_role(parent: str, objective: str) -> str:
         m = re.search(pattern, parent, re.I | re.M)
         if m:
             return m.group(1).strip().title()
-    if "review" in objective.lower():
+    obj = objective.lower()
+    role_hint = _condensed_seed(parent).lower()
+    if _is_code_review_context(obj, role_hint):
         return "Code Review Agent"
-    if "support" in objective.lower():
+    if "support" in obj:
         return "Customer Support Agent"
-    if "security" in objective.lower() or "incident" in objective.lower():
+    if "security" in obj or "incident" in obj:
         return "Security Incident Response Agent"
-    if "sales" in objective.lower() or "outreach" in objective.lower():
+    if "sales" in obj or "outreach" in obj:
         return "Sales Outreach Agent"
-    if "research" in objective.lower():
-        return "Research Analyst Agent"
-    if "coding" in objective.lower():
+    if _is_coding_task(obj, role_hint):
         return "AI Coding Assistant"
+    if _is_research_task(obj, role_hint):
+        return "Research Analyst Agent"
     return "Task Agent"
 
 
@@ -116,7 +192,7 @@ def infer_process_steps(role: str, objective: str) -> str:
     """Generate role-specific process steps."""
     obj = objective.lower()
     role_l = role.lower()
-    if "review" in obj or "review" in role_l or "code" in role_l:
+    if _is_code_review_context(obj, role_l):
         return """\
 ## Review Protocol
 1. **Scope**: identify changed files and blast radius
@@ -152,16 +228,7 @@ def infer_process_steps(role: str, objective: str) -> str:
 4. **CTA**: single clear ask (15-min call, not "let me know")
 5. **Constraints**: ≤120 words body, no spam trigger words
 6. **Self-eval**: score for reply probability, not send volume"""
-    if "research" in obj or "research" in role_l:
-        return """\
-## Research Protocol
-1. **Decompose**: break topic into 3-5 falsifiable sub-claims
-2. **Cross-domain**: find ≥1 non-obvious correlation across 2+ fields
-3. **Evidence**: cite sources, assign confidence 0.0–1.0 per claim
-4. **Predictions**: include ≥1 testable prediction
-5. **Gaps**: explicit open questions for next iteration
-6. **Self-eval**: would a skeptical expert find this actionable?"""
-    if "coding" in obj or "coding" in role_l:
+    if _is_coding_task(obj, role_l):
         return """\
 ## Coding Protocol
 1. **Read first**: understand existing code before editing
@@ -170,6 +237,15 @@ def infer_process_steps(role: str, objective: str) -> str:
 4. **Retry**: on failure, diagnose and retry up to 3 times
 5. **Commit**: clear message explaining why, not what
 6. **Self-eval**: is the diff the smallest correct solution?"""
+    if _is_research_task(obj, role_l):
+        return """\
+## Research Protocol
+1. **Decompose**: break topic into 3-5 falsifiable sub-claims
+2. **Cross-domain**: find ≥1 non-obvious correlation across 2+ fields
+3. **Evidence**: cite sources, assign confidence 0.0–1.0 per claim
+4. **Predictions**: include ≥1 testable prediction
+5. **Gaps**: explicit open questions for next iteration
+6. **Self-eval**: would a skeptical expert find this actionable?"""
     return """\
 ## Execution Protocol
 1. Parse input and state assumptions if ambiguous
@@ -181,7 +257,7 @@ def infer_process_steps(role: str, objective: str) -> str:
 def infer_output_format(role: str, objective: str) -> str:
     obj = objective.lower()
     role_l = role.lower()
-    if "review" in obj or "review" in role_l:
+    if _is_code_review_context(obj, role_l):
         return """\
 ## Output Format
 ```markdown
@@ -224,7 +300,14 @@ BODY: [≤120 words]
 CTA: [single ask]
 SELF_SCORE: reply_probability=0.X, spam_risk=0.X
 ```"""
-    if "research" in obj:
+    if _is_coding_task(obj, role_l):
+        return """\
+## Output Format
+1. Brief plan (≤3 bullets)
+2. Code changes (minimal diff)
+3. Test commands run + results
+4. Self-score: correctness=X, minimalism=X"""
+    if _is_research_task(obj, role_l):
         return """\
 ## Output Format
 ```markdown
@@ -241,13 +324,6 @@ SELF_SCORE: reply_probability=0.X, spam_risk=0.X
 ## Open Questions
 - [for next iteration]
 ```"""
-    if "coding" in obj or "coding" in role_l:
-        return """\
-## Output Format
-1. Brief plan (≤3 bullets)
-2. Code changes (minimal diff)
-3. Test commands run + results
-4. Self-score: correctness=X, minimalism=X"""
     return "## Output Format\nReturn structured response matching the objective. No preamble."
 
 
@@ -270,17 +346,25 @@ def _objective_core_text(objective: str) -> str:
     return core.strip()
 
 
+def _goal_word_budget(core: str) -> int:
+    if core.lower().startswith("when this works"):
+        return 55
+    return 40
+
+
 def _is_simple_task(seed: str, objective: str) -> bool:
     """Short seed+goal tasks should not get full benchmark boilerplate."""
     core = _objective_core_text(objective)
-    combined = f"{seed} {core}".lower()
+    title = _seed_title(seed)
+    condensed = _condensed_seed(seed)
+    combined = f"{condensed} {core}".lower()
     complex_markers = (
         "mitre", "compliance", "emergency", "policy", "stack trace",
         "owasp", "att&ck", "billing", "incident", "pull request",
     )
     if any(marker in combined for marker in complex_markers):
         return False
-    return len(seed.split()) <= 25 and len(core.split()) <= 40
+    return len(title.split()) <= 25 and len(core.split()) <= _goal_word_budget(core)
 
 
 def synthesize_variant(user: str, *, compact: bool = False) -> str:

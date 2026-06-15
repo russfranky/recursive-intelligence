@@ -17,6 +17,7 @@ Central index for **Recursive Intelligence Engine** (`ri-engine`).
 |----------|-------------|
 | [getting_started.md](getting_started.md) | Step-by-step CLI and Python API |
 | [cloud_development.md](cloud_development.md) | GitHub Codespaces and Google Colab |
+| [claude_code_integration.md](claude_code_integration.md) | Claude Code handoff toggle |
 | [agent_integration.md](agent_integration.md) | Embed the engine in agent workflows |
 | [use_cases.md](use_cases.md) | Benchmark fixtures and scenario notes |
 

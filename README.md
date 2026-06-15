@@ -145,6 +145,7 @@ recursive-intelligence/
 | Document | Description |
 |----------|-------------|
 | [**docs/README.md**](docs/README.md) | **Documentation hub** |
+| [claude_code_integration.md](docs/claude_code_integration.md) | Claude Code handoff setting (`ri-engine config claude-code on`) |
 | [getting_started.md](docs/getting_started.md) | Install and first run |
 | [technical_reference.md](docs/technical_reference.md) | Architecture and API |
 | [research_and_citations.md](docs/research_and_citations.md) | Related work and BibTeX |

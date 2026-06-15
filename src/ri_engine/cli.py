@@ -52,6 +52,9 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "runbook":
         return _run_runbook(args)
 
+    if args.command == "config":
+        return _run_config(args)
+
     if args.command == "real-world":
         from ri_engine.real_world_test import main_prep, main_run
         if args.rw_command == "prep" or args.rw_command is None:
@@ -227,6 +230,33 @@ def _build_parser() -> argparse.ArgumentParser:
         "--force-goal",
         action="store_true",
         help="Skip objective clarity kickback (expert)",
+    )
+    improve.add_argument(
+        "--claude-code",
+        action="store_true",
+        help="Enable Claude Code handoff for this run (writes runbook + next-step panel)",
+    )
+    improve.add_argument(
+        "--no-claude-code",
+        action="store_true",
+        help="Disable Claude Code handoff for this run",
+    )
+    improve.add_argument(
+        "--claude-code-name",
+        type=str,
+        default="",
+        help="Runbook entry name when Claude Code handoff is active (default: claude-code-agent)",
+    )
+
+    config = sub.add_parser("config", help="User/project settings (Claude Code handoff, etc.)")
+    config_sub = config.add_subparsers(dest="config_command")
+    config_sub.add_parser("show", help="Show merged settings")
+    cc = config_sub.add_parser("claude-code", help="Toggle Claude Code handoff default")
+    cc.add_argument("state", choices=["on", "off", "show"], nargs="?", default="show")
+    cc.add_argument(
+        "--project",
+        action="store_true",
+        help="Save setting in ./.ri-engine/settings.yaml (default: user config)",
     )
 
     runbook = sub.add_parser("runbook", help="Browse and compile approved prompts for the next AI")
@@ -427,8 +457,71 @@ def _run_improve(args: argparse.Namespace) -> int:
     else:
         client_path = out_path or Path("output") / "your_improved_prompt.json"
         print_client_result(console, report, output_path=client_path)
+        _maybe_claude_code_handoff(console, report, args, client_path)
 
     return 0
+
+
+def _claude_code_handoff_enabled(args: argparse.Namespace) -> bool:
+    if getattr(args, "no_claude_code", False):
+        return False
+    if getattr(args, "claude_code", False):
+        return True
+    from ri_engine.user_settings import claude_code_handoff_enabled
+
+    return claude_code_handoff_enabled()
+
+
+def _maybe_claude_code_handoff(
+    console: Console,
+    report: dict,
+    args: argparse.Namespace,
+    output_path: Path,
+    *,
+    runbook_path: Path | None = None,
+) -> None:
+    if not _claude_code_handoff_enabled(args):
+        return
+    from ri_engine.claude_code_handoff import handoff_after_improve, print_claude_code_handoff
+
+    if getattr(args, "runbook", False) or runbook_path:
+        print_claude_code_handoff(console, runbook_path=runbook_path, output_path=output_path)
+        return
+    name = getattr(args, "claude_code_name", "") or getattr(args, "runbook_name", "") or "claude-code-agent"
+    handoff_after_improve(console, report=report, output_path=output_path, runbook_name=name)
+
+
+def _run_config(args: argparse.Namespace) -> int:
+    from ri_engine.user_settings import (
+        load_settings,
+        project_settings_path,
+        set_claude_code_handoff,
+        user_settings_path,
+    )
+
+    cmd = getattr(args, "config_command", None) or "show"
+    if cmd == "show":
+        settings = load_settings()
+        console.print("[accent]Settings[/accent] (project overrides user)\n")
+        for key, val in settings.items():
+            console.print(f"  {key}: {val}")
+        console.print(f"\n[dim]User:[/dim] {user_settings_path()}")
+        console.print(f"[dim]Project:[/dim] {project_settings_path()}")
+        return 0
+    if cmd == "claude-code":
+        state = getattr(args, "state", "show") or "show"
+        scope = "project" if getattr(args, "project", False) else "user"
+        if state == "show":
+            from ri_engine.user_settings import claude_code_handoff_enabled
+
+            on = claude_code_handoff_enabled()
+            console.print(f"claude_code_handoff: {'on' if on else 'off'}")
+            return 0
+        path = set_claude_code_handoff(state == "on", scope=scope)
+        console.print(f"[green]claude_code_handoff → {state}[/green] ({path})")
+        return 0
+    console.print("[yellow]Usage: ri-engine config show | ri-engine config claude-code on|off[/yellow]")
+    return 1
 
 
 def _run_improve_until_plateau(args: argparse.Namespace, *, expert: bool) -> int:
@@ -586,6 +679,8 @@ def _run_improve_until_plateau(args: argparse.Namespace, *, expert: bool) -> int
             console.print(f"[dim]Traits exported: {plateau_result.trait_export_path}[/dim]")
         client_path = out_path or Path("output") / "your_improved_prompt.json"
         print_client_result(console, final_report, output_path=client_path)
+        rb = Path(plateau_result.runbook_path) if plateau_result.runbook_path else None
+        _maybe_claude_code_handoff(console, final_report, args, client_path, runbook_path=rb)
         if plateau_result.session_path:
             console.print(f"[dim]Session saved: {plateau_result.session_path}[/dim]")
             console.print("[dim]Resume: ri-engine improve --continue --until-plateau[/dim]")

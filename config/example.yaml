@@ -36,4 +36,5 @@ output_path: ./output/example_run.json
 
 metadata:
   source: "Uzwyshyn — Agentic AI, Recursion, Biology and Selection Environments"
+  inspiration_url: "https://www.linkedin.com/pulse/ai-agentic-substrate-life-inside-recursive-zone-uzwyshyn-ph-d--zohyc"
   author: "Recursive Intelligence Engine v0.1"

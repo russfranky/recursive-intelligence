@@ -6,6 +6,10 @@ All notable changes to this project are documented here.
 
 ### Added
 
+- `docs/research_and_citations.md` — credits Raymond Uzwyshyn LinkedIn inspiration, related prompt-optimization work, BibTeX
+
+### Changed
+
 - Linguistic gate ablation API: `--linguistic-gate`, `--leaning`, `--no-linguistic-gate`, `--diagnostics`
 - Baseline vs VSR comparison (`pick_improved_prompt`) with minimum gain and length guardrails
 - Rubric: objective alignment, register fit, instruction economy; reduced self-eval weight

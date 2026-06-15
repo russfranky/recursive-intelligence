@@ -12,7 +12,9 @@ ri-engine improve --seed "You are a helper." --goal "When this works, the AI wil
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/russfranky/recursive-intelligence)
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/russfranky/recursive-intelligence/blob/main/notebooks/ri_engine_quickstart.ipynb)
 
-**License:** [MIT](LICENSE) · **Changelog:** [CHANGELOG.md](CHANGELOG.md) · **Architecture:** [docs/technical_reference.md](docs/technical_reference.md)
+**License:** [MIT](LICENSE) · **Changelog:** [CHANGELOG.md](CHANGELOG.md) · **Architecture:** [docs/technical_reference.md](docs/technical_reference.md) · **Research:** [docs/research_and_citations.md](docs/research_and_citations.md)
+
+Inspired by [Raymond Uzwyshyn's writing](https://www.linkedin.com/pulse/ai-agentic-substrate-life-inside-recursive-zone-uzwyshyn-ph-d--zohyc) on agentic AI, recursion, and **Variation → Selection → Retention** as selection-environment logic — see [research & citations](docs/research_and_citations.md).
 
 ---
 
@@ -124,6 +126,7 @@ ri-engine improve --seed prompt.txt --goal "…" --provider openai
 
 | Doc | Contents |
 |-----|----------|
+| [research_and_citations.md](docs/research_and_citations.md) | Inspiration (Uzwyshyn LinkedIn), related work, how to cite |
 | [technical_reference.md](docs/technical_reference.md) | Architecture, VSR, macro registry, Occam's razor |
 | [publication.md](docs/publication.md) | API contract, limitations, red-team notes |
 | [getting_started.md](docs/getting_started.md) | Step-by-step CLI walkthrough |

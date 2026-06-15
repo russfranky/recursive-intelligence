@@ -101,4 +101,8 @@ Evolve Occam rules: `ri-engine improve --template occams-razor` · canonical pro
 
 ## Research background
 
-Based on Variation → Selection → Retention as executable prompt iteration — Darwinian selection environments for LLM prompts.
+This engine implements **Variation → Selection → Retention** as executable prompt iteration — treating prompt improvement as a **Darwinian selection environment** for LLM instructions.
+
+**Primary inspiration:** Raymond Uzwyshyn Ph.D., [*The AI Agentic Substrate: Life Inside the Recursive Zone*](https://www.linkedin.com/pulse/ai-agentic-substrate-life-inside-recursive-zone-uzwyshyn-ph-d--zohyc) and related LinkedIn writing on *Agentic AI, Recursion, Biology and Our New Selection Environments* (Feb 2026). Those articles describe agentic systems as hyper-accelerated VSR loops and selection environments; this repo is a practical, offline-first experiment in that pattern for **prompt** space.
+
+Full citations, related work (APE, PromptBreeder, OPRO, DSPy), and BibTeX: **[docs/research_and_citations.md](research_and_citations.md)**.

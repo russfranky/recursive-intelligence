@@ -16,7 +16,7 @@ def resource_root() -> Path:
     bundled = _PKG / "bundled"
     if (bundled / "config").is_dir():
         return bundled
-    repo = _PKG.parents[2]
+    repo = _PKG.parents[1]
     if (repo / "config").is_dir():
         return repo
     return bundled

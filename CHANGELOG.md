@@ -2,6 +2,14 @@
 
 All notable changes to this project are documented here.
 
+## [0.1.11] - 2026-06-15
+
+### Added
+
+- **`ri-engine integrate reset`** — dry-run preview by default; `--yes` removes manifest, config, seed, docs, runbook entries
+- **`--reinit`** — reset + fresh `integrate init` in one step
+- **`--keep-runbook`** / **`--keep-settings`** for partial cleanup
+
 ## [0.1.10] - 2026-06-15
 
 ### Added

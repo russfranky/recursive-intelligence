@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "recursive-intelligence"
-version = "0.1.10"
+version = "0.1.11"
 description = "Recursive prompt improvement — VSR loop with linguistic gate (ri-engine CLI)"
 readme = "README.md"
 license = { text = "MIT" }

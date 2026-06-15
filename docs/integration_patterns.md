@@ -23,6 +23,9 @@ Creates `ri/config/`, `prompts/seed/`, `runbook/RUNBOOK.md`, `.ri-engine/project
 ```bash
 ri-engine integrate status    # check manifest
 ri-engine integrate improve   # until-plateau + runbook (recursive loop)
+ri-engine integrate reset      # preview what would be removed
+ri-engine integrate reset --yes # remove scaffold + manifest, start fresh
+ri-engine integrate reset --yes --reinit  # reset then init in one step
 ```
 
 Full pattern: [integration_patterns.md](integration_patterns.md)

@@ -290,6 +290,142 @@ def integration_status() -> dict[str, Any]:
     }
 
 
+def _safe_unlink(path: Path) -> bool:
+    if path.is_file():
+        path.unlink()
+        return True
+    return False
+
+
+def _remove_runbook_entries_for_agent(agent_slug: str, runbook_base: Path) -> list[str]:
+    """Remove runbook index entries and prompt files matching the integrated agent."""
+    from ri_engine.runbook import compile_runbook, load_index, save_index
+
+    if not runbook_base.is_dir():
+        return []
+    slug = _slug(agent_slug)
+    removed: list[str] = []
+    kept: list[dict[str, Any]] = []
+    for entry in load_index(runbook_base):
+        entry_slug = _slug(str(entry.get("name", "")))
+        entry_id = str(entry.get("id", ""))
+        if entry_slug == slug or entry_id.startswith(f"{slug}-"):
+            pf = entry.get("prompt_file")
+            if pf:
+                prompt_path = runbook_base / pf
+                if _safe_unlink(prompt_path):
+                    removed.append(str(prompt_path))
+            removed.append(f"runbook entry:{entry.get('id', '')}")
+        else:
+            kept.append(entry)
+    if len(kept) != len(load_index(runbook_base)):
+        save_index(kept, runbook_base)
+        compile_runbook(runbook_base)
+    return removed
+
+
+def reset_project_integration(
+    *,
+    yes: bool = False,
+    keep_runbook: bool = False,
+    keep_settings: bool = False,
+    reinit: bool = False,
+    name: str = "",
+) -> dict[str, Any]:
+    """
+    Remove integration scaffold files and manifest so you can start fresh.
+    Dry-run by default — pass yes=True to execute.
+    """
+    root = workspace_dir()
+    manifest = load_manifest()
+    agent_slug = _slug(name or (manifest.agent_slug if manifest else "") or f"{detect_project_name()}-agent")
+
+    targets: list[Path] = []
+    if manifest:
+        for rel in (manifest.config_path, manifest.seed_path, manifest.docs_path):
+            if rel:
+                targets.append(root / rel)
+        targets.append(manifest_path())
+        if not keep_settings:
+            targets.append(root / ".ri-engine" / "settings.yaml")
+        targets.append(root / "output" / f"{manifest.agent_slug}-improved.json")
+        runbook_base = root / manifest.runbook_dir
+        runbook_agent = manifest.agent_slug
+    else:
+        targets.extend([
+            root / DEFAULT_CONFIG_DIR / f"{agent_slug}.yaml",
+            root / DEFAULT_SEED_DIR / f"{agent_slug}.md",
+            root / "docs" / "prompt-improvement.md",
+            manifest_path(),
+        ])
+        if not keep_settings:
+            targets.append(root / ".ri-engine" / "settings.yaml")
+        targets.append(root / "output" / f"{agent_slug}-improved.json")
+        runbook_base = root / "runbook"
+        runbook_agent = agent_slug
+
+    # De-dupe while preserving order
+    seen: set[str] = set()
+    unique_targets: list[Path] = []
+    for p in targets:
+        key = str(p)
+        if key not in seen:
+            seen.add(key)
+            unique_targets.append(p)
+
+    would_remove = [str(p.relative_to(root)) for p in unique_targets if p.is_file()]
+
+    runbook_removals: list[str] = []
+    if not keep_runbook:
+        from ri_engine.runbook import load_index
+
+        slug = _slug(runbook_agent)
+        if runbook_base.is_dir():
+            for entry in load_index(runbook_base):
+                entry_slug = _slug(str(entry.get("name", "")))
+                entry_id = str(entry.get("id", ""))
+                if entry_slug == slug or entry_id.startswith(f"{slug}-"):
+                    runbook_removals.append(f"runbook entry:{entry.get('id', '')}")
+
+    if not yes:
+        return {
+            "status": "dry_run",
+            "agent_slug": agent_slug,
+            "would_remove": would_remove,
+            "would_clean_runbook": runbook_removals,
+            "message": "Re-run with: ri-engine integrate reset --yes",
+            "next_commands": ["ri-engine integrate reset --yes", "ri-engine integrate init"],
+        }
+
+    removed: list[str] = []
+    for path in unique_targets:
+        if _safe_unlink(path):
+            removed.append(str(path.relative_to(root)))
+
+    if not keep_runbook and runbook_removals:
+        removed.extend(_remove_runbook_entries_for_agent(runbook_agent, runbook_base))
+
+    # Remove empty .ri-engine dir if only had manifest/settings
+    ri_dir = root / ".ri-engine"
+    if ri_dir.is_dir() and not any(ri_dir.iterdir()):
+        ri_dir.rmdir()
+        removed.append(".ri-engine/ (empty)")
+
+    result: dict[str, Any] = {
+        "status": "reset",
+        "agent_slug": agent_slug,
+        "removed": removed,
+        "kept_runbook": keep_runbook,
+        "kept_settings": keep_settings,
+        "next_commands": ["ri-engine integrate init"],
+    }
+
+    if reinit:
+        result["reinit"] = init_project_integration(name=agent_slug, from_claude=True, force=True)
+
+    return result
+
+
 def run_integrated_improve(
     *,
     provider: str | None = None,

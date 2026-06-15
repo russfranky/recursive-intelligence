@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "recursive-intelligence"
-version = "0.1.4"
+version = "0.1.5"
 description = "Recursive prompt improvement — VSR loop with linguistic gate (ri-engine CLI)"
 readme = "README.md"
 license = { text = "MIT" }
@@ -41,7 +41,7 @@ dependencies = [
 
 [project.urls]
 Homepage = "https://github.com/russfranky/recursive-intelligence"
-Documentation = "https://github.com/russfranky/recursive-intelligence/blob/main/docs/discoverability.md"
+Documentation = "https://github.com/russfranky/recursive-intelligence/blob/main/docs/README.md"
 Repository = "https://github.com/russfranky/recursive-intelligence"
 Issues = "https://github.com/russfranky/recursive-intelligence/issues"
 Changelog = "https://github.com/russfranky/recursive-intelligence/blob/main/CHANGELOG.md"

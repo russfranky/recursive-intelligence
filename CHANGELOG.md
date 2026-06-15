@@ -2,6 +2,19 @@
 
 All notable changes to this project are documented here.
 
+## [0.1.5] - 2026-06-15
+
+### Added
+
+- Institutional repo organization: `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `SECURITY.md`, `CREDITS.md`, `CITATION.cff`
+- Documentation hub: `docs/README.md`, `config/README.md`, `experiments/README.md`
+- GitHub PR template and issue templates (bug, feature)
+
+### Changed
+
+- README restructured for professional overview, project layout, and governance links
+- PyPI documentation URL points to `docs/README.md`
+
 ## [0.1.4] - 2026-06-15
 
 ### Added

@@ -63,6 +63,8 @@ Status: **experimental prior** (see `experiments/run_gate_ablation.py`). Ablatio
 
 ## How to cite this project
 
+Machine-readable metadata: [CITATION.cff](../CITATION.cff) (repository root).
+
 ```bibtex
 @software{recursive_intelligence_2026,
   title  = {Recursive Intelligence Engine (ri-engine)},

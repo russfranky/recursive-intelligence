@@ -1,0 +1,28 @@
+cff-version: 1.2.0
+title: "Recursive Intelligence Engine"
+message: "If you use this software, please cite it as below."
+type: software
+authors:
+  - name: "russfranky"
+repository-code: "https://github.com/russfranky/recursive-intelligence"
+url: "https://github.com/russfranky/recursive-intelligence"
+license: MIT
+version: 0.1.5
+keywords:
+  - prompt-engineering
+  - variation-selection-retention
+  - llm
+  - agents
+abstract: >-
+  Open-source recursive prompt improvement engine (ri-engine CLI) implementing
+  Variation, Selection, and Retention with an experimental linguistic gate.
+preferred-citation:
+  type: software
+  title: "Recursive Intelligence Engine (ri-engine)"
+  authors:
+    - name: "russfranky"
+  year: 2026
+  url: "https://github.com/russfranky/recursive-intelligence"
+  notes: >-
+    Research inspiration: Raymond Uzwyshyn Ph.D. on agentic AI, recursion,
+    biology, and selection environments. See docs/research_and_citations.md.

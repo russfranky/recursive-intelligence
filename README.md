@@ -1,58 +1,83 @@
-# Prompt Improvement Studio
+# Recursive Intelligence Engine
 
-**Recursive prompt improvement — Variation → Selection → Retention, with a linguistic gate.**
+**Open-source recursive prompt improvement — Variation → Selection → Retention (VSR), with an experimental linguistic gate.**
 
-Give it a seed prompt and a goal. It runs the VSR loop offline (no API key by default), resolves language/register leanings (plain, latinate, mixed, …), and returns an improved prompt.
+[![CI](https://github.com/russfranky/recursive-intelligence/actions/workflows/ci.yml/badge.svg)](https://github.com/russfranky/recursive-intelligence/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![PyPI](https://img.shields.io/pypi/v/recursive-intelligence.svg)](https://pypi.org/project/recursive-intelligence/)
 
-```bash
-pip install recursive-intelligence
-ri-engine improve --seed "You are a helper." --goal "When this works, the AI will resolve the task in one pass"
-```
-
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/russfranky/recursive-intelligence)
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/russfranky/recursive-intelligence/blob/main/notebooks/ri_engine_quickstart.ipynb)
-
-**License:** [MIT](LICENSE) · **Changelog:** [CHANGELOG.md](CHANGELOG.md) · **Architecture:** [docs/technical_reference.md](docs/technical_reference.md) · **Research:** [docs/research_and_citations.md](docs/research_and_citations.md)
-
-Inspired by **Raymond Uzwyshyn Ph.D.** on agentic AI, recursion, and **Variation → Selection → Retention** as selection-environment logic — see [research & citations](docs/research_and_citations.md).
-
----
-
-## Install
+Give a **seed prompt** and a **goal**. The engine runs an offline VSR loop (no API key by default), resolves register leanings (plain, latinate, mixed, …), and returns an improved prompt.
 
 ```bash
 pip install recursive-intelligence
-# optional real LLM backends:
-pip install "recursive-intelligence[all]"
-```
-
-From source: `git clone … && pip install -e ".[all]"`
-
----
-
-## Usage
-
-### Primary path (any prompt, any goal)
-
-```bash
 ri-engine improve \
   --seed "You are a helper." \
   --goal "When this works, the AI will produce a structured answer with measurable success criteria"
 ```
 
-### Ablation / research flags
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/russfranky/recursive-intelligence)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/russfranky/recursive-intelligence/blob/main/notebooks/ri_engine_quickstart.ipynb)
+
+---
+
+## Overview
+
+| | |
+|---|---|
+| **Package** | `recursive-intelligence` |
+| **CLI** | `ri-engine` |
+| **Python API** | `from ri_engine import improve` |
+| **Default provider** | Mock (deterministic, offline) |
+| **License** | [MIT](LICENSE) |
+
+Research inspiration: **Raymond Uzwyshyn Ph.D.** — agentic AI, recursion, and selection environments. See [CREDITS.md](CREDITS.md) and [docs/research_and_citations.md](docs/research_and_citations.md).
+
+---
+
+## Features
+
+- **VSR loop** — generate variants, score fitness, retain winners, repeat until convergence
+- **Linguistic gate** (experimental) — weighted register prior; ablation modes via CLI
+- **Baseline comparison** — VSR output vs one-shot finalize; returns simpler result when VSR does not win
+- **Objective alignment scoring** — rubric weights goal fit over structural bloat
+- **Template fixtures** — optional benchmark configs; primary path is `--seed` + `--goal`
+- **Local ablation** — `experiments/run_gate_ablation.py` (no API key)
+
+---
+
+## Installation
 
 ```bash
-ri-engine improve --seed "…" --goal "…" --linguistic-gate auto   # default
-ri-engine improve --seed "…" --goal "…" --linguistic-gate off
-ri-engine improve --seed "…" --goal "…" --leaning plain
-ri-engine improve --seed "…" --goal "…" --diagnostics
-ri-engine improve --seed "…" --goal "…" --use-persistent-macro-registry
+pip install recursive-intelligence
+
+# Optional real LLM backends:
+pip install "recursive-intelligence[all]"
 ```
 
-Local gate ablation (no API key): `python3 experiments/run_gate_ablation.py`
+**From source:**
 
-### Python API
+```bash
+git clone https://github.com/russfranky/recursive-intelligence.git
+cd recursive-intelligence
+pip install -e ".[all]"
+```
+
+Requirements: Python 3.10+
+
+---
+
+## Quick start
+
+### CLI
+
+```bash
+ri-engine improve \
+  --seed "You are a helper." \
+  --goal "When this works, the AI will resolve the task in one pass"
+```
+
+### Python
 
 ```python
 from ri_engine import improve
@@ -62,54 +87,79 @@ result = improve(
     objective="When this works, the AI will produce a structured answer.",
 )
 print(result.improved_prompt)
-print(result.fitness)  # VSR fitness score
+print(result.fitness)
 ```
 
-### Optional: template fixtures
-
-Templates are pre-filled seed/objective pairs used for benchmarks and linguistic-registry pooling — not required for normal use.
+### Research flags
 
 ```bash
-ri-engine templates
-ri-engine improve --template code-review
+ri-engine improve --seed "…" --goal "…" --linguistic-gate auto   # default
+ri-engine improve --seed "…" --goal "…" --linguistic-gate off
+ri-engine improve --seed "…" --goal "…" --leaning plain
+ri-engine improve --seed "…" --goal "…" --diagnostics
 ```
 
-### Proof / benchmark
-
-```bash
-ri-engine demo
-```
-
-Runs six fixture scenarios; scores are from the internal structural rubric (`prompt_rubric.py`), not live task metrics.
-
-### Expert / research commands
-
-```bash
-ri-engine expert benchmark
-ri-engine expert pool-linguistic-registry
-ri-engine expert macro-registry
-ri-engine improve --seed … --goal … --expert
-```
+Full walkthrough: [docs/getting_started.md](docs/getting_started.md)
 
 ---
 
 ## How it works
 
 ```
-Linguistic Gate → Macro Priors → [Membrane] → Variation → Selection → Retention → repeat
+Linguistic Gate → [Macro Priors] → [Membrane] → Variation → Selection → Retention → repeat
+                                                      ↓
+                                            Baseline vs VSR pick
 ```
 
-1. **Linguistic gate** (experimental prior) — weighted objective text + weak registry prior; defaults to mixed when confidence is low
-2. **Variation** — generates prompt variants (8 strategies)
-3. **Selection** — scores candidates (objective alignment, clarity, utility, coherence, register fit, simplicity)
-4. **Retention** — carries winning traits forward; detects convergence
-5. **Baseline check** — compares VSR output against one-shot `finalize_prompt()`; returns the simpler baseline if VSR does not win meaningfully
+1. **Linguistic gate** — experimental prior; defaults to mixed when confidence is low
+2. **Variation** — eight mutation strategies
+3. **Selection** — objective alignment, clarity, utility, coherence, register fit, simplicity
+4. **Retention** — lineage memory and convergence detection
+5. **Baseline check** — compare against one-shot `finalize_prompt()`
 
-Default provider is **mock** (offline, deterministic). Optional: `--provider openai` or `--provider anthropic`.
+Architecture details: [docs/technical_reference.md](docs/technical_reference.md)
 
-**Mock mode scope:** mock mode is a deterministic offline test of the recursive improvement process. It measures structural prompt quality using local heuristics (`prompt_rubric.py`). It does **not** prove that the resulting prompt will improve downstream LLM task performance. Use real-provider evaluation for behavioral claims.
+---
 
-Persistent macro trait registry is **off by default**; pass `--use-persistent-macro-registry` for cross-run learning experiments.
+## Project structure
+
+```
+recursive-intelligence/
+├── src/ri_engine/          # Core library and CLI
+├── tests/                  # Pytest suite
+├── docs/                   # Documentation index → docs/README.md
+├── config/                 # Templates, use cases, registries → config/README.md
+├── experiments/            # Local ablation scripts → experiments/README.md
+├── examples/               # Sample scripts
+├── prompts/                # VSR operator prompts (bundled into package)
+├── CONTRIBUTING.md         # Contribution guidelines
+├── CREDITS.md              # Attribution
+├── CITATION.cff            # Machine-readable citation
+└── CHANGELOG.md            # Release history
+```
+
+---
+
+## Documentation
+
+| Document | Description |
+|----------|-------------|
+| [**docs/README.md**](docs/README.md) | **Documentation hub** |
+| [getting_started.md](docs/getting_started.md) | Install and first run |
+| [technical_reference.md](docs/technical_reference.md) | Architecture and API |
+| [research_and_citations.md](docs/research_and_citations.md) | Related work and BibTeX |
+| [publication.md](docs/publication.md) | Scope, limitations, release notes |
+| [cloud_development.md](docs/cloud_development.md) | Codespaces and Colab |
+
+---
+
+## Scope and limitations
+
+**Mock mode** (default) is a deterministic offline test of the recursive improvement process. It measures structural prompt quality using local heuristics (`prompt_rubric.py`). It does **not** prove that the resulting prompt will improve downstream LLM task performance.
+
+Use `--provider openai` or `--provider anthropic` with appropriate API keys for semantic rewriting. Evaluate task outcomes separately.
+
+Persistent macro trait registry is **off by default** (`--use-persistent-macro-registry` to enable).
 
 ---
 
@@ -122,16 +172,24 @@ ri-engine improve --seed prompt.txt --goal "…" --provider openai
 
 ---
 
-## Docs
+## Contributing
 
-| Doc | Contents |
-|-----|----------|
-| [research_and_citations.md](docs/research_and_citations.md) | Inspiration (Raymond Uzwyshyn Ph.D.), related work, how to cite |
-| [technical_reference.md](docs/technical_reference.md) | Architecture, VSR, macro registry, Occam's razor |
-| [publication.md](docs/publication.md) | API contract, limitations, red-team notes |
-| [getting_started.md](docs/getting_started.md) | Step-by-step CLI walkthrough |
-| [cloud_development.md](docs/cloud_development.md) | Codespaces + Colab |
+Contributions welcome. Please read [CONTRIBUTING.md](CONTRIBUTING.md) and [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
+
+```bash
+pytest tests/ -q
+```
+
+Report security issues per [SECURITY.md](SECURITY.md).
 
 ---
 
-*General-purpose prompt improvement. You bring the seed and goal; the engine handles language alignment and recursive refinement.*
+## Citation
+
+See [CITATION.cff](CITATION.cff) and [docs/research_and_citations.md](docs/research_and_citations.md).
+
+---
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md).

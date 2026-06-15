@@ -1,5 +1,5 @@
 # Recursive Intelligence — Example Run
-# Based on Uzwyshyn: Agentic AI, Recursion, Biology and Selection Environments
+# Based on Raymond Uzwyshyn Ph.D.: Agentic AI, Recursion, Biology and Selection Environments
 
 seed_prompt: |
   You are a research agent. Given a topic, produce a structured analysis with
@@ -35,6 +35,5 @@ fitness_weights:
 output_path: ./output/example_run.json
 
 metadata:
-  source: "Uzwyshyn — Agentic AI, Recursion, Biology and Selection Environments"
-  inspiration_url: "https://www.linkedin.com/pulse/ai-agentic-substrate-life-inside-recursive-zone-uzwyshyn-ph-d--zohyc"
+  source: "Raymond Uzwyshyn Ph.D. — Agentic AI, Recursion, Biology and Selection Environments"
   author: "Recursive Intelligence Engine v0.1"

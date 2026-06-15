@@ -284,7 +284,7 @@ Expert tooling (`ri-engine expert …`) remains for research but is not part of 
 
 ## Research & citations
 
-VSR architecture and “selection environment” framing are inspired by Raymond Uzwyshyn Ph.D.'s LinkedIn writing, especially [*The AI Agentic Substrate: Life Inside the Recursive Zone*](https://www.linkedin.com/pulse/ai-agentic-substrate-life-inside-recursive-zone-uzwyshyn-ph-d--zohyc) (Feb 2026). Full bibliography and BibTeX: [docs/research_and_citations.md](research_and_citations.md).
+VSR architecture and “selection environment” framing are inspired by **Raymond Uzwyshyn Ph.D.** Full bibliography and BibTeX: [docs/research_and_citations.md](research_and_citations.md).
 
 ---
 

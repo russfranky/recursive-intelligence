@@ -6,7 +6,7 @@ All notable changes to this project are documented here.
 
 ### Added
 
-- `docs/research_and_citations.md` — credits Raymond Uzwyshyn LinkedIn inspiration, related prompt-optimization work, BibTeX
+- `docs/research_and_citations.md` — credits Raymond Uzwyshyn Ph.D., related prompt-optimization work, BibTeX
 
 ### Changed
 

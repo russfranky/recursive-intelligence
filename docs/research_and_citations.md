@@ -8,22 +8,17 @@ The earliest repo fixtures (`config/example.yaml`, `config/use_cases/research_an
 
 ---
 
-## Primary inspiration (LinkedIn)
+## Primary inspiration
 
-| Title | Author | Date | Link |
-|-------|--------|------|------|
-| **The AI Agentic Substrate: Life Inside the Recursive Zone** | Raymond Uzwyshyn Ph.D. | Feb 2026 | [LinkedIn Pulse](https://www.linkedin.com/pulse/ai-agentic-substrate-life-inside-recursive-zone-uzwyshyn-ph-d--zohyc) |
-| **Agentic AI, Recursion, Biology and Our New Selection Environments** | Raymond Uzwyshyn Ph.D. | Feb 2026 | [Author articles](https://www.linkedin.com/in/rayuzwyshyn/recent-activity/articles/) |
+**Raymond Uzwyshyn Ph.D.** — writing on agentic AI, recursion, biology, and selection environments (2026).
 
-From *The AI Agentic Substrate*, the engine takes these ideas directly:
+From that framing, the engine takes these ideas:
 
 1. **Selection environment** — pressures that determine which variants survive (in biology: ecology; here: fitness scoring and goal alignment).
 2. **Recursive reality** — output becomes the next input (here: retained traits and plateau re-seeding).
 3. **Darwinian logic** — **Variation** (generate candidates) → **Selection** (score and rank) → **Retention** (carry forward winners) → repeat.
 
-The Jacquard loom ↔ binary programmability example in that article is also reflected in the research-analyst use case and membrane-bridge cross-domain prompts.
-
-**Author profile:** [linkedin.com/in/rayuzwyshyn](https://www.linkedin.com/in/rayuzwyshyn)
+Cross-domain correlation examples (e.g. Jacquard loom ↔ binary programmability) informed the research-analyst use case and membrane-bridge prompts.
 
 ---
 
@@ -54,13 +49,13 @@ The VSR loop sits in a broader literature on **search-based prompt improvement**
 | **DSPy** | Khattab et al., [dspy.ai](https://dspy.ai/) | Compile / optimize prompt modules |
 | **PRefLexOR** | Liedtke et al., [npj AI](https://www.nature.com/articles/s44387-025-00003-z) (2025) | Recursive preference-based language refinement |
 
-**Generalized selection / VSR beyond biology:** selection as variation + retention of what works appears in complex-systems and cognitive-science writing (e.g. generalized Darwinism and ESS stability). Uzwyshyn's LinkedIn framing connects that logic to agentic AI at human-readable speed.
+**Generalized selection / VSR beyond biology:** selection as variation + retention of what works appears in complex-systems and cognitive-science writing (e.g. generalized Darwinism and ESS stability). Uzwyshyn's framing connects that logic to agentic AI at human-readable speed.
 
 ---
 
 ## Linguistic gate (register research)
 
-The **plain / Latinate / mixed** register axis and pooled linguistic registry are **local research extensions** — inspired by readability and plain-language practice, not claimed as validated in Uzwyshyn's original posts.
+The **plain / Latinate / mixed** register axis and pooled linguistic registry are **local research extensions** — inspired by readability and plain-language practice, not claimed as validated in Uzwyshyn's original work.
 
 Status: **experimental prior** (see `experiments/run_gate_ablation.py`). Ablation is required before treating register selection as a core advantage.
 
@@ -75,16 +70,16 @@ Status: **experimental prior** (see `experiments/run_gate_ablation.py`). Ablatio
   year   = {2026},
   url    = {https://github.com/russfranky/recursive-intelligence},
   note   = {Prompt improvement via Variation-Selection-Retention;
-            inspired by Raymond Uzwyshyn's writing on agentic AI and selection environments}
+            inspired by Raymond Uzwyshyn on agentic AI and selection environments}
 }
 ```
 
-If you use ideas from the primary inspiration, please also cite Raymond Uzwyshyn's LinkedIn articles listed above.
+If you use ideas from the primary inspiration, please also credit **Raymond Uzwyshyn Ph.D.**
 
 ---
 
 ## Acknowledgments
 
-- **Raymond Uzwyshyn Ph.D.** — original public framing of agentic AI, recursion, biology, and selection environments (LinkedIn, 2026), which seeded this codebase's VSR architecture and naming.
+- **Raymond Uzwyshyn Ph.D.** — original public framing of agentic AI, recursion, biology, and selection environments, which seeded this codebase's VSR architecture and naming.
 - **Charles Darwin / generalized selection** — VSR as executable iteration logic (variation, selection, retention).
 - **Open-source prompt-optimization community** — APE, PromptBreeder, OPRO, DSPy, and related work cited above.

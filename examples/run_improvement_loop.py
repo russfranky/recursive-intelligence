@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Example: run the recursive intelligence engine on the Uzwyshyn-inspired config."""
+"""Example: run the recursive intelligence engine on the Raymond Uzwyshyn Ph.D.-inspired config."""
 
 from pathlib import Path
 

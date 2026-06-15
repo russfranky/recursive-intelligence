@@ -48,9 +48,9 @@ For linguistic-gate or rubric changes:
 - Document honest scope: mock rubric ≠ live task performance.
 - Do not overweight novelty or structural bloat in selection fitness.
 
-## Code of conduct
+## Community standards
 
-This project follows the [Contributor Covenant](CODE_OF_CONDUCT.md). By participating, you agree to uphold it.
+See [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
 
 ## Questions
 

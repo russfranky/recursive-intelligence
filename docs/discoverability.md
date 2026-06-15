@@ -21,7 +21,8 @@ How to get **recursive-intelligence** found and used — evolved via ri-engine's
 ## 60-second quick win (no API key)
 
 ```bash
-pip install -e . && ri-engine improve --template customer-support
+pip install recursive-intelligence
+ri-engine improve --template customer-support
 ```
 
 Copy **Your Improved Prompt — Copy This** into ChatGPT, Claude, Cursor, or your AI tool. Done.

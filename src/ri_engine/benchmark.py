@@ -18,9 +18,10 @@ from ri_engine.models import RunConfig
 from ri_engine.prompt_rubric import compare_prompts, score_task_prompt
 from ri_engine.prompt_synthesizer import finalize_prompt
 
-ROOT = Path(__file__).resolve().parents[2]
-USE_CASES_DIR = ROOT / "config" / "use_cases"
-OUTPUT_DIR = ROOT / "output" / "benchmark"
+from ri_engine.paths import config_dir, workspace_dir
+
+USE_CASES_DIR = config_dir() / "use_cases"
+OUTPUT_DIR = workspace_dir() / "output" / "benchmark"
 
 console = Console()
 

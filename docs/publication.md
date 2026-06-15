@@ -239,6 +239,35 @@ gh repo edit russfranky/recursive-intelligence \
 ```
 
 - [x] Colab badge URL — `russfranky/recursive-intelligence` (verified)
+- [x] PyPI packaging — `pip install recursive-intelligence` (`.github/workflows/publish.yml`)
+- [ ] Publish v0.1.0 to PyPI — one-time trusted publisher setup (see below)
+
+---
+
+## PyPI one-time setup
+
+Users install with:
+
+```bash
+pip install recursive-intelligence
+ri-engine improve --template customer-support
+```
+
+To publish from GitHub Actions:
+
+1. Create a PyPI account and project: https://pypi.org/project/recursive-intelligence/
+2. Add a **trusted publisher** on PyPI: Owner `russfranky`, repo `recursive-intelligence`, workflow `publish.yml`, environment `pypi`
+3. In GitHub repo settings → Environments → create **`pypi`**
+4. Create a GitHub release (tag `v0.1.0`) — the publish workflow runs automatically
+
+Or publish manually:
+
+```bash
+bash scripts/sync-package-data.sh
+python -m pip install build
+python -m build
+twine upload dist/*
+```
 
 ---
 

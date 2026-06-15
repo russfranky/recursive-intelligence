@@ -14,8 +14,9 @@ from typing import Any
 import yaml
 from rich.console import Console
 
-ROOT = Path(__file__).resolve().parents[2]
-TEMPLATES_DIR = ROOT / "config" / "templates"
+from ri_engine.paths import config_dir
+
+TEMPLATES_DIR = config_dir() / "templates"
 
 # Friendly labels (what users see)
 PHASE_FRIENDLY = {
@@ -68,7 +69,7 @@ def load_template(template_id: str) -> dict[str, Any]:
         raise FileNotFoundError(f"Template not found: {template_id}. Run: ri-engine templates")
     data = yaml.safe_load(path.read_text(encoding="utf-8"))
     if ref := data.get("extends"):
-        base_path = ROOT / "config" / ref
+        base_path = config_dir() / ref
         base = yaml.safe_load(base_path.read_text(encoding="utf-8"))
         merged_meta = {**base.get("metadata", {}), **data.get("metadata", {})}
         data = {**base, **{k: v for k, v in data.items() if k not in ("extends", "metadata")}}

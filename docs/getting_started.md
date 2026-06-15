@@ -20,12 +20,13 @@ Think of it as an **editor for AI instructions**.
 Ask your IT team to run:
 
 ```bash
-pip install -e .
+pip install recursive-intelligence
 ```
 
-Or if you have Python installed:
+Or if you have Python and want the latest source:
 
 ```bash
+git clone https://github.com/russfranky/recursive-intelligence.git
 cd recursive-intelligence
 pip install -e .
 ```

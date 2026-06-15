@@ -167,10 +167,12 @@ class AnthropicProvider:
 
 def load_prompt(name: str) -> str:
     """Load a prompt template from the prompts directory."""
-    base = Path(__file__).resolve().parents[2] / "prompts" / f"{name}.md"
+    from ri_engine.paths import prompts_dir
+
+    base = prompts_dir() / f"{name}.md"
     if base.exists():
         return base.read_text(encoding="utf-8")
-    fallback = Path(__file__).resolve().parents[2] / "prompts" / f"{name}.txt"
+    fallback = prompts_dir() / f"{name}.txt"
     return fallback.read_text(encoding="utf-8") if fallback.exists() else ""
 
 

@@ -19,10 +19,10 @@ from typing import Any
 
 from ri_engine.models import Candidate, RunConfig
 from ri_engine.trait_parser import ParsedTrait, parse_traits
+from ri_engine.paths import config_dir, workspace_dir
 
-ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_REGISTRY_PATH = ROOT / "config" / "macro_trait_registry.json"
-DEFAULT_EXPORT_DIR = ROOT / "output" / "traits"
+DEFAULT_REGISTRY_PATH = workspace_dir() / "config" / "macro_trait_registry.json"
+DEFAULT_EXPORT_DIR = workspace_dir() / "output" / "traits"
 
 FORBIDDEN_EXPORT_FIELDS = (
     "seed_prompt",

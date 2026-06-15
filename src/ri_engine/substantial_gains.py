@@ -18,6 +18,7 @@ from ri_engine.improve_prompts import (
     _composite_score,
     _load_config,
 )
+from ri_engine.paths import config_dir
 from ri_engine.models import RunConfig
 from ri_engine.structural_scorer import (
     OPERATOR_EXTENSIONS,
@@ -36,7 +37,7 @@ console = Console()
 
 def diagnose_gains() -> dict:
     """Analyze current state and identify highest-leverage improvements."""
-    config = _load_config(Path(__file__).resolve().parents[2] / "config" / "improve_system_prompts.yaml")
+    config = _load_config(config_dir() / "improve_system_prompts.yaml")
     evolver = SystemPromptEvolver()
     diagnosis = diagnose_all(str(PROMPTS_DIR))
 
@@ -122,7 +123,7 @@ def apply_substantial_gains() -> dict:
     3. Re-score with structural rubric
     4. Keep best version (structural + mock composite)
     """
-    config = _load_config(Path(__file__).resolve().parents[2] / "config" / "improve_system_prompts.yaml")
+    config = _load_config(config_dir() / "improve_system_prompts.yaml")
     evolver = SystemPromptEvolver()
     results: dict[str, dict] = {}
 

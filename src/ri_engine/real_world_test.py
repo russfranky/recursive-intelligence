@@ -34,13 +34,13 @@ from ri_engine.prompt_rubric import compare_prompts, score_task_prompt
 from ri_engine.prompt_synthesizer import finalize_prompt
 from ri_engine.resilient_llm import wrap_provider
 from ri_engine.visualizer import ProcessVisualizer
+from ri_engine.paths import config_dir, prompts_dir, workspace_dir
 
-ROOT = Path(__file__).resolve().parents[2]
-REAL_WORLD_CONFIG_DIR = ROOT / "config" / "real_world"
-OUTPUT_DIR = ROOT / "output" / "real_world"
+REAL_WORLD_CONFIG_DIR = config_dir() / "real_world"
+OUTPUT_DIR = workspace_dir() / "output" / "real_world"
 ACTIVE_CONFIG = REAL_WORLD_CONFIG_DIR / "active.yaml"
 SESSION_TEMPLATE = REAL_WORLD_CONFIG_DIR / "session.template.yaml"
-PROMPTS_DIR = ROOT / "prompts"
+PROMPTS_DIR = prompts_dir()
 
 console = Console()
 
@@ -71,7 +71,7 @@ def prep_real_world_test(*, force: bool = False) -> dict[str, Any]:
     _check("Operator prompts", op_count >= 5, f"{op_count} prompts in prompts/")
 
     # Linguistic registry
-    reg_path = ROOT / "config" / "linguistic_registry.json"
+    reg_path = config_dir() / "linguistic_registry.json"
     if reg_path.exists():
         reg = LinguisticRegistry(reg_path).load()
         _check("Language registry", len(reg.entries) >= 5, f"{len(reg.entries)} category cells pooled")

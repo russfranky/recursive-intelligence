@@ -8,9 +8,9 @@ from ri_engine.pool_linguistic_registry import pool_linguistic_registry
 
 def test_pool_linguistic_registry_full_spectrum(tmp_path: Path):
     # Use subset for speed: copy first 2 spectrum entries to temp yaml
-    from ri_engine.language_leanings import ROOT
+    from ri_engine.paths import config_dir
 
-    spectrum_src = ROOT / "config" / "linguistic_spectrum.yaml"
+    spectrum_src = config_dir() / "linguistic_spectrum.yaml"
     import yaml
 
     data = yaml.safe_load(spectrum_src.read_text())

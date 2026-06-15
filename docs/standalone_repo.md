@@ -58,3 +58,10 @@ cd recursive-intelligence
 pip install -e ".[all]"
 ri-engine demo
 ```
+
+## Install from PyPI
+
+```bash
+pip install recursive-intelligence
+ri-engine improve --template customer-support
+```

@@ -13,13 +13,11 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_RUNBOOK_DIR = ROOT / "runbook"
-
+from ri_engine.paths import workspace_dir
 
 def default_runbook_dir() -> Path:
-    """Project-local runbook directory (``runbook/`` at repo root)."""
-    return DEFAULT_RUNBOOK_DIR
+    """Project-local runbook directory (``runbook/`` in the current working directory)."""
+    return workspace_dir() / "runbook"
 
 
 @dataclass
@@ -46,7 +44,7 @@ def _slug(name: str) -> str:
 
 
 def runbook_dir(path: Path | str | None = None) -> Path:
-    d = Path(path) if path else DEFAULT_RUNBOOK_DIR
+    d = Path(path) if path else default_runbook_dir()
     d.mkdir(parents=True, exist_ok=True)
     (d / "prompts").mkdir(parents=True, exist_ok=True)
     return d

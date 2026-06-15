@@ -105,8 +105,8 @@ def _build_parser() -> argparse.ArgumentParser:
         epilog=(
             "Examples:\n"
             "  ri-engine templates\n"
-            "  ri-engine improve --template customer-support\n"
-            "  ri-engine improve --template customer-support --until-plateau --runbook\n"
+            "  ri-engine improve --template coding-assistant\n"
+            "  ri-engine improve --template coding-assistant --until-plateau --runbook\n"
             "  ri-engine improve --continue --until-plateau\n"
             "  ri-engine improve --seed my_prompt.txt --goal \"Help customers resolve billing issues\"\n"
             "  ri-engine runbook list\n"

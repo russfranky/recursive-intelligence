@@ -63,5 +63,4 @@ ri-engine demo
 
 ```bash
 pip install recursive-intelligence
-ri-engine improve --template customer-support
 ```

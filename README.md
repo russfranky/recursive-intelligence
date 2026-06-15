@@ -10,7 +10,7 @@ Improve system prompts for **ChatGPT**, **Claude**, **Copilot**, **Cursor**, and
 **Try in 60 seconds (offline):**
 
 ```bash
-pip install recursive-intelligence && ri-engine improve --template customer-support
+pip install recursive-intelligence
 ```
 
 Copy the improved prompt into ChatGPT, Claude, Cursor, or your AI tool. [Full discoverability guide →](docs/discoverability.md)
@@ -38,7 +38,6 @@ Copy the improved prompt into ChatGPT, Claude, Cursor, or your AI tool. [Full di
 
 ```bash
 pip install recursive-intelligence
-ri-engine improve --template customer-support
 ```
 
 **From source:**
@@ -66,7 +65,7 @@ ri-engine templates
 ### 2. Improve a prompt
 
 ```bash
-ri-engine improve --template customer-support
+ri-engine improve --template coding-assistant
 ```
 
 Or use your own starting prompt:

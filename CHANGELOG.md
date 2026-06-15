@@ -2,6 +2,14 @@
 
 All notable changes to this project are documented here.
 
+## [0.1.8] - 2026-06-15
+
+### Added
+
+- Claude Code handoff setting (default **off**): `ri-engine config claude-code on|off`
+- Per-run overrides: `--claude-code`, `--no-claude-code`
+- Docs: [claude_code_integration.md](docs/claude_code_integration.md)
+
 ## [0.1.7] - 2026-06-15
 
 ### Fixed

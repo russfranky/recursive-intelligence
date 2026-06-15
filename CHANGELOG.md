@@ -2,6 +2,13 @@
 
 All notable changes to this project are documented here.
 
+## [0.1.6] - 2026-06-15
+
+### Fixed
+
+- PyPI publish: bump version after history rewrite (0.1.5 already on PyPI; retagged publishes were failing)
+- Publish workflow: verify git tag matches `pyproject.toml` version before upload
+
 ## [0.1.5] - 2026-06-15
 
 ### Added

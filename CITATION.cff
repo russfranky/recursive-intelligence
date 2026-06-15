@@ -7,7 +7,7 @@ authors:
 repository-code: "https://github.com/russfranky/recursive-intelligence"
 url: "https://github.com/russfranky/recursive-intelligence"
 license: MIT
-version: 0.1.5
+version: 0.1.6
 keywords:
   - prompt-engineering
   - variation-selection-retention

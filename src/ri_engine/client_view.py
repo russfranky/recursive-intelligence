@@ -127,6 +127,17 @@ def build_client_summary(report: dict) -> dict[str, Any]:
         "next_step": "Copy 'your_improved_prompt' into your system prompt.",
     }
 
+    fitness_val = float(fitness) if fitness is not None else 0.0
+    if fitness_val >= 0.85:
+        summary["curation_note"] = (
+            "High rubric fitness can still be generic. Merge with domain canon, "
+            "anti-patterns, and falsifiable checks before runbook deploy."
+        )
+        summary["next_step"] = (
+            "Curate: merge VSR output with project-specific rules → runbook or system prompt. "
+            "See docs/integration_patterns.md"
+        )
+
     if gate.get("rationale"):
         summary["style_reason"] = gate["rationale"]
 

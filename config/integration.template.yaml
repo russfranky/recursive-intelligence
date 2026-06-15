@@ -1,0 +1,57 @@
+# Project integration template — copy to your repo (e.g. ri/config/my-agent.yaml)
+#
+# Hubzz reference layout:
+#   prompts/seed/my-agent.md     hand-written seed + canon + anti-patterns
+#   ri/config/my-agent.yaml        this file
+#   runbook/RUNBOOK.md             approved prompts (ri-engine --runbook)
+#   docs/prompt-improvement.md     team workflow
+#
+# Run:
+#   ri-engine improve --config ri/config/my-agent.yaml --until-plateau --runbook
+
+name: "My Project Agent"
+description: "Describe what this prompt governs — e.g. spatial compile, API agent, support bot"
+category: "Agentic Development"
+audience: "operator"
+
+# Path relative to repo root — loaded when present (overrides seed_prompt body)
+seed_file: prompts/seed/my-agent.md
+
+seed_prompt: |
+  # My Agent (fallback if seed_file missing)
+
+  ## Canon
+  - (domain rules agents must never violate)
+
+  ## Anti-patterns
+  - (failures from past agent runs — high leverage for VSR)
+
+objective: |
+  When this works, the agent (describe falsifiable outcome with measurable success).
+  Include what counts as done and what is explicitly out of scope.
+
+provider: mock
+max_generations: 8
+population_size: 8
+survivors_count: 2
+convergence_threshold: 0.025
+convergence_window: 2
+enable_membrane_bridge: true
+
+domains:
+  - "your domain (specific constraints)"
+  - "adjacent field for membrane cross-pollination"
+
+fitness_weights:
+  clarity: 0.30
+  novelty: 0.05
+  utility: 0.45
+  coherence: 0.20
+
+metadata:
+  use_case: project_integration
+  apply_linguistic_gate: true
+  # Optional: middle-loop battery (ri-engine real-world run -c this file)
+  # task_battery: config/workflow_self_test_tasks.yaml
+
+output_path: ./output/my-agent-improved.json

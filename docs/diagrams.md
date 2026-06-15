@@ -219,6 +219,23 @@ flowchart TD
 
 ---
 
+## 9. Project integration (monorepo pattern)
+
+Real-world layout used in production repos (Hubzz reference case):
+
+```mermaid
+flowchart LR
+  SEED["prompts/seed/*.md"] --> IMP["improve --until-plateau --runbook"]
+  CFG["ri/config/*.yaml"] --> IMP
+  IMP --> MERGE["Hand-merge canon + anti-patterns"]
+  MERGE --> RB["runbook/RUNBOOK.md"]
+  RB --> AG["Cursor / Claude Code sessions"]
+```
+
+See [integration_patterns.md](integration_patterns.md) for the full case study.
+
+---
+
 ## Related docs
 
 | Topic | Document |
@@ -226,5 +243,6 @@ flowchart TD
 | Install & first run | [getting_started.md](getting_started.md) |
 | Claude Code handoff | [claude_code_integration.md](claude_code_integration.md) |
 | Agent embedding | [agent_integration.md](agent_integration.md) |
+| Monorepo integration | [integration_patterns.md](integration_patterns.md) |
 | Architecture detail | [technical_reference.md](technical_reference.md) |
 | Scope & limitations | [publication.md](publication.md) |

@@ -42,6 +42,23 @@ ri-engine --config config/my_agent.yaml --provider openai
 
 Copy `best_prompt` from the output JSON into your agent system prompt or project instructions file.
 
+### Phase 3.5: Hand-merge (domain projects)
+
+**High rubric fitness can still be generic.** Real integrations (e.g. Hubzz spatial/district work) plateau at ~97% fitness yet need a human merge of:
+
+- Domain canon (naming, invariants, validation rules)
+- Anti-patterns from failed agent runs
+- Falsifiable success criteria and explicit non-goals
+
+Approve the **curated** prompt to `runbook/RUNBOOK.md`, not raw VSR output.
+
+Full pattern: [integration_patterns.md](integration_patterns.md)
+
+```bash
+ri-engine improve --config ri/config/my-agent.yaml --until-plateau --runbook
+# → review → merge canon → ri-engine runbook compile
+```
+
 ## Phase 4: Recursive Meta-Loop
 
 After the agent runs on real tasks:

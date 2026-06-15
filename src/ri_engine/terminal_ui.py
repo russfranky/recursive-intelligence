@@ -78,6 +78,9 @@ WELCOME_HINTS = [
 ]
 
 IMPROVE_HINTS = [
+    "until-plateau --runbook",
+    "real-world workflow",
+    "config claude-code on",
     "Ctrl+C: stop",
     "--quiet: no animation",
     "--until-plateau: cycle until stable",
@@ -213,6 +216,9 @@ def print_result(console: Console, summary: dict) -> None:
         box=ROUNDED,
         padding=(1, 2),
     ))
+    if note := summary.get("curation_note"):
+        console.print(Text(note, style="warn"))
+        console.print()
     console.print(Text(summary.get("next_step", ""), style="quip"))
     console.print()
     console.print(hint_bar(["improve again", "demo", "templates"]))

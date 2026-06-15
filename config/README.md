@@ -16,6 +16,7 @@ config/
 ├── use_cases/                # Benchmark scenario definitions
 ├── workflow_self_test.yaml   # Claude Code middle-loop session
 ├── workflow_self_test_tasks.yaml  # Falsifiable task battery
+├── integration.template.yaml # Copy to your repo (ri/config/…)
 └── real_world/               # Session templates for plateau runs
 ```
 
@@ -48,5 +49,6 @@ ri-engine real-world workflow   # Claude Code middle-loop self-test
 ```
 
 See [docs/claude_code_integration.md](../docs/claude_code_integration.md) for the recursive validation loop.
+See [docs/integration_patterns.md](../docs/integration_patterns.md) for monorepo integration (Hubzz case study).
 
 See [docs/technical_reference.md](../docs/technical_reference.md) for field reference.

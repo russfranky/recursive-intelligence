@@ -43,3 +43,16 @@ def test_build_client_summary_plain_language():
     assert summary.get("quality_score") == "92%"
     assert "your_improved_prompt" in summary
     assert len(summary["what_we_did"]) >= 3
+
+
+def test_build_client_summary_high_fitness_suggests_curation():
+    report = {
+        "meta": {"generations_run": 5, "converged": True},
+        "best_fitness": 0.97,
+        "best_prompt": "Generic structured agent prompt.",
+        "linguistic_gate": {"leaning": "plain", "confidence": 0.9},
+        "config": {"objective": "When this works, compile districts"},
+    }
+    summary = build_client_summary(report)
+    assert "curation_note" in summary
+    assert "integration_patterns" in summary["next_step"]

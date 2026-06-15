@@ -154,6 +154,7 @@ recursive-intelligence/
 |----------|-------------|
 | [**docs/README.md**](docs/README.md) | **Documentation hub** |
 | [**diagrams.md**](docs/diagrams.md) | **Mermaid charts** — VSR, validation loops, Claude Code |
+| [integration_patterns.md](docs/integration_patterns.md) | **Monorepo integration** — seed, runbook, hand-merge (Hubzz case) |
 | [claude_code_integration.md](docs/claude_code_integration.md) | Claude Code handoff setting (`ri-engine config claude-code on`) |
 | [getting_started.md](docs/getting_started.md) | Install and first run |
 | [technical_reference.md](docs/technical_reference.md) | Architecture and API |

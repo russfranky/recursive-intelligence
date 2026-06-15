@@ -2,6 +2,15 @@
 
 All notable changes to this project are documented here.
 
+## [0.1.9] - 2026-06-15
+
+### Added
+
+- Claude Code **middle-loop self-test**: `ri-engine real-world workflow`
+- `config/workflow_self_test.yaml` — session config for workflow validation
+- `config/workflow_self_test_tasks.yaml` — falsifiable structural task battery (8 checks)
+- Task battery scoring integrated into `real-world run` when `metadata.task_battery` is set
+
 ## [0.1.8] - 2026-06-15
 
 ### Added

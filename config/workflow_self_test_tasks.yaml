@@ -1,0 +1,68 @@
+# Middle-loop task battery for Claude Code + ri-engine workflow.
+# Scores evolved prompts with falsifiable structural checks (offline).
+# Run via: ri-engine real-world workflow
+
+battery_id: claude_code_workflow_v1
+description: >
+  Structural checks that the improved prompt fits the ri-engine → Claude Code
+  handoff workflow. Pass rate is necessary but not sufficient — confirm with
+  live Claude Code runs on held-out tasks.
+
+pass_threshold: 0.85  # fraction of tasks that must pass
+
+tasks:
+  - id: no_code_review_bleed
+    description: Must not masquerade as a PR/code-review agent
+    type: must_not_contain
+    patterns:
+      - "Review Protocol"
+      - "OWASP"
+      - "P0 (block)"
+
+  - id: no_research_deliverable_format
+    description: Must not use research-analyst output tables
+    type: must_not_contain
+    patterns:
+      - "| Claim | Confidence |"
+      - "## Predictions"
+
+  - id: compact_workflow
+    description: Workflow prompt stays concise (no benchmark boilerplate bloat)
+    type: max_words
+    max: 150
+
+  - id: workflow_steps_present
+    description: Mentions research → spec → implement sequence
+    type: must_contain_all
+    patterns:
+      - research
+      - spec
+      - implement
+
+  - id: runbook_or_handoff
+    description: References runbook or handoff path for Claude Code
+    type: must_contain_any
+    patterns:
+      - runbook
+      - handoff
+
+  - id: single_leaning_clause
+    description: At most one injected linguistic leaning block
+    type: max_occurrences
+    pattern: mandatory linguistic leaning
+    max: 1
+    ignore_case: true
+
+  - id: no_benchmark_boilerplate
+    description: Compact mode — no full VSR benchmark sections
+    type: must_not_contain
+    patterns:
+      - "Failure Modes to Block"
+      - "Self-Evaluation Rubric"
+      - "Success Metrics"
+
+  - id: plain_register_goal
+    description: Objective-aligned plain register when goal requests minimal ceremony
+    type: must_not_contain
+    patterns:
+      - "MANDATORY LINGUISTIC LEANING: Use formal Latinate"

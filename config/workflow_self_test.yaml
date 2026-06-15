@@ -1,0 +1,57 @@
+# Claude Code + ri-engine middle-loop self-test session.
+#
+# Run the full loop (improve + task battery):
+#   ri-engine real-world workflow
+#
+# Or run this config directly:
+#   ri-engine real-world run -c config/workflow_self_test.yaml
+
+name: "Claude Code Workflow Self-Test"
+description: >
+  Middle loop for the ri-engine → Claude Code integration. Evolves the workflow
+  seed, then scores the result against a fixed task battery. Use pass rate +
+  plateau on held-out Claude Code tasks to know when to stop iterating.
+category: "Agentic Development"
+audience: "operator"
+
+seed_file: docs/claude_code_integration.md
+
+seed_prompt: |
+  # Claude Code integration
+
+  Use ri-engine to improve prompts, then Claude Code to execute work in the repo.
+  Handoff is off by default — turn on for runbook + terminal instructions after improve.
+
+objective: |
+  When this works, the improved prompt teaches Claude Code to run ri-engine improve
+  on task seeds, enable handoff when needed, read runbook/RUNBOOK.md, research
+  before editing, write a short spec, wait for proceed, then implement — with
+  minimal ceremony and no duplicate instructions.
+
+provider: mock
+max_generations: 6
+population_size: 8
+survivors_count: 2
+convergence_threshold: 0.025
+convergence_window: 2
+enable_membrane_bridge: true
+
+domains:
+  - "software craftsmanship (minimal diffs, read-before-edit)"
+  - "technical writing (concise operator instructions)"
+  - "control systems (feedback loops, plateau detection)"
+
+fitness_weights:
+  clarity: 0.30
+  novelty: 0.05
+  utility: 0.45
+  coherence: 0.20
+
+metadata:
+  use_case: workflow_self_test
+  test_id: workflow-self-test
+  apply_linguistic_gate: true
+  task_battery: config/workflow_self_test_tasks.yaml
+  claude_code_handoff: true
+
+output_dir: ./output/real_world/sessions

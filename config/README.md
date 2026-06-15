@@ -14,6 +14,8 @@ config/
 ├── macro_trait_registry.json # Persistent traits (opt-in at runtime)
 ├── templates/                # Plug-and-play CLI templates
 ├── use_cases/                # Benchmark scenario definitions
+├── workflow_self_test.yaml   # Claude Code middle-loop session
+├── workflow_self_test_tasks.yaml  # Falsifiable task battery
 └── real_world/               # Session templates for plateau runs
 ```
 
@@ -42,6 +44,9 @@ Scenario configs used by `ri-engine demo` and expert benchmarks. Each defines se
 
 ```bash
 ri-engine improve --config config/example.yaml
+ri-engine real-world workflow   # Claude Code middle-loop self-test
 ```
+
+See [docs/claude_code_integration.md](../docs/claude_code_integration.md) for the recursive validation loop.
 
 See [docs/technical_reference.md](../docs/technical_reference.md) for field reference.

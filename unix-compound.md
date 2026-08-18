@@ -1,6 +1,13 @@
 # unix-compound
 
-A recursive meta-skill that turns any domain into modular, measurable, compounding progress using pure text streams.
+A recursive meta-skill **and** a terminal CLI plugin that turns any domain into modular, measurable, compounding progress using pure text streams.
+
+```bash
+pip install -e .
+unix-compound start "daily operating system ≤15 min" --lock --run
+# or
+ri-engine compound start "daily operating system ≤15 min" --lock --run
+```
 
 Based on the Unix philosophy:
 
@@ -27,16 +34,14 @@ Plus: build afresh rather than complicate; expect every output to become input t
 **goal**
 Propose measurable success criteria to the human, refine them, then lock as a pure text stream.
 
-Guidance:
 - Prefer 3–5 binary or numeric criteria.
-- Explicitly ask for hard constraints (time, tools, energy, money) and lock them as part of the criteria.
-- If the human does not lock criteria after two proposals, proceed with the latest proposal as *provisional* and mark it clearly.
-- Longitudinal criteria ("for 14 days") may be marked *in-progress / deferred verification*.
+- Ask for hard constraints (time, tools, energy, money) and lock them as part of the criteria.
+- If the human does not lock after two proposals, proceed with the latest proposal as *provisional*.
+- Longitudinal criteria ("for 14 days") are marked *deferred verification*.
 
 **skeleton**
 Produce the modular structure of single-purpose components (Skeleton-of-Thought + Occam).
 
-Guidance:
 - Immediately apply all hard constraints from the goal.
 - When starting from messy existing material, cluster near-duplicates and mark multi-purpose items for throwaway.
 - Prefer fewer modules.
@@ -44,12 +49,15 @@ Guidance:
 **sequence**
 Derive order, blockers, and a light critical path. Skip when modules are independent.
 
-Guidance:
 - Default to skipping unless clear dependencies exist.
-- Early router / classifier modules are expected to be blockers — this is normal.
+- Early router / classifier modules are expected to be blockers.
 
 **build**
 Implement the next atomic module in its simplest viable form.
+
+- Uses Variation → Selection → Retention internally.
+- Scores goal-fit, one-thing-well, and simplicity.
+- Throws away bloated variants.
 
 **check**
 QA against “one thing well” and the locked goal criteria. If clumsy, throw away and rebuild.
@@ -57,14 +65,16 @@ QA against “one thing well” and the locked goal criteria. If clumsy, throw a
 Also verify the module does not violate any hard resource constraint from the goal.
 
 **sidecar**
-Emit the terminal Markdown progress view as the first content of every response (module status + goal progress).
+Emit the terminal Markdown progress view as the first content of every response.
 
 When the module list exceeds ~8 items, prefer a compact view (active + last 3 completed + goal progress).
 
 **next**
 Capture residuals and decide whether to recurse or terminate.
 
-Declare diminishing returns and recommend stopping when Goal Progress ≥ 90% and residuals have been low-impact for two consecutive cycles.
+Declare diminishing returns and stop when Goal Progress ≥ 90% and residuals have been low-impact for two consecutive cycles.
+
+Before terminate, compare against a simple one-shot plan. Prefer the simpler winner if it already meets the goal.
 
 ---
 
@@ -78,9 +88,28 @@ New capabilities are added only by creating new single-purpose modules — never
 
 ---
 
-## Sidecar Format
+## CLI
 
-Emit this block first in every response while the skill is running. Update it after every major phase.
+```bash
+unix-compound start "domain text"
+unix-compound lock                 # confirm proposed criteria
+unix-compound lock --run           # lock then run to idle
+unix-compound propose              # second proposal; auto-provisional lock
+unix-compound step                 # one phase
+unix-compound run                  # until terminate (needs --yes if goal open)
+unix-compound sidecar              # print sidecar only
+unix-compound status               # sidecar + module table
+unix-compound status --json
+unix-compound export -o out.json
+```
+
+Session file: `output/unix-compound-session.json`
+
+Works offline (no API key). Deterministic heuristics plus VSR scoring.
+
+---
+
+## Sidecar Format
 
 ```markdown
 ### unix-compound · sidecar
@@ -99,7 +128,7 @@ Emit this block first in every response while the skill is running. Update it af
 **Residuals** ...
 ```
 
-Status set (fixed):
+Status set:
 
 - OK locked (passed check)
 - >> active / in progress
@@ -109,47 +138,7 @@ Status set (fixed):
 
 ---
 
-## Sequence / Critical Path (optional)
-
-When dependencies exist, emit a compact text block:
-
-```markdown
-### Sequence / Critical Path
-1. module-a
-2. module-b          <- blocks everything after it
-3. module-c           (depends on 2)
-
-**Critical path**: a -> b -> c
-**Current blockers**: c blocked by b
-```
-
----
-
-## Success Criteria Block
-
-While proposing:
-
-```markdown
-### Success Criteria (proposed)
-1. Done when: [concrete, observable outcome]
-2. Done when: [testable metric or condition]
-3. Done when: [user-visible result]
--> Confirm / edit / reject?
-```
-
-Once locked:
-
-```markdown
-### Success Criteria (locked)
-1. [ ] Done when: ...
-2. [ ] Done when: ...
-3. [ ] Done when: ...
-Goal Progress: 0/3
-```
-
----
-
-## How to use
+## How to use as a skill
 
 Drop this file into any conversation, agent, or skill system. Point it at a domain. It will recursively define success, decompose into single-purpose modules, sequence when needed, build, check, and stop when the goal is met or diminishing returns appear.
 

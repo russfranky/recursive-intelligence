@@ -55,8 +55,11 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "config":
         return _run_config(args)
 
-    if args.command == "integrate":
-        return _run_integrate(args)
+    if args.command == "compound":
+        from ri_engine.unix_compound_cli import main as compound_main
+
+        forwarded: list[str] = list(getattr(args, "compound_argv", []) or [])
+        return compound_main(forwarded)
 
     if args.command == "real-world":
         from ri_engine.real_world_test import main_prep, main_run, main_workflow
@@ -120,6 +123,7 @@ def _build_parser() -> argparse.ArgumentParser:
             "  ri-engine improve --template code-review\n"
             "  ri-engine improve --seed prompt.txt --goal \"…\" --until-plateau --runbook\n"
             "  ri-engine demo\n"
+            "  ri-engine compound start \"daily operating system ≤15 min\" --lock --run\n"
             "  ri-engine expert benchmark\n"
             "\n"
             "Expert mode: add --expert for raw VSR report fields."
@@ -299,6 +303,13 @@ def _build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="After reset, run integrate init immediately (requires --yes)",
     )
+
+    compound = sub.add_parser(
+        "compound",
+        help="unix-compound: recursive modular process (goal → skeleton → build → check)",
+        add_help=False,
+    )
+    compound.add_argument("compound_argv", nargs=argparse.REMAINDER)
 
     runbook = sub.add_parser("runbook", help="Browse and compile approved prompts for the next AI")
     rb_sub = runbook.add_subparsers(dest="runbook_command")
@@ -1045,6 +1056,7 @@ def _legacy_main(argv: list[str]) -> int | None:
         return None
     if argv[0] in {
         "improve", "demo", "templates", "expert", "real-world", "runbook", "integrate",
+        "compound",
         "improve-prompts", "benchmark", "register-proof",
         "pool-linguistic-registry", "substantial-gains",
     }:

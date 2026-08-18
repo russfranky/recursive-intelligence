@@ -2,6 +2,16 @@
 
 All notable changes to this project are documented here.
 
+## [0.2.0] - 2026-08-17
+
+### Added
+
+- **unix-compound CLI plugin** — `unix-compound` and `ri-engine compound`
+- Process: goal → skeleton → sequence → build (VSR) → check → sidecar → next
+- Terminal Markdown sidecar, success-criteria lock, Gantt-style blockers
+- Baseline one-shot comparison and diminishing-returns stop (2-cycle rule)
+- Session file: `output/unix-compound-session.json`
+
 ## [0.1.11] - 2026-06-15
 
 ### Added

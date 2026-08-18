@@ -71,6 +71,7 @@ PHASE_QUIPS: dict[str, list[str]] = {
 }
 
 WELCOME_HINTS = [
+    "compound start \"daily OS ≤15 min\" --lock --run",
     "integrate init",
     "integrate improve",
     "improve --seed prompt.txt --goal \"When this works, the AI will …\"",
@@ -143,6 +144,7 @@ def print_welcome(console: Console | None = None) -> None:
     rows.add_column(style="prompt")
     rows.add_row("templates", "see ready-made starting points")
     rows.add_row("improve", "run recursive improvement on your prompt")
+    rows.add_row("compound", "unix-compound: modularize any domain")
     rows.add_row("demo", "proof: 6 scenarios, F → A")
     con.print(rows)
     con.print()

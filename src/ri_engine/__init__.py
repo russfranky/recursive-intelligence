@@ -13,6 +13,9 @@ from ri_engine.api import (
 from ri_engine.engine import RecursiveIntelligenceEngine
 from ri_engine.models import Candidate, GenerationResult, RunConfig
 
+from ri_engine.unix_compound import Session as UnixCompoundSession
+from ri_engine.unix_compound import start as compound_start
+
 __all__ = [
     "RecursiveIntelligenceEngine",
     "Candidate",
@@ -26,5 +29,7 @@ __all__ = [
     "ImproveResult",
     "PlateauImproveResult",
     "ObjectiveTooVagueError",
+    "UnixCompoundSession",
+    "compound_start",
 ]
-__version__ = "0.1.3"
+__version__ = "0.2.0"

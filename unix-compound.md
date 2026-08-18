@@ -1,80 +1,30 @@
 # unix-compound
 
-A recursive meta-skill **and** a terminal CLI plugin that turns any domain into modular, measurable, compounding progress using pure text streams.
+A drop-in AI skill. Point it at any domain. It recursively defines success, decomposes the work into single-purpose modules, sequences blockers, builds, checks, and stops when the goal is met or returns diminish.
 
-```bash
-pip install -e .
-unix-compound start "daily operating system ≤15 min" --lock --run
-# or
-ri-engine compound start "daily operating system ≤15 min" --lock --run
-```
+Every output is a text stream. Every module does one thing. Leftover modules compound into the next run.
 
-Based on the Unix philosophy:
+---
+
+## Philosophy (McIlroy)
 
 1. Write programs that do one thing and do it well.
 2. Write programs to work together.
 3. Write programs to handle text streams, because that is a universal interface.
 
-Plus: build afresh rather than complicate; expect every output to become input to an unknown next program; try early and throw away clumsy parts; prefer tools over unskilled help.
+Also: build afresh rather than complicate old programs; expect every output to become the input of an unknown next program; try early and throw away clumsy parts; prefer tools over unskilled help.
 
 ---
 
 ## Standing Rules
 
-- One thing well
-- Text streams as the universal interface
-- Early try → throw away → rebuild
-- Prefer tools and high-quality human signal
-- Occam applied at every step
-
----
-
-## Modules
-
-**goal**
-Propose measurable success criteria to the human, refine them, then lock as a pure text stream.
-
-- Prefer 3–5 binary or numeric criteria.
-- Ask for hard constraints (time, tools, energy, money) and lock them as part of the criteria.
-- If the human does not lock after two proposals, proceed with the latest proposal as *provisional*.
-- Longitudinal criteria ("for 14 days") are marked *deferred verification*.
-
-**skeleton**
-Produce the modular structure of single-purpose components (Skeleton-of-Thought + Occam).
-
-- Immediately apply all hard constraints from the goal.
-- When starting from messy existing material, cluster near-duplicates and mark multi-purpose items for throwaway.
-- Prefer fewer modules.
-
-**sequence**
-Derive order, blockers, and a light critical path. Skip when modules are independent.
-
-- Default to skipping unless clear dependencies exist.
-- Early router / classifier modules are expected to be blockers.
-
-**build**
-Implement the next atomic module in its simplest viable form.
-
-- Uses Variation → Selection → Retention internally.
-- Scores goal-fit, one-thing-well, and simplicity.
-- Throws away bloated variants.
-
-**check**
-QA against “one thing well” and the locked goal criteria. If clumsy, throw away and rebuild.
-
-Also verify the module does not violate any hard resource constraint from the goal.
-
-**sidecar**
-Emit the terminal Markdown progress view as the first content of every response.
-
-When the module list exceeds ~8 items, prefer a compact view (active + last 3 completed + goal progress).
-
-**next**
-Capture residuals and decide whether to recurse or terminate.
-
-Declare diminishing returns and stop when Goal Progress ≥ 90% and residuals have been low-impact for two consecutive cycles.
-
-Before terminate, compare against a simple one-shot plan. Prefer the simpler winner if it already meets the goal.
+- One thing well.
+- Text streams are the universal interface.
+- Early try → throw away → rebuild.
+- Prefer tools and high-quality human signal.
+- Occam at every step: if two designs meet the goal, keep the simpler one.
+- New capability = a new module. Never fatten an existing one.
+- This skill is a process, not a framework. Do not add modules to the skill unless a real gap appears twice.
 
 ---
 
@@ -84,32 +34,70 @@ Before terminate, compare against a simple one-shot plan. Prefer the simpler win
 goal → skeleton → sequence? → (build → check → sidecar)* → next
 ```
 
-New capabilities are added only by creating new single-purpose modules — never by expanding existing ones.
+Emit the sidecar as the first content of every response while the skill is running.
 
 ---
 
-## CLI
+## Modules
 
-```bash
-unix-compound start "domain text"
-unix-compound lock                 # confirm proposed criteria
-unix-compound lock --run           # lock then run to idle
-unix-compound propose              # second proposal; auto-provisional lock
-unix-compound step                 # one phase
-unix-compound run                  # until terminate (needs --yes if goal open)
-unix-compound sidecar              # print sidecar only
-unix-compound status               # sidecar + module table
-unix-compound status --json
-unix-compound export -o out.json
-```
+### goal
+Propose measurable success criteria, refine them with the human, then lock as a text stream.
 
-Session file: `output/unix-compound-session.json`
+- Prefer 3–5 binary or numeric criteria.
+- Ask for hard constraints (time, tools, energy, money) and lock them with the criteria.
+- If the human does not lock after two proposals, proceed with the latest proposal as *provisional* and mark it clearly.
+- Longitudinal criteria ("for 14 days") may be marked *in-progress / deferred verification*.
+- Without a locked goal, later progress is unmeasurable. Do not skip this module.
 
-Works offline (no API key). Deterministic heuristics plus VSR scoring.
+### skeleton
+Produce the modular structure (Skeleton-of-Thought + Occam).
+
+- Hierarchical decomposition into single-purpose components.
+- Immediately apply all hard constraints from the goal.
+- When starting from messy existing material, cluster near-duplicates and mark multi-purpose items for throwaway.
+- Prefer fewer modules.
+
+### sequence
+Chain-of-Logic over the skeleton: order, blockers, critical path. Skip when modules are independent.
+
+- SoT answers *what the pieces are*. Chain-of-Logic answers *what must happen first*.
+- Default to skipping unless clear dependencies exist.
+- Early router / classifier modules are expected to be blockers — this is normal.
+- Emit a compact Gantt-style block only when dependencies exist.
+
+### build
+Implement the next atomic module in its simplest viable form.
+
+- Inside build, run a short VSR cycle: generate 2–4 variants → score → retain one.
+- Score: goal-fit, one-thing-well, simplicity. Discard bloated variants.
+- Keep a one-line lineage (which variant won, why).
+- Do not implement two modules at once.
+
+### check
+QA the module against “one thing well” and the locked goal criteria.
+
+- If clumsy, throw away and rebuild. Do not patch a multi-purpose module.
+- Verify it does not violate any hard resource constraint from the goal.
+- A passing check locks the module (`OK`).
+
+### sidecar
+Emit the terminal Markdown progress view as the first content of every response.
+
+- Module status + goal progress + decision + residuals.
+- When the module list exceeds ~8 items, use a compact view: active + last 3 completed + goal progress.
+- HTML / visual dashboards are residuals. Terminal Markdown is the interface.
+
+### next
+Capture residuals and decide whether to recurse or terminate.
+
+- Recurse to the next pending, unblocked module.
+- Declare diminishing returns when Goal Progress ≥ 90% and residuals have been low-impact for two consecutive cycles. Recommend stop.
+- After a third consecutive stall at ≥ 90%, force-stop.
+- Before terminate, compare the modular result against a simple one-shot plan of the same goal. If the one-shot already meets the criteria, keep the one-shot.
 
 ---
 
-## Sidecar Format
+## Sidecar (emit first)
 
 ```markdown
 ### unix-compound · sidecar
@@ -128,18 +116,92 @@ Works offline (no API key). Deterministic heuristics plus VSR scoring.
 **Residuals** ...
 ```
 
-Status set:
+Status set (fixed):
 
-- OK locked (passed check)
-- >> active / in progress
-- .. pending
-- XX discarded / thrown away
-- -- residual / future
+- `OK` locked (passed check)
+- `>>` active
+- `..` pending
+- `XX` discarded
+- `--` residual / future
 
 ---
 
-## How to use as a skill
+## Success Criteria
 
-Drop this file into any conversation, agent, or skill system. Point it at a domain. It will recursively define success, decompose into single-purpose modules, sequence when needed, build, check, and stop when the goal is met or diminishing returns appear.
+While proposing:
 
-Each successful run leaves behind reusable text-stream modules and a higher baseline for the next application.
+```markdown
+### Success Criteria (proposed)
+1. Done when: [concrete, observable outcome]
+2. Done when: [testable metric or condition]
+3. Done when: [user-visible result]
+-> Confirm / edit / reject?
+```
+
+Once locked:
+
+```markdown
+### Success Criteria (locked)
+1. [ ] Done when: ...
+2. [ ] Done when: ...
+3. [ ] Done when: ...
+Goal Progress: 0/3
+```
+
+---
+
+## Sequence / Critical Path (only if dependencies exist)
+
+```markdown
+### Sequence / Critical Path
+1. module-a
+2. module-b          <- blocks everything after it
+3. module-c           (depends on 2)
+
+**Critical path**: a -> b -> c
+**Current blockers**: c blocked by b
+```
+
+---
+
+## Worked example
+
+Domain: `daily operating system, ≤15 minutes, notes app only`
+
+**goal (proposed, then locked)**
+1. Done when: capture, plan, and review are separate modules that talk via text streams
+2. Done when: the whole system fits in ≤15 minutes
+3. Done when: each day produces one archivable text output
+4. Done when: it ran 5 consecutive days *(longitudinal — deferred)*
+
+**skeleton**
+`morning-capture` · `daily-plan` · `evening-review` · `archive-stream`
+
+**sequence**
+`morning-capture` blocks `daily-plan` blocks `evening-review` blocks `archive-stream`
+
+**build / check**
+VSR on `morning-capture` retains the contract-first variant. Check passes. Lock. Next.
+
+**next**
+3/4 criteria met, one deferred. Residuals low-impact. Terminate. One-shot checklist does not meet criterion 1, so the modular set is kept.
+
+---
+
+## Anti-patterns
+
+- Skipping `goal` and “just starting”
+- Expanding a module instead of creating a new one
+- Building two modules in one step
+- Treating the sidecar as optional
+- Continuing after two low-impact cycles at ≥ 90%
+- Keeping a clever modular design when a one-shot already meets the locked goal
+- Inventing HTML, dashboards, or extra lexicon when terminal Markdown already shows the state
+
+---
+
+## How to use
+
+Drop this file into any conversation, agent, or skill system. Name a domain. Follow the process. Stop when the sidecar says terminate.
+
+Each successful run leaves reusable text-stream modules and a higher baseline for the next application. That is the compounding return.
